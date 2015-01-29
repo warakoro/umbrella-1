@@ -55,19 +55,17 @@ public class Goal implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 45)
-    @Column(name = "description")
     private String description;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 45)
-    @Column(name = "priority")
     private String priority;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "goalid", fetch = FetchType.LAZY)
     private List<Score> scoreList;
-    @JoinColumn(name = "Category_id", referencedColumnName = "id")
+    @JoinColumn(name = "categoryid", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Category categoryid;
-    @JoinColumn(name = "User_id", referencedColumnName = "id")
+    @JoinColumn(name = "userid", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private User userid;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "goalid", fetch = FetchType.LAZY)

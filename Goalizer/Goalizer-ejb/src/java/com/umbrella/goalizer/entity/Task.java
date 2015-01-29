@@ -54,7 +54,7 @@ public class Task implements Serializable {
     private int recurrence;
     @Column(name = "status")
     private Boolean status;
-    @JoinColumn(name = "Goal_id", referencedColumnName = "id")
+    @JoinColumn(name = "goalid", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Goal goalid;
 
