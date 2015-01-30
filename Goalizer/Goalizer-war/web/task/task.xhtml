@@ -5,10 +5,13 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
-    <ui:composition template="default/main.xhtml">
+    <ui:composition template="../default/main.xhtml">
         <ui:define name="content">
             <h:body>
-                <p:button outcome="task/task" value="Watch your tasks!"/>
+                <h:form>
+                    <h:outputLabel value="Hello Dear user "/>
+                    <h:outputLabel value=" Here is all your tasks!!!"/>
+                </h:form>
             </h:body>
         </ui:define>
     </ui:composition>
