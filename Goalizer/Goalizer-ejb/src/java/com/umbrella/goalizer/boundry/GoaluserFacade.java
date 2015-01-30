@@ -6,7 +6,7 @@
 
 package com.umbrella.goalizer.boundry;
 
-import com.umbrella.goalizer.entity.Category;
+import com.umbrella.goalizer.entity.Goaluser;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -16,7 +16,7 @@ import javax.persistence.PersistenceContext;
  * @author 984372
  */
 @Stateless
-public class CategoryFacade extends AbstractFacade<Category> {
+public class GoaluserFacade extends AbstractFacade<Goaluser> {
     @PersistenceContext(unitName = "Goalizer-ejbPU")
     private EntityManager em;
 
@@ -25,8 +25,8 @@ public class CategoryFacade extends AbstractFacade<Category> {
         return em;
     }
 
-    public CategoryFacade() {
-        super(Category.class);
+    public GoaluserFacade() {
+        super(Goaluser.class);
     }
     
 }

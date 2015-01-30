@@ -19,7 +19,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -28,7 +27,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author 984372
  */
 @Entity
-@Table(name = "task")
+@Table(name = "TASK")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Task.findAll", query = "SELECT t FROM Task t"),
@@ -41,21 +40,17 @@ public class Task implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "id")
+    @Column(name = "ID")
     private Integer id;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 100)
-    @Column(name = "description")
+    @Size(max = 255)
+    @Column(name = "DESCRIPTION")
     private String description;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "recurrence")
-    private int recurrence;
-    @Column(name = "status")
-    private Boolean status;
-    @JoinColumn(name = "goalid", referencedColumnName = "id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @Column(name = "RECURRENCE")
+    private Integer recurrence;
+    @Column(name = "STATUS")
+    private Short status;
+    @JoinColumn(name = "GOALID", referencedColumnName = "ID")
+    @ManyToOne(fetch = FetchType.LAZY)
     private Goal goalid;
 
     public Task() {
@@ -63,12 +58,6 @@ public class Task implements Serializable {
 
     public Task(Integer id) {
         this.id = id;
-    }
-
-    public Task(Integer id, String description, int recurrence) {
-        this.id = id;
-        this.description = description;
-        this.recurrence = recurrence;
     }
 
     public Integer getId() {
@@ -87,19 +76,19 @@ public class Task implements Serializable {
         this.description = description;
     }
 
-    public int getRecurrence() {
+    public Integer getRecurrence() {
         return recurrence;
     }
 
-    public void setRecurrence(int recurrence) {
+    public void setRecurrence(Integer recurrence) {
         this.recurrence = recurrence;
     }
 
-    public Boolean getStatus() {
+    public Short getStatus() {
         return status;
     }
 
-    public void setStatus(Boolean status) {
+    public void setStatus(Short status) {
         this.status = status;
     }
 

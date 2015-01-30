@@ -22,14 +22,15 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author 984372
  */
 @Entity
-@Table(name = "deadline")
+@Table(name = "DEADLINE")
+@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Deadline.findAll", query = "SELECT d FROM Deadline d"),
     @NamedQuery(name = "Deadline.findById", query = "SELECT d FROM Deadline d WHERE d.id = :id"),
@@ -39,15 +40,13 @@ public class Deadline implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "id")
+    @Column(name = "ID")
     private Integer id;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "Date")
+    @Column(name = "DATE")
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
-    @JoinColumn(name = "goalid", referencedColumnName = "id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "GOALID", referencedColumnName = "ID")
+    @ManyToOne(fetch = FetchType.LAZY)
     private Goal goalid;
 
     public Deadline() {
@@ -55,11 +54,6 @@ public class Deadline implements Serializable {
 
     public Deadline(Integer id) {
         this.id = id;
-    }
-
-    public Deadline(Integer id, Date date) {
-        this.id = id;
-        this.date = date;
     }
 
     public Integer getId() {
@@ -108,7 +102,7 @@ public class Deadline implements Serializable {
 
     @Override
     public String toString() {
-        return "mum.umbrella.goaltraker.Deadline[ id=" + id + " ]";
+        return "com.umbrella.goalizer.entity.Deadline[ id=" + id + " ]";
     }
     
 }
