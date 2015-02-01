@@ -7,6 +7,7 @@ package com.umbrella.goalizer.mb.goal;
 
 import com.umbrella.goalizer.boundry.GoalFacade;
 import com.umbrella.goalizer.entity.Goal;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
@@ -41,6 +42,11 @@ public class GoalMB {
     
     public String createGoal(){
         goalEJB.create(goal);
+        return "";
+    }
+    
+    public String showAll(){
+        List<Goal> goals =goalEJB.findAll();
         return "";
     }
     
