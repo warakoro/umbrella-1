@@ -31,13 +31,6 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author 984372
  */
 @Entity
-@Table(name = "goal")
-@NamedQueries({
-    @NamedQuery(name = "Goal.findAll", query = "SELECT g FROM Goal g"),
-    @NamedQuery(name = "Goal.findById", query = "SELECT g FROM Goal g WHERE g.id = :id"),
-    @NamedQuery(name = "Goal.findByName", query = "SELECT g FROM Goal g WHERE g.name = :name"),
-    @NamedQuery(name = "Goal.findByDescription", query = "SELECT g FROM Goal g WHERE g.description = :description"),
-    @NamedQuery(name = "Goal.findByPriority", query = "SELECT g FROM Goal g WHERE g.priority = :priority")})
 public class Goal implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "goalid", fetch = FetchType.LAZY)
     private List<Task> taskList;
@@ -45,28 +38,21 @@ public class Goal implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "id")
     private Integer id;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 45)
-    @Column(name = "name")
     private String name;
-    @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 45)
     private String description;
-    @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 45)
     private String priority;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "goalid", fetch = FetchType.LAZY)
     private List<Score> scoreList;
     @JoinColumn(name = "categoryid", referencedColumnName = "id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Category categoryid;
     @JoinColumn(name = "userid", referencedColumnName = "id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private User userid;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "goalid", fetch = FetchType.LAZY)
     private List<Activity> activityList;
