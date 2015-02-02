@@ -6,7 +6,9 @@
 package com.umbrella.goalizer.mb.goal;
 
 import com.umbrella.goalizer.boundry.GoalFacade;
+import com.umbrella.goalizer.boundry.UserFacade;
 import com.umbrella.goalizer.entity.Goal;
+import com.umbrella.goalizer.entity.User;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
@@ -27,7 +29,8 @@ public class GoalMB {
     @EJB
     private GoalFacade goalEJB;
     public Goal goal;
-
+    @EJB 
+    private UserFacade userFacade;
 
     public Goal getGoal() {
         return goal;
@@ -41,6 +44,10 @@ public class GoalMB {
     }
     
     public String createGoal(){
+        User user = new User();
+        user.setId(1);
+        user = userFacade.find(user.getId());
+        goal.setUserid(user);
         goalEJB.create(goal);
         return "";
     }

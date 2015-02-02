@@ -36,47 +36,23 @@ public class User implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
-    @Column(name = "id")
     private Integer id;
-    @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 45)
-    @Column(name = "username")
     private String username;
-    @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 45)
-    @Column(name = "password")
     private String password;
-    @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 45)
-    @Column(name = "firstName")
     private String firstName;
-    @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 45)
-    @Column(name = "lastName")
     private String lastName;
-    @Basic(optional = false)
     @NotNull
-    @Column(name = "dob")
     @Temporal(TemporalType.TIMESTAMP)
     private Date dob;
-    @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 45)
-    @Column(name = "gender")
     private String gender;
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
-    @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 45)
-    @Column(name = "email")
     private String email;
-    @Size(max = 45)
-    @Column(name = "address")
     private String address;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userid", fetch = FetchType.LAZY)
     private List<Goal> goalList;
