@@ -25,11 +25,10 @@ public class GoalMB {
     /**
      * Creates a new instance of GoalMB
      */
-    
     @EJB
     private GoalFacade goalEJB;
     public Goal goal;
-    @EJB 
+    @EJB
     private UserFacade userFacade;
 
     public Goal getGoal() {
@@ -39,22 +38,23 @@ public class GoalMB {
     public void setGoal(Goal goal) {
         this.goal = goal;
     }
-    
+
     public GoalMB() {
+        goal = new Goal();
     }
-    
-    public String createGoal(){
+
+    public String createGoal() {
         User user = new User();
         user.setId(1);
         user = userFacade.find(user.getId());
         goal.setUserid(user);
         goalEJB.create(goal);
-        return "";
+        return "index";
     }
-    
-    public String showAll(){
-        List<Goal> goals =goalEJB.findAll();
-        return "";
+
+    public List<Goal> showAll() {
+        List<Goal> goals = goalEJB.findAll();
+        return goals;
     }
-    
+
 }

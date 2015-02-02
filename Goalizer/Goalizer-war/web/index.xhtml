@@ -9,23 +9,33 @@
         <ui:define name="content">
             <h:body>
                 <p:commandButton value="Add New Goal" type="button" onclick="PF('addNewGoal').show();" />
-                
+
                 <p:dialog header="Add New Goal" widgetVar="addNewGoal" minHeight="40">
                     <h:form>
                         <h:panelGrid columns="2" cellpadding="5" width="400">
                             <p:outputLabel value="Goal name: "/>
-                            <p:inputText id="goalName"/>
+                            <p:inputText id="goalName" value="${goalMB.goal.name}"/>
                             <p:outputLabel value="Goal description: "/>
-                            <p:inputTextarea id="goalDescription"/>
+                            <p:inputTextarea id="goalDescription" value="${goalMB.goal.description}"/>
                             <p:outputLabel value="Goal priority: "/>
-                            <p:inputText id="goalPriority"/>
+                            <p:inputText id="goalPriority" value="${goalMB.goal.priority}"/>
                             <p:outputLabel value="Category: "/>
-                            <p:inputText id="category"/>
-                            <p:button onclick="/addGoal" value="Submit"/>
+                            <p:inputText id="category" value="${goalMB.goal.categoryid.name}"/>
+                            <h:commandButton action="${goalMB.createGoal}" value="Submit"/>
                         </h:panelGrid>
-                        
+
                     </h:form>
                 </p:dialog>
+                <br/>
+                <br/>
+                <br/>
+               
+                <p:dataList value="#{goalMB.showAll()}" var="goal" type="ordered">
+                    <f:facet name="header">
+                        Goals
+                    </f:facet>
+                    #{goal.description}, #{goal.name}, #{goal.userid.firstName}
+                </p:dataList>
             </h:body>
         </ui:define>
     </ui:composition>
