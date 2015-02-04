@@ -15,7 +15,6 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 
 /**
- *
  * @author Luis
  */
 @ManagedBean
@@ -56,5 +55,4 @@ public class GoalMB {
         List<Goal> goals =goalEJB.findAll();
         return "";
     }
-    
 }

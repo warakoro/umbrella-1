@@ -5,7 +5,12 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
-    <ui:composition template="default/main.xhtml">
+     
+    <h:head>
+        <meta http-equiv="Refresh" content="0; URL=#{request.contextPath}/goals.jsf"/>
+    </h:head>
+    <!--<ui:composition template="default/main.xhtml">-->
+<!--
         <ui:define name="content">
             <h:body>
                 <p:commandButton value="Add New Goal" type="button" onclick="PF('addNewGoal').show();" />
@@ -27,7 +32,7 @@
                     </h:form>
                 </p:dialog>
             </h:body>
-        </ui:define>
-    </ui:composition>
+        </ui:define>-->
+    <!--</ui:composition>-->
 </html>
 

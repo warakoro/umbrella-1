@@ -1,25 +1,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://java.sun.com/jsf/facelets">
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
  
     <ui:composition>
- 
         <ul class="nav nav-sidebar">
-            <li class="active"><a href="#">Home Page</a></li>
-            <li><a href="../goal/viewGoal.jsf">Goals</a></li>
-            <li><a href="#">Progress</a></li>
+            <li class="active"><h:link value="Goals" outcome="goals"/></li>
+            <li><h:link value="Progress" outcome="progress" /></li>
             <li><a href="#">Settings</a></li>
-        </ul>
-        <ul class="nav nav-sidebar">
-            <li><a href="../task/task.jsf">Tasks</a></li>
-            <li><a href="">Nav item again</a></li>
-            <li><a href="">One more nav</a></li>
-            <li><a href="">Another nav item</a></li>
-            <li><a href="">More navigation</a></li>
-        </ul>
-        <ul class="nav nav-sidebar">
-            <li><a href="">Activities</a></li>
-            <li><a href="">One more nav</a></li>
-            <li><a href="">Another nav item</a></li>
         </ul>        
     </ui:composition>
 </html>
