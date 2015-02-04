@@ -7,17 +7,25 @@
 package com.umbrella.goalizer.entity;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorType;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -28,32 +36,25 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author 984372
  */
 @Entity
-@Table(name = "task")
-@XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "Task.findAll", query = "SELECT t FROM Task t"),
-    @NamedQuery(name = "Task.findById", query = "SELECT t FROM Task t WHERE t.id = :id"),
-    @NamedQuery(name = "Task.findByDescription", query = "SELECT t FROM Task t WHERE t.description = :description"),
-    @NamedQuery(name = "Task.findByRecurrence", query = "SELECT t FROM Task t WHERE t.recurrence = :recurrence"),
-    @NamedQuery(name = "Task.findByStatus", query = "SELECT t FROM Task t WHERE t.status = :status")})
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "disc", discriminatorType =  DiscriminatorType.STRING)
+@DiscriminatorValue("SINGLE_TASK")
 public class Task implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "id")
     private Integer id;
+    
     @Basic(optional = false)
-    @NotNull
+    private String title;
+    
     @Size(min = 1, max = 100)
-    @Column(name = "description")
     private String description;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "recurrence")
-    private int recurrence;
-    @Column(name = "status")
-    private Boolean status;
+   
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "task", fetch = FetchType.LAZY)
+    private List<Deadline> deadlines;
+        
     @JoinColumn(name = "goalid", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Goal goalid;
@@ -68,7 +69,6 @@ public class Task implements Serializable {
     public Task(Integer id, String description, int recurrence) {
         this.id = id;
         this.description = description;
-        this.recurrence = recurrence;
     }
 
     public Integer getId() {
@@ -79,6 +79,14 @@ public class Task implements Serializable {
         this.id = id;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     public String getDescription() {
         return description;
     }
@@ -87,20 +95,12 @@ public class Task implements Serializable {
         this.description = description;
     }
 
-    public int getRecurrence() {
-        return recurrence;
+    public List<Deadline> getDeadlines() {
+        return deadlines;
     }
 
-    public void setRecurrence(int recurrence) {
-        this.recurrence = recurrence;
-    }
-
-    public Boolean getStatus() {
-        return status;
-    }
-
-    public void setStatus(Boolean status) {
-        this.status = status;
+    public void setDeadlines(List<Deadline> deadlines) {
+        this.deadlines = deadlines;
     }
 
     public Goal getGoalid() {
@@ -110,6 +110,7 @@ public class Task implements Serializable {
     public void setGoalid(Goal goalid) {
         this.goalid = goalid;
     }
+
 
     @Override
     public int hashCode() {

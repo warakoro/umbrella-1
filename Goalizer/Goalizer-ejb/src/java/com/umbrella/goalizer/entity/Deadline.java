@@ -49,6 +49,10 @@ public class Deadline implements Serializable {
     @JoinColumn(name = "goalid", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Goal goalid;
+    
+    @JoinColumn(name = "task_id", referencedColumnName = "id")
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private Task task;
 
     public Deadline() {
     }
