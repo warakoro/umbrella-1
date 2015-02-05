@@ -53,7 +53,9 @@ public class GoalMB {
     }
     
     public String showAll(){
-        List<Goal> goals =goalEJB.findAll();
+        User user = new User();
+        user.setId(1);
+        List<Goal> goals =goalEJB.getGoalsByUser(user);
         return "";
     }
     
