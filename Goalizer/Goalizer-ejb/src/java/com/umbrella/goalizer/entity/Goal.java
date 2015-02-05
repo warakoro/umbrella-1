@@ -49,7 +49,7 @@ public class Goal implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "goalid", fetch = FetchType.LAZY)
     private List<Score> scoreList;
     @JoinColumn(name = "categoryid", referencedColumnName = "id")
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private Category categoryid;
     @JoinColumn(name = "userid", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
@@ -60,10 +60,7 @@ public class Goal implements Serializable {
     private List<Deadline> deadlineList;
 
     public Goal() {
-    }
-
-    public Goal(Integer id) {
-        this.id = id;
+        categoryid = new Category();
     }
 
     public Goal(Integer id, String name, String description, String priority) {
@@ -167,7 +164,7 @@ public class Goal implements Serializable {
 
     @Override
     public String toString() {
-        return "mum.umbrella.goaltraker.Goal[ id=" + id + " ]";
+        return "Goal{" + "taskList=" + taskList + ", id=" + id + ", name=" + name + '}';
     }
 
     @XmlTransient
