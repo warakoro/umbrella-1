@@ -21,6 +21,8 @@
                             <p:inputText id="goalPriority" value="${goalMB.goal.priority}"/>
                             <p:outputLabel value="Category: "/>
                             <p:inputText id="category" value="${goalMB.goal.categoryid.name}"/>
+                            <p:outputLabel for="deadline" value="Deadline: " />
+                            <p:calendar id="deadline" value="${goalMB.goal.deadline.date} />
                             <h:commandButton action="${goalMB.createGoal}" value="Submit"/>
                         </h:panelGrid>
 
