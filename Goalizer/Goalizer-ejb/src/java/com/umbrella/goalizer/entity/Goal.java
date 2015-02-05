@@ -6,6 +6,7 @@
 package com.umbrella.goalizer.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -19,6 +20,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -29,7 +32,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @NamedQueries({
     @NamedQuery(name = Goal.GOALSBYUSER, query = "SELECT g FROM Goal g WHERE g.userid.id = :userId")})
-public class Goal implements Serializable {
+public class Goal implements Serializable, Comparable<Goal> {
 
     public static final String GOALSBYUSER = "Goal.getGoalsByUser";
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "goalid", fetch = FetchType.LAZY)
@@ -58,7 +61,8 @@ public class Goal implements Serializable {
     private List<Activity> activityList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "goalid", fetch = FetchType.LAZY)
     private List<Deadline> deadlineList;
-
+    @Temporal(TemporalType.DATE)
+    private Date creationDate;
     public Goal() {
         categoryid = new Category();
     }
@@ -68,6 +72,14 @@ public class Goal implements Serializable {
         this.name = name;
         this.description = description;
         this.priority = priority;
+    }
+
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
     }
 
     public Integer getId() {
@@ -174,6 +186,11 @@ public class Goal implements Serializable {
 
     public void setTaskList(List<Task> taskList) {
         this.taskList = taskList;
+    }
+
+    @Override
+    public int compareTo(Goal o) {
+        return this.getCreationDate().compareTo(o.getCreationDate());
     }
 
 }
