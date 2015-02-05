@@ -32,7 +32,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @NamedQueries({
     @NamedQuery(name = Goal.GOALSBYUSER, query = "SELECT g FROM Goal g WHERE g.userid.id = :userId")})
-public class Goal implements Serializable {
+public class Goal implements Serializable, Comparable<Goal> {
 
     public static final String GOALSBYUSER = "Goal.getGoalsByUser";
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "goalid", fetch = FetchType.LAZY)
@@ -186,6 +186,11 @@ public class Goal implements Serializable {
 
     public void setTaskList(List<Task> taskList) {
         this.taskList = taskList;
+    }
+
+    @Override
+    public int compareTo(Goal o) {
+        return this.getCreationDate().compareTo(o.getCreationDate());
     }
 
 }

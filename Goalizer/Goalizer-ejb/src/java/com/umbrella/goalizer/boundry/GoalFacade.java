@@ -8,6 +8,7 @@ package com.umbrella.goalizer.boundry;
 
 import com.umbrella.goalizer.entity.Goal;
 import com.umbrella.goalizer.entity.User;
+import java.util.Collections;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -33,8 +34,11 @@ public class GoalFacade extends AbstractFacade<Goal> {
     }
     
     public List<Goal> getGoalsByUser(User user){
+        
         Query q = em.createNamedQuery(Goal.GOALSBYUSER).setParameter("userId", user.getId());
-        return q.getResultList();
+        List<Goal> goals = q.getResultList();
+        Collections.sort(goals);
+        return goals;
     }
     
 }
