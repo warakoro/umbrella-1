@@ -7,6 +7,7 @@ package com.umbrella.goalizer.mb.goal;
 
 import com.umbrella.goalizer.boundry.GoalFacade;
 import com.umbrella.goalizer.boundry.UserFacade;
+import com.umbrella.goalizer.entity.Deadline;
 import com.umbrella.goalizer.entity.Goal;
 import com.umbrella.goalizer.entity.User;
 import java.util.Date;
@@ -31,23 +32,33 @@ public class GoalMB {
     public Goal goal;
     @EJB
     private UserFacade userFacade;
-
+    private Deadline deadLine; 
     public Goal getGoal() {
         return goal;
     }
 
+    public Deadline getDeadLine() {
+        return deadLine;
+    }
+
+    public void setDeadLine(Deadline deadLine) {
+        this.deadLine = deadLine;
+    }
+    
     public void setGoal(Goal goal) {
         this.goal = goal;
     }
 
     public GoalMB() {
         goal = new Goal();
+        deadLine = new Deadline();
     }
 
     public String createGoal() {
         User user = new User();
         user.setId(1);
         user = userFacade.find(user.getId());
+        goal.addDeadline(deadLine);
         goal.setCreationDate(new Date());
         goal.setUserid(user);
         goalEJB.create(goal);

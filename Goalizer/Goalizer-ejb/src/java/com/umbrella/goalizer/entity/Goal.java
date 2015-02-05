@@ -6,6 +6,7 @@
 package com.umbrella.goalizer.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
@@ -60,13 +61,16 @@ public class Goal implements Serializable, Comparable<Goal> {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "goalid", fetch = FetchType.LAZY)
     private List<Activity> activityList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "goalid", fetch = FetchType.LAZY)
-    private List<Deadline> deadlineList;
+    private List<Deadline> deadlineList = new ArrayList();
     @Temporal(TemporalType.DATE)
     private Date creationDate;
     public Goal() {
         categoryid = new Category();
     }
-
+    public void addDeadline(Deadline deadLine){
+        deadLine.setGoalid(this);
+        deadlineList.add(deadLine);
+    }
     public Goal(Integer id, String name, String description, String priority) {
         this.id = id;
         this.name = name;
