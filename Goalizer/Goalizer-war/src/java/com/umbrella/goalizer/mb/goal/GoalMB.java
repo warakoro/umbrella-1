@@ -9,6 +9,7 @@ import com.umbrella.goalizer.boundry.GoalFacade;
 import com.umbrella.goalizer.boundry.UserFacade;
 import com.umbrella.goalizer.entity.Goal;
 import com.umbrella.goalizer.entity.User;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
@@ -47,6 +48,7 @@ public class GoalMB {
         User user = new User();
         user.setId(1);
         user = userFacade.find(user.getId());
+        goal.setCreationDate(new Date());
         goal.setUserid(user);
         goalEJB.create(goal);
         return "index";
