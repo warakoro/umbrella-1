@@ -32,19 +32,19 @@
                 <br/>
                 <br/>
                
-                <p:dataList value="#{goalMB.showAll()}" var="goal" type="ordered">
+<!--                <p:dataList value="#{goalMB.showAll()}" var="goal" type="ordered">
                     <f:facet name="header">
                         Goals
                     </f:facet>
                     #{goal.description}, #{goal.name}, #{goal.userid.firstName}
-                </p:dataList>
+                </p:dataList>-->
                 
                 
                 
                 
                 
                 
-                <h:form id="form">
+                <h:form id="goalForm">
                 <p:dataGrid var="goal" value="#{goalMB.showAll()}" columns="3" layout="grid"
                     rows="12" paginator="true" id="goals"
                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
@@ -60,7 +60,7 @@
 
                             <h:outputText value="#{goal.description}" />
 
-                            <p:commandLink update=":form:goalDetail" oncomplete="PF('goalViewDialog').show()" title="Goal Detail">
+                            <p:commandLink update=":goalForm:goalDetail" oncomplete="PF('goalViewDialog').show()" title="Goal Detail">
                                 <h:outputText styleClass="ui-icon ui-icon-search" style="margin:0 auto;" />
                                 <f:setPropertyActionListener value="#{goal}" target="#{goalMB.selectedGoal}" />
                             </p:commandLink>
@@ -80,7 +80,7 @@
                             <h:outputText value="#{goalMB.selectedGoal.description}" />
                             
                             <h:outputText value="Deadline: " />
-                            <h:outputText value="#{goalMB.selectedGoal.deadlineList.get(0)}" />
+                            <h:outputText value="#{goalMB.selectedGoal.currentDeadline}" />
 
                         </p:panelGrid>
                     </p:outputPanel>
