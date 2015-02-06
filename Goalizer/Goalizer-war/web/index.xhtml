@@ -45,7 +45,7 @@
                 
                 
                 <h:form id="goalForm">
-                <p:dataGrid var="goal" value="#{goalMB.showAll()}" columns="3" layout="grid"
+                <p:dataGrid var="goal" value="#{goalMB.showAll()}" columns="1" layout="grid"
                     rows="12" paginator="true" id="goals"
                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                     rowsPerPageTemplate="6,12,16">
@@ -69,9 +69,9 @@
 
                 </p:dataGrid>
 
-                <p:dialog header="Goal details" widgetVar="goalViewDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
-                    <p:outputPanel id="goalDetail" style="text-align:center;">
-                        <p:panelGrid  columns="2" rendered="#{not empty goalMB.selectedGoal}" columnClasses="label,value">
+                <p:dialog header="Goal details" widgetVar="goalViewDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="true" minHeight="40">
+                    <p:outputPanel id="goalDetail" style="text-align:center;" rendered="true">
+                        <p:panelGrid  columns="2" rendered="#{not empty goalMB.selectedGoal}">
                             <f:facet name="header">
                                 <h:outputText value="#{goalMB.selectedGoal.name}" />
                             </f:facet>
@@ -80,7 +80,7 @@
                             <h:outputText value="#{goalMB.selectedGoal.description}" />
                             
                             <h:outputText value="Deadline: " />
-                            <h:outputText value="#{goalMB.selectedGoal.currentDeadline}" />
+                            <h:outputText value="#{goalMB.selectedGoal.currentDeadline.date}" />
 
                         </p:panelGrid>
                     </p:outputPanel>
