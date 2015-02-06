@@ -20,7 +20,7 @@ import javax.faces.bean.RequestScoped;
  *
  * @author Luis
  */
-@ManagedBean
+@ManagedBean(name = "goalMB")
 @RequestScoped
 public class GoalMB {
 
