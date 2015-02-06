@@ -16,8 +16,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -33,17 +31,6 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "GOALUSER")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "Goaluser.findAll", query = "SELECT g FROM Goaluser g"),
-    @NamedQuery(name = "Goaluser.findById", query = "SELECT g FROM Goaluser g WHERE g.id = :id"),
-    @NamedQuery(name = "Goaluser.findByAddress", query = "SELECT g FROM Goaluser g WHERE g.address = :address"),
-    @NamedQuery(name = "Goaluser.findByDob", query = "SELECT g FROM Goaluser g WHERE g.dob = :dob"),
-    @NamedQuery(name = "Goaluser.findByEmail", query = "SELECT g FROM Goaluser g WHERE g.email = :email"),
-    @NamedQuery(name = "Goaluser.findByFirstname", query = "SELECT g FROM Goaluser g WHERE g.firstname = :firstname"),
-    @NamedQuery(name = "Goaluser.findByGender", query = "SELECT g FROM Goaluser g WHERE g.gender = :gender"),
-    @NamedQuery(name = "Goaluser.findByLastname", query = "SELECT g FROM Goaluser g WHERE g.lastname = :lastname"),
-    @NamedQuery(name = "Goaluser.findByPassword", query = "SELECT g FROM Goaluser g WHERE g.password = :password"),
-    @NamedQuery(name = "Goaluser.findByUsername", query = "SELECT g FROM Goaluser g WHERE g.username = :username")})
 public class User implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id

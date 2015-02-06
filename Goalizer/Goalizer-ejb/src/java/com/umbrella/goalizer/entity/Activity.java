@@ -47,9 +47,9 @@ public class Activity implements Serializable {
     @Size(max = 255)
     @Column(name = "DESCRIPTION")
     private String description;
-    @JoinColumn(name = "GOAL_ID", referencedColumnName = "ID")
+    @JoinColumn(name = "goalid", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)
-    private Goal goalId;
+    private Goal goalid;
 
     public Activity() {
     }
@@ -83,11 +83,11 @@ public class Activity implements Serializable {
     }
 
     public Goal getGoalId() {
-        return goalId;
+        return goalid;
     }
 
     public void setGoalId(Goal goalId) {
-        this.goalId = goalId;
+        this.goalid = goalId;
     }
 
     @Override

@@ -50,9 +50,9 @@ public class Score implements Serializable {
     @Size(max = 255)
     @Column(name = "VALUE")
     private String value;
-    @JoinColumn(name = "GOAL_ID", referencedColumnName = "ID")
+    @JoinColumn(name = "goalid", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)
-    private Goal goalId;
+    private Goal goalid;
 
     public Score() {
     }
@@ -86,11 +86,11 @@ public class Score implements Serializable {
     }
 
     public Goal getGoalId() {
-        return goalId;
+        return goalid;
     }
 
-    public void setGoalId(Goal goalId) {
-        this.goalId = goalId;
+    public void setGoalId(Goal goalid) {
+        this.goalid = goalid;
     }
 
     @Override
