@@ -60,9 +60,9 @@
 
                             <h:outputText value="#{goal.description}" />
 
-                            <p:commandLink update=":form:carDetail" oncomplete="PF('goalViewDialog').show()" title="Goal Detail">
+                            <p:commandLink update=":form:goalDetail" oncomplete="PF('goalViewDialog').show()" title="Goal Detail">
                                 <h:outputText styleClass="ui-icon ui-icon-search" style="margin:0 auto;" />
-                                <f:setPropertyActionListener value="#{goal}" target="#{dataGridView.selectedCar}" />
+                                <f:setPropertyActionListener value="#{goal}" target="#{goalMB.selectedGoal}" />
                             </p:commandLink>
                         </h:panelGrid>
                     </p:panel>
@@ -71,22 +71,17 @@
 
                 <p:dialog header="Goal details" widgetVar="goalViewDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
                     <p:outputPanel id="goalDetail" style="text-align:center;">
-                        <p:panelGrid  columns="2" rendered="#{not empty dataGridView.selectedCar}" columnClasses="label,value">
+                        <p:panelGrid  columns="2" rendered="#{not empty goalMB.selectedGoal}" columnClasses="label,value">
                             <f:facet name="header">
-                                <h:outputText value="#{goal.name}" />
+                                <h:outputText value="#{goalMB.selectedGoal.name}" />
                             </f:facet>
 
-                            <h:outputText value="Id:" />
-                            <h:outputText value="#{dataGridView.selectedCar.id}" />
+                            <h:outputText value="Goal description: " />
+                            <h:outputText value="#{goalMB.selectedGoal.description}" />
+                            
+                            <h:outputText value="Deadline: " />
+                            <h:outputText value="#{goalMB.selectedGoal.deadlineList.get(0)}" />
 
-                            <h:outputText value="Year" />
-                            <h:outputText value="#{dataGridView.selectedCar.year}" />
-
-                            <h:outputText value="Color:" />
-                            <h:outputText value="#{dataGridView.selectedCar.color}" style="color:#{dataGridView.selectedCar.color}"/>
-
-                            <h:outputText value="Price" />
-                            <h:outputText value="$#{dataGridView.selectedCar.price}" />
                         </p:panelGrid>
                     </p:outputPanel>
                 </p:dialog>
