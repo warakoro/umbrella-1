@@ -10,7 +10,7 @@
             <h:body>
                 <p:commandButton value="Add New Goal" type="button" onclick="PF('addNewGoal').show();" />
 
-                <p:dialog id="goalDialog" header="Add New Goal" widgetVar="addNewGoal" minHeight="40">
+                <p:dialog widgetVar="goalDialog" header="Add New Goal" widgetVar="addNewGoal" minHeight="40">
                     <h:form>
                         <p:panel id="creategoal">
                             <p:messages id="msgs" />
@@ -26,7 +26,7 @@
                                 <p:outputLabel for="deadline" value="Deadline: " />
                                 <p:calendar id="deadline" value="#{goalMB.deadLine.date}" showOn="button" required="true" />
                             </h:panelGrid>
-                            <p:commandButton update="creategoal" actionListener="#{goalMB.createGoal()}" value="Submit"/>
+                            <p:commandButton update="creategoal" action="#{goalMB.createGoal()}" value="Submit"/>
                         </p:panel>
 
                     </h:form>
@@ -73,8 +73,8 @@
                                 <h:outputText value="Deadline: " />
                                 <h:outputText value="#{goalMB.selectedGoal.currentDeadline.date}" />
                             </p:panelGrid>
-                            <p:commandButton actionListener="${goalMB.createGoal()}" value="Submit"/>
-                            <p:commandButton actionListener="${goalMB.createGoal()}" value="Submit"/>
+                            <p:commandButton actionListener="${goalMB.update()}" value="Update"/>
+                            <p:commandButton actionListener="${goalMB.delete()}" value="Delete"/>
 
 
                         </p:outputPanel>
