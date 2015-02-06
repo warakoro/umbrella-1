@@ -86,8 +86,13 @@ public class GoalMB {
     }
 
     public String update() {
-        goalEJB.edit(goal);
-        return "";
+        goalEJB.edit(selectedGoal);
+        return "index";
+    }
+    
+    public String delete(){ 
+        goalEJB.remove(selectedGoal);
+        return "index";
     }
 
 }
