@@ -13,7 +13,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
-        <url-pattern>/faces/*</url-pattern>
+        <url-pattern>*.jsf</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
@@ -21,13 +21,13 @@
         </session-timeout>
     </session-config>
     <welcome-file-list>
-        <welcome-file>faces/index.xhtml</welcome-file>
+        <welcome-file>index.jsf</welcome-file>
     </welcome-file-list>
     
      <!--    here-->
     <error-page>
         <error-code>403</error-code>
-        <location>/faces/403.xhtml</location>
+        <location>/403.jsf</location>
     </error-page>
     <!--securty constraint-->
     <!--challange user-->
@@ -36,7 +36,7 @@
         <web-resource-collection>
             <web-resource-name>Users</web-resource-name>
             <description/>
-            <url-pattern>/faces/users/*</url-pattern>
+            <url-pattern>/users/*</url-pattern>
             <http-method>GET</http-method>
             <http-method>POST</http-method>
         </web-resource-collection>
@@ -49,8 +49,8 @@
         <auth-method>FORM</auth-method>
         <realm-name>goalizer</realm-name>
         <form-login-config>
-            <form-login-page>/faces/login.xhtml</form-login-page>
-            <form-error-page>/faces/loginError.xhtml</form-error-page>
+            <form-login-page>/login.jsf</form-login-page>
+            <form-error-page>/loginError.jsf</form-error-page>
         </form-login-config>
     </login-config>
     <security-role>
