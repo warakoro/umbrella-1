@@ -6,6 +6,7 @@
 
 package com.umbrella.goalizer.boundry;
 
+import com.umbrella.goalizer.entity.Deadline;
 import com.umbrella.goalizer.entity.Goal;
 import com.umbrella.goalizer.entity.User;
 import java.util.Collections;
@@ -39,6 +40,12 @@ public class GoalFacade extends AbstractFacade<Goal> {
         List<Goal> goals = q.getResultList();
         Collections.sort(goals);
         return goals;
+    }
+    
+    public void getLastDeadLine(Goal goal){
+        List<Deadline> deadlines = goal.getDeadlineList();
+        Deadline deadLine = deadlines.get(deadlines.size()-1);
+        goal.setCurrentDeadline(deadLine);
     }
     
 }

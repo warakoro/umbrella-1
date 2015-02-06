@@ -23,6 +23,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -62,11 +63,20 @@ public class Goal implements Serializable, Comparable<Goal> {
     private List<Deadline> deadlineList = new ArrayList();
     @Temporal(TemporalType.DATE)
     private Date creationDate;
-
+    @Transient
+    private Deadline currentDeadline;
     public Goal() {
         categoryid = new Category();
     }
 
+    public Deadline getCurrentDeadline() {
+        return currentDeadline;
+    }
+
+    public void setCurrentDeadline(Deadline currentDeadline) {
+        this.currentDeadline = currentDeadline;
+    }
+    
     public void addDeadline(Deadline deadLine) {
         deadLine.setGoalid(this);
         deadlineList.add(deadLine);
