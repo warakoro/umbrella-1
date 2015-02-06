@@ -14,15 +14,15 @@
                     <h:form>
                         <h:panelGrid columns="2" cellpadding="5" width="400">
                             <p:outputLabel value="Goal name: "/>
-                            <p:inputText id="goalName" value="${goalMB.goal.name}"/>
+                            <p:inputText id="goalName" value="${goalMB.goal.name}" required="true" />
                             <p:outputLabel value="Goal description: "/>
-                            <p:inputTextarea id="goalDescription" value="${goalMB.goal.description}"/>
+                            <p:inputTextarea id="goalDescription" value="${goalMB.goal.description}" required="true" />
                             <p:outputLabel value="Goal priority: "/>
-                            <p:inputText id="goalPriority" value="${goalMB.goal.priority}"/>
+                            <p:inputText id="goalPriority" value="${goalMB.goal.priority}" required="true" />
                             <p:outputLabel value="Category: "/>
-                            <p:inputText id="category" value="${goalMB.goal.categoryid.name}"/>
+                            <p:inputText id="category" value="${goalMB.goal.categoryid.name}" required="true" />
                             <p:outputLabel for="deadline" value="Deadline: " />
-                            <p:calendar id="deadline" value="${goalMB.deadLine.date}" showOn="button" />
+                            <p:calendar id="deadline" value="${goalMB.deadLine.date}" showOn="button" required="true" />
                             <h:commandButton action="${goalMB.createGoal()}" value="Submit"/>
                         </h:panelGrid>
 
