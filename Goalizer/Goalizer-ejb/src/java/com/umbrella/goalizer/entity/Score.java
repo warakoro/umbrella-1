@@ -22,15 +22,16 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author 984372
  */
 @Entity
-@Table(name = "score")
+@Table(name = "SCORE")
+@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Score.findAll", query = "SELECT s FROM Score s"),
     @NamedQuery(name = "Score.findById", query = "SELECT s FROM Score s WHERE s.id = :id"),
@@ -41,30 +42,23 @@ public class Score implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "id")
+    @Column(name = "ID")
     private Integer id;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "Date")
+    @Column(name = "DATE")
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
-    @Size(max = 45)
-    @Column(name = "Value")
+    @Size(max = 255)
+    @Column(name = "VALUE")
     private String value;
-    @JoinColumn(name = "Goal_id", referencedColumnName = "id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private Goal goalid;
+    @JoinColumn(name = "GOAL_ID", referencedColumnName = "ID")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Goal goalId;
 
     public Score() {
     }
 
     public Score(Integer id) {
         this.id = id;
-    }
-
-    public Score(Integer id, Date date) {
-        this.id = id;
-        this.date = date;
     }
 
     public Integer getId() {
@@ -91,12 +85,12 @@ public class Score implements Serializable {
         this.value = value;
     }
 
-    public Goal getGoalid() {
-        return goalid;
+    public Goal getGoalId() {
+        return goalId;
     }
 
-    public void setGoalid(Goal goalid) {
-        this.goalid = goalid;
+    public void setGoalId(Goal goalId) {
+        this.goalId = goalId;
     }
 
     @Override
@@ -121,7 +115,7 @@ public class Score implements Serializable {
 
     @Override
     public String toString() {
-        return "mum.umbrella.goaltraker.Score[ id=" + id + " ]";
+        return "com.umbrella.goalizer.entity.Score[ id=" + id + " ]";
     }
     
 }

@@ -19,52 +19,43 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
  * @author 984372
  */
 @Entity
-@Table(name = "activity")
+@Table(name = "ACTIVITY")
+@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Activity.findAll", query = "SELECT a FROM Activity a"),
     @NamedQuery(name = "Activity.findById", query = "SELECT a FROM Activity a WHERE a.id = :id"),
-    @NamedQuery(name = "Activity.findByDescription", query = "SELECT a FROM Activity a WHERE a.description = :description"),
-    @NamedQuery(name = "Activity.findByDate", query = "SELECT a FROM Activity a WHERE a.date = :date")})
+    @NamedQuery(name = "Activity.findByDate", query = "SELECT a FROM Activity a WHERE a.date = :date"),
+    @NamedQuery(name = "Activity.findByDescription", query = "SELECT a FROM Activity a WHERE a.description = :description")})
 public class Activity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "id")
+    @Column(name = "ID")
     private Integer id;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 45)
-    @Column(name = "description")
-    private String description;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 45)
-    @Column(name = "date")
+    @Size(max = 255)
+    @Column(name = "DATE")
     private String date;
-    @JoinColumn(name = "Goal_id", referencedColumnName = "id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
-    private Goal goalid;
+    @Size(max = 255)
+    @Column(name = "DESCRIPTION")
+    private String description;
+    @JoinColumn(name = "GOAL_ID", referencedColumnName = "ID")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Goal goalId;
 
     public Activity() {
     }
 
     public Activity(Integer id) {
         this.id = id;
-    }
-
-    public Activity(Integer id, String description, String date) {
-        this.id = id;
-        this.description = description;
-        this.date = date;
     }
 
     public Integer getId() {
@@ -75,14 +66,6 @@ public class Activity implements Serializable {
         this.id = id;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public String getDate() {
         return date;
     }
@@ -91,12 +74,20 @@ public class Activity implements Serializable {
         this.date = date;
     }
 
-    public Goal getGoalid() {
-        return goalid;
+    public String getDescription() {
+        return description;
     }
 
-    public void setGoalid(Goal goalid) {
-        this.goalid = goalid;
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Goal getGoalId() {
+        return goalId;
+    }
+
+    public void setGoalId(Goal goalId) {
+        this.goalId = goalId;
     }
 
     @Override
@@ -121,7 +112,7 @@ public class Activity implements Serializable {
 
     @Override
     public String toString() {
-        return "mum.umbrella.goaltraker.Activity[ id=" + id + " ]";
+        return "com.umbrella.goalizer.entity.Activity[ id=" + id + " ]";
     }
     
 }

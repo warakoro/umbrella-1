@@ -26,7 +26,7 @@ public class GoalMB {
      */
     
     @EJB
-    private GoalFacade goalEJB;
+    private GoalFacade goalFacade;
     public Goal goal;
     @EJB 
     private UserFacade userFacade;
@@ -47,12 +47,12 @@ public class GoalMB {
         user.setId(1);
         user = userFacade.find(user.getId());
         goal.setUserid(user);
-        goalEJB.create(goal);
+        goalFacade.create(goal);
         return "";
     }
     
     public String showAll(){
-        List<Goal> goals =goalEJB.findAll();
+        List<Goal> goals =goalFacade.findAll();
         return "";
     }
 }
