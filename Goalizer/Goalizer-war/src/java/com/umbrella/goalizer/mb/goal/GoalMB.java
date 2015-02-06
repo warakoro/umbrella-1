@@ -36,6 +36,7 @@ public class GoalMB {
     private Goal selectedGoal;
 
     public Goal getSelectedGoal() {
+        goalEJB.getLastDeadLine(selectedGoal);
         return selectedGoal;
     }
 
