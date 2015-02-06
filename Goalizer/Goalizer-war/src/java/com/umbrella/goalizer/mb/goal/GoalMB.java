@@ -33,6 +33,17 @@ public class GoalMB {
     @EJB
     private UserFacade userFacade;
     private Deadline deadLine; 
+    private Goal selectedGoal;
+
+    public Goal getSelectedGoal() {
+        return selectedGoal;
+    }
+
+    public void setSelectedGoal(Goal selectedGoal) {
+        this.selectedGoal = selectedGoal;
+    }
+    
+    
     public Goal getGoal() {
         return goal;
     }
@@ -70,6 +81,12 @@ public class GoalMB {
         user.setId(1);
         List<Goal> goals =goalEJB.getGoalsByUser(user);
         return goals;
+    }
+    
+    
+    public String update(){
+        goalEJB.edit(goal);
+        return "";
     }
 
 }
