@@ -71,5 +71,11 @@ public class GoalMB {
         List<Goal> goals =goalEJB.getGoalsByUser(user);
         return goals;
     }
+    
+    
+    public String update(){
+        goalEJB.edit(goal);
+        return "";
+    }
 
 }

@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @NamedQueries({
     @NamedQuery(name = Goal.GOALSBYUSER, query = "SELECT g FROM Goal g WHERE g.userid.id = :userId")})
 public class Goal implements Serializable, Comparable<Goal> {
-
+    
     public static final String GOALSBYUSER = "Goal.getGoalsByUser";
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "goalid", fetch = FetchType.LAZY)
     private List<Task> taskList;
@@ -59,18 +59,19 @@ public class Goal implements Serializable, Comparable<Goal> {
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private User userid;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "goalid", fetch = FetchType.LAZY)
-    private List<Activity> activityList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "goalid", fetch = FetchType.LAZY)
     private List<Deadline> deadlineList = new ArrayList();
     @Temporal(TemporalType.DATE)
     private Date creationDate;
+
     public Goal() {
         categoryid = new Category();
     }
-    public void addDeadline(Deadline deadLine){
+
+    public void addDeadline(Deadline deadLine) {
         deadLine.setGoalid(this);
         deadlineList.add(deadLine);
     }
+
     public Goal(Integer id, String name, String description, String priority) {
         this.id = id;
         this.name = name;
@@ -140,14 +141,6 @@ public class Goal implements Serializable, Comparable<Goal> {
 
     public void setUserid(User userid) {
         this.userid = userid;
-    }
-
-    public List<Activity> getActivityList() {
-        return activityList;
-    }
-
-    public void setActivityList(List<Activity> activityList) {
-        this.activityList = activityList;
     }
 
     public List<Deadline> getDeadlineList() {
