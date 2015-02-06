@@ -43,7 +43,6 @@ public class GoalFacade extends AbstractFacade<Goal> {
     }
     
     public void getLastDeadLine(Goal goal){
-        goal = find(goal.getId());
         List<Deadline> deadlines = goal.getDeadlineList();
         Deadline deadLine = deadlines.get(deadlines.size()-1);
         goal.setCurrentDeadline(deadLine);

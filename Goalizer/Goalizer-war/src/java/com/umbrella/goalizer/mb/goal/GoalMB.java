@@ -32,19 +32,17 @@ public class GoalMB {
     public Goal goal;
     @EJB
     private UserFacade userFacade;
-    private Deadline deadLine; 
+    private Deadline deadLine;
     private Goal selectedGoal;
 
     public Goal getSelectedGoal() {
-        goalEJB.getLastDeadLine(selectedGoal);
         return selectedGoal;
     }
 
     public void setSelectedGoal(Goal selectedGoal) {
         this.selectedGoal = selectedGoal;
     }
-    
-    
+
     public Goal getGoal() {
         return goal;
     }
@@ -56,7 +54,7 @@ public class GoalMB {
     public void setDeadLine(Deadline deadLine) {
         this.deadLine = deadLine;
     }
-    
+
     public void setGoal(Goal goal) {
         this.goal = goal;
     }
@@ -76,16 +74,18 @@ public class GoalMB {
         goalEJB.create(goal);
         return "index";
     }
-    
-    public List<Goal> showAll(){
+
+    public List<Goal> showAll() {
         User user = new User();
         user.setId(1);
-        List<Goal> goals =goalEJB.getGoalsByUser(user);
+        List<Goal> goals = goalEJB.getGoalsByUser(user);
+        for (Goal goal1 : goals) {
+            goalEJB.getLastDeadLine(goal1);
+        }
         return goals;
     }
-    
-    
-    public String update(){
+
+    public String update() {
         goalEJB.edit(goal);
         return "";
     }
