@@ -10,23 +10,23 @@
             <h:body>
                 <p:commandButton value="Add New Goal" type="button" onclick="PF('addNewGoal').show();" />
 
-                <p:dialog  header="Add New Goal" widgetVar="addNewGoal" minHeight="40">
+                <p:dialog id="goalDialog" header="Add New Goal" widgetVar="addNewGoal" minHeight="40">
                     <h:form>
                         <p:panel id="creategoal">
                             <p:messages id="msgs" />
                             <h:panelGrid columns="2" cellpadding="5" width="400">
                                 <p:outputLabel for="goalName" value="Goal name: "/>
-                                <p:inputText id="goalName" value="${goalMB.goal.name}" required="true" label="Goal name" />
+                                <p:inputText id="goalName" value="#{goalMB.goal.name}" required="true" label="Goal name" />
                                 <p:outputLabel for="goalDescription" value="Goal description: "/>
-                                <p:inputTextarea id="goalDescription" value="${goalMB.goal.description}" required="true" label="Goal description" />
+                                <p:inputTextarea id="goalDescription" value="#{goalMB.goal.description}" required="true" label="Goal description" />
                                 <p:outputLabel for="goalPriority" value="Goal priority: "/>
-                                <p:inputText id="goalPriority" value="${goalMB.goal.priority}" required="true" label="Goal priority" />
+                                <p:inputText id="goalPriority" value="#{goalMB.goal.priority}" required="true" label="Goal priority" />
                                 <p:outputLabel for="category" value="Category: "/>
-                                <p:inputText id="category" value="${goalMB.goal.categoryid.name}" required="true" label="Category" />
+                                <p:inputText id="category" value="#{goalMB.goal.categoryid.name}" required="true" label="Category" />
                                 <p:outputLabel for="deadline" value="Deadline: " />
-                                <p:calendar id="deadline" value="${goalMB.deadLine.date}" showOn="button" required="true" />
+                                <p:calendar id="deadline" value="#{goalMB.deadLine.date}" showOn="button" required="true" />
                             </h:panelGrid>
-                            <p:commandButton update="creategoal" actionListener="${goalMB.createGoal()}" value="Submit"/>
+                            <p:commandButton update="creategoal" actionListener="#{goalMB.createGoal()}" value="Submit"/>
                         </p:panel>
 
                     </h:form>
@@ -72,11 +72,11 @@
 
                                 <h:outputText value="Deadline: " />
                                 <h:outputText value="#{goalMB.selectedGoal.currentDeadline.date}" />
-                                
-                                <p:commandButton update="creategoal" actionListener="${goalMB.createGoal()}" value="Submit"/>
-                                <p:commandButton update="creategoal" actionListener="${goalMB.createGoal()}" value="Submit"/>
-
                             </p:panelGrid>
+                            <p:commandButton actionListener="${goalMB.createGoal()}" value="Submit"/>
+                            <p:commandButton actionListener="${goalMB.createGoal()}" value="Submit"/>
+
+
                         </p:outputPanel>
                     </p:dialog>
                 </h:form>
