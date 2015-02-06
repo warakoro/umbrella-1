@@ -15,6 +15,7 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import org.primefaces.context.RequestContext;
 
 /**
  *
@@ -72,6 +73,7 @@ public class GoalMB {
         goal.setCreationDate(new Date());
         goal.setUserid(user);
         goalEJB.create(goal);
+        RequestContext.getCurrentInstance().closeDialog("goalDialog");
         return "index";
     }
 
