@@ -10,103 +10,97 @@
             <h:body>
                 <p:commandButton value="Add New Goal" type="button" onclick="PF('addNewGoal').show();" />
 
-                <p:dialog header="Add New Goal" widgetVar="addNewGoal" minHeight="40">
+                <p:dialog id="goalDialog" header="Add New Goal" widgetVar="addNewGoal" minHeight="40">
                     <h:form>
-                        <h:panelGrid columns="2" cellpadding="5" width="400">
-                            <p:outputLabel value="Goal name: "/>
-                            <p:inputText id="goalName" value="${goalMB.goal.name}" required="true" />
-                            <p:outputLabel value="Goal description: "/>
-                            <p:inputTextarea id="goalDescription" value="${goalMB.goal.description}" required="true" />
-                            <p:outputLabel value="Goal priority: "/>
-                            <p:inputText id="goalPriority" value="${goalMB.goal.priority}" required="true" />
-                            <p:outputLabel value="Category: "/>
-                            <p:inputText id="category" value="${goalMB.goal.categoryid.name}" required="true" />
-                            <p:outputLabel for="deadline" value="Deadline: " />
-                            <p:calendar id="deadline" value="${goalMB.deadLine.date}" showOn="button" required="true" />
-                            <h:commandButton action="${goalMB.createGoal()}" value="Submit"/>
-                        </h:panelGrid>
+                        <p:panel id="creategoal">
+                            <p:messages id="msgs" />
+                            <h:panelGrid columns="2" cellpadding="5" width="400">
+                                <p:outputLabel for="goalName" value="Goal name: "/>
+                                <p:inputText id="goalName" value="#{goalMB.goal.name}" required="true" label="Goal name" />
+                                <p:outputLabel for="goalDescription" value="Goal description: "/>
+                                <p:inputTextarea id="goalDescription" value="#{goalMB.goal.description}" required="true" label="Goal description" />
+                                <p:outputLabel for="goalPriority" value="Goal priority: "/>
+                                <p:inputText id="goalPriority" value="#{goalMB.goal.priority}" required="true" label="Goal priority" />
+                                <p:outputLabel for="category" value="Category: "/>
+                                <p:inputText id="category" value="#{goalMB.goal.categoryid.name}" required="true" label="Category" />
+                                <p:outputLabel for="deadline" value="Deadline: " />
+                                <p:calendar id="deadline" value="#{goalMB.deadLine.date}" showOn="button" required="true" />
+                            </h:panelGrid>
+                            <p:commandButton update="creategoal" actionListener="#{goalMB.createGoal()}" value="Submit"/>
+                        </p:panel>
 
                     </h:form>
                 </p:dialog>
                 <br/>
                 <br/>
                 <br/>
-               
-                <p:dataList value="#{goalMB.showAll()}" var="goal" type="ordered">
-                    <f:facet name="header">
-                        Goals
-                    </f:facet>
-                    #{goal.description}, #{goal.name}, #{goal.userid.firstName}
-                </p:dataList>
-                
-                
-                
-                
-                
-                
+
                 <h:form id="goalForm">
-                <p:dataGrid var="goal" value="#{goalMB.showAll()}" columns="1" layout="grid"
-                    rows="12" paginator="true" id="goals"
-                    paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                    rowsPerPageTemplate="6,12,16">
+                    <p:dataGrid var="goal" value="#{goalMB.showAll()}" columns="1" layout="grid"
+                                rows="12" paginator="true" id="goals"
+                                paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                rowsPerPageTemplate="6,12,16">
 
-                    <f:facet name="header">
-                        Goals
-                    </f:facet>
+                        <f:facet name="header">
+                            Goals
+                        </f:facet>
 
-                    <p:panel header="#{goal.name}" style="text-align:center">
-                        <h:panelGrid columns="1" style="width:100%">
-                            <p:graphicImage name="images/category/#{goal.categoryid.id}.gif"/>
+                        <p:panel header="#{goal.name}" style="text-align:center">
+                            <h:panelGrid columns="1" style="width:100%">
+                                <p:graphicImage name="images/category/#{goal.categoryid.id}.gif"/>
 
-                            <h:outputText value="#{goal.description}" />
+                                <h:outputText value="#{goal.description}" />
 
-                            <p:commandLink update=":goalForm:goalDetail" oncomplete="PF('goalViewDialog').show()" title="Goal Detail">
-                                <h:outputText styleClass="ui-icon ui-icon-search" style="margin:0 auto;" />
-                                <f:setPropertyActionListener value="#{goal}" target="#{goalMB.selectedGoal}" />
-                            </p:commandLink>
-                        </h:panelGrid>
-                    </p:panel>
+                                <p:commandLink update=":goalForm:goalDetail" oncomplete="PF('goalViewDialog').show()" title="Goal Detail">
+                                    <h:outputText styleClass="ui-icon ui-icon-search" style="margin:0 auto;" />
+                                    <f:setPropertyActionListener value="#{goal}" target="#{goalMB.selectedGoal}" />
+                                </p:commandLink>
+                            </h:panelGrid>
+                        </p:panel>
 
-                </p:dataGrid>
+                    </p:dataGrid>
 
-                <p:dialog header="Goal details" widgetVar="goalViewDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="true" minHeight="40">
-                    <p:outputPanel id="goalDetail" style="text-align:center;" rendered="true">
-                        <p:panelGrid  columns="2" rendered="#{not empty goalMB.selectedGoal}">
-                            <f:facet name="header">
-                                <h:outputText value="#{goalMB.selectedGoal.name}" />
-                            </f:facet>
+                    <p:dialog header="Goal details" widgetVar="goalViewDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="true" minHeight="40">
+                        <p:outputPanel id="goalDetail" style="text-align:center;" rendered="true">
+                            <p:panelGrid  columns="2" rendered="#{not empty goalMB.selectedGoal}">
+                                <f:facet name="header">
+                                    <h:outputText value="#{goalMB.selectedGoal.name}" />
+                                </f:facet>
 
-                            <h:outputText value="Goal description: " />
-                            <h:outputText value="#{goalMB.selectedGoal.description}" />
-                            
-                            <h:outputText value="Deadline: " />
-                            <h:outputText value="#{goalMB.selectedGoal.currentDeadline.date}" />
+                                <h:outputText value="Goal description: " />
+                                <h:outputText value="#{goalMB.selectedGoal.description}" />
 
-                        </p:panelGrid>
-                    </p:outputPanel>
-                </p:dialog>
-            </h:form>
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
+                                <h:outputText value="Deadline: " />
+                                <h:outputText value="#{goalMB.selectedGoal.currentDeadline.date}" />
+                            </p:panelGrid>
+                            <p:commandButton actionListener="${goalMB.createGoal()}" value="Submit"/>
+                            <p:commandButton actionListener="${goalMB.createGoal()}" value="Submit"/>
+
+
+                        </p:outputPanel>
+                    </p:dialog>
+                </h:form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             </h:body>
         </ui:define>
     </ui:composition>
