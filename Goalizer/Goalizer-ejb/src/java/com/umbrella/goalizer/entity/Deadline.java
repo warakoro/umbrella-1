@@ -43,9 +43,10 @@ public class Deadline implements Serializable {
     private Integer id;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "Date")
-    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "d_date")
+    @Temporal(TemporalType.DATE)
     private Date date;
+    
     @JoinColumn(name = "goalid", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Goal goalid;
@@ -88,6 +89,14 @@ public class Deadline implements Serializable {
 
     public void setGoalid(Goal goalid) {
         this.goalid = goalid;
+    }
+
+    public Task getTask() {
+        return task;
+    }
+
+    public void setTask(Task task) {
+        this.task = task;
     }
 
     @Override

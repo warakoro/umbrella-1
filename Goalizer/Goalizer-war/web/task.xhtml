@@ -39,32 +39,31 @@
                                         <div class="panel-heading"><h3 class="panel-title text-center">New Task</h3></div>
                                         <div class="panel-body">
                                             <h:form role="form">
-                                                <div class="form-group"><h:inputText value="#{taskMB.task.title}" class="form-control input-sm" a:placeholder="Task Name"/></div>
+                                                <p:messages/>
+                                                <div class="form-group"><h:inputText value="#{taskMB.task.title}" class="form-control input-sm" a:placeholder="Task Name" required="true"/></div>
                                                 <div class="form-group"><h:inputText value="#{taskMB.task.description}" class="form-control input-sm" a:placeholder="Task Description"/></div>
-<!--                                                <div class="form-group">
-                                                    <h:selectOneRadio value="#{taskMB.taskType}" class="radio-inline">
-                                                        <f:selectItem itemValue="SingleTask" itemLabel="Single Task" />
-                                                        <f:selectItem itemValue="RecuuringTask" itemLabel="Recuuring Task"  />
-                                                    </h:selectOneRadio>
-                                                </div>-->
-                                                
-                                                    <div class="row">
-                                                        <h:selectOneRadio value="#{taskMB.taskType}">
-                                                            <div class="col-xs-6 col-sm-6 col-md-6">
-                                                                <div class="form-group">
-                                                                    <f:selectItem itemValue="SingleTask" itemLabel="Single Task" />
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-xs-6 col-sm-6 col-md-6">
-                                                                <div class="form-group">
-                                                                    <f:selectItem itemValue="RecuuringTask" itemLabel="Recuuring Task111" />
-                                                                </div>
-                                                            </div>
-                                                        </h:selectOneRadio>
-                                                    </div>  
-                                                    
-
-                                                <input type="submit" value="Add" class="btn btn-info btn-block"/>
+                                                <div class="form-group"><p:calendar a:placeholder="DeadLine" value="#{taskMB.deadline.date}"/></div>
+                                                <h:selectOneRadio value="#{taskMB.taskType}">
+                                                    <div class="btn-group btn-group-justified" role="group" aria-label="...">
+                                                    <div class="btn-group" role="group">
+                                                        <f:selectItem itemValue="SingleTask" class="btn btn-default" itemLabel="Single Task" />
+                                                    </div>
+                                                    <div class="btn-group" role="group">
+                                                        <f:selectItem itemValue="RecuuringTask" class="btn btn-default" itemLabel="Recuuring Task" />
+                                                    </div>
+                                                    </div>
+                                                    <f:ajax render="results" />
+                                                </h:selectOneRadio>
+                                                <br></br>
+                                                <h:panelGroup id="results">   
+                                                    <h:panelGroup rendered="#{taskMB.taskType == 'RecuuringTask'}">
+                                                    <div class="form-group"><h:inputText value="#{taskMB.recurringTask.recurrence}" class="form-control input-sm" a:placeholder="Recurrence"/></div>
+                                                    <div class="form-group">
+                                                        <h:selectOneMenu value="#{taskMB.recurringTask.recurrence}" class="form-control"><f:selectItems value="#{periodMB.periods}" /></h:selectOneMenu>
+                                                    </div>
+                                                    </h:panelGroup> 
+                                                </h:panelGroup>
+                                                <h:commandButton value="Add" class="btn btn-info btn-block" action="#{taskMB.addNewTask()}"/>
                                             </h:form>
                                         </div>
                                     </div>

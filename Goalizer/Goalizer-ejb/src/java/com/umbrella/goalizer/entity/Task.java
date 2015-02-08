@@ -7,10 +7,10 @@
 package com.umbrella.goalizer.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.DiscriminatorValue;
@@ -23,13 +23,8 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
+
 
 /**
  *
@@ -49,7 +44,6 @@ public class Task implements Serializable {
     @Basic(optional = false)
     private String title;
     
-    @Size(min = 1, max = 100)
     private String description;
    
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "task", fetch = FetchType.LAZY)
@@ -60,15 +54,11 @@ public class Task implements Serializable {
     private Goal goalid;
 
     public Task() {
+       this.deadlines = new ArrayList<>();
     }
 
-    public Task(Integer id) {
-        this.id = id;
-    }
-
-    public Task(Integer id, String description, int recurrence) {
-        this.id = id;
-        this.description = description;
+    public void addDeadline(Deadline deadline){
+        this.deadlines.add(deadline);
     }
 
     public Integer getId() {

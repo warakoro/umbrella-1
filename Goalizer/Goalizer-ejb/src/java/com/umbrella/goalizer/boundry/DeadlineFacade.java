@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.umbrella.goalizer.boundry;
 
 import com.umbrella.goalizer.entity.Deadline;
@@ -13,7 +12,7 @@ import javax.persistence.PersistenceContext;
 
 /**
  *
- * @author 984272
+ * @author donya
  */
 @Stateless
 public class DeadlineFacade extends AbstractFacade<Deadline> {

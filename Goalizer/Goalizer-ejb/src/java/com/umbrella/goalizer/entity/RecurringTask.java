@@ -26,8 +26,12 @@ public class RecurringTask extends Task implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private int recurrence;
+    
     @Enumerated(EnumType.STRING)
     private Period period;
+
+    public RecurringTask() {
+    }
 
     public Integer getId() {
         return id;
