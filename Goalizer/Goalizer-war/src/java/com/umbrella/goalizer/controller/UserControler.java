@@ -40,6 +40,8 @@ import javax.inject.Inject;
          myUser.setUrole(regVie.getUrole());
          myUser.setEmail(regVie.getEmail());
          myUser.setAddress(regVie.getAddress());
+         myUser.setDob(regVie.getDob());
+         myUser.setGender(regVie.getGender());
          
          //saving the user in database
          userfacade.create(myUser);
@@ -47,7 +49,7 @@ import javax.inject.Inject;
     
      
  public String encodePassword(String pw) {
-            String encodedPasswordHash ="8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918";
+            String encodedPasswordHash ="null";
             try {
                 String password = pw;
                 MessageDigest md = java.security.MessageDigest.getInstance("SHA-256");

@@ -12,10 +12,13 @@ import java.util.Date;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.Past;
+import javax.validation.constraints.Pattern;
 
 /**
  *
@@ -33,22 +36,33 @@ public class UserView implements Serializable{
     private String email;
     private String address;
     private String urole;
+    @Past
     private Date dob;
+   // @Pattern(regexp="^[-_,A-Za-z0-9]$", message="you have to choose a gender")
+    private String gender;
     
     @Inject 
     private UserControler userController;
     
     //saving user
       public String MakeRegistration(){
-        
+        //creation of acount created message
+          FacesMessage msg = new FacesMessage("Your account has been created succesfully, you may login now!");
+          msg.setSeverity(FacesMessage.SEVERITY_INFO);
+          FacesContext.getCurrentInstance().addMessage(null, msg);
         this.setUrole("USER_ROLE");
         userController.makeRegistrationC(this);
         return "login.jsf";
     }
       
     //logout user
-      public String Logout(){          
+      public String Logout(){
+          //creatin the logout message
+          FacesMessage msg = new FacesMessage("You've been logged out successfully");
+          msg.setSeverity(FacesMessage.SEVERITY_INFO);
+          FacesContext.getCurrentInstance().addMessage(null, msg);
           
+          //getting instance and logging out
           FacesContext context = FacesContext.getCurrentInstance();
           HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
           try{
@@ -60,6 +74,14 @@ public class UserView implements Serializable{
           
           return "login.jsf";
       }
+
+    public String getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
 
     public Date getDob() {
         return dob;

@@ -8,8 +8,10 @@
     <ui:composition template="default/main.xhtml">
         <ui:define name="content">
             <h:body>
+                
                 <form method="POST" action="j_security_check">
                     <p:panel header="Login">
+                        <p:messages/>
                         <p:panelGrid columns="2">
                             Username: <input type="text" name="j_username" />
                             Password: <input type="password" name="j_password" />
