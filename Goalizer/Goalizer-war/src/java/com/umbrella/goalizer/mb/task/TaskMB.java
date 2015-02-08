@@ -6,7 +6,6 @@
 
 package com.umbrella.goalizer.mb.task;
 
-import com.umbrella.goalizer.boundry.AbstractFacade;
 import com.umbrella.goalizer.boundry.RecurringTaskFacade;
 import com.umbrella.goalizer.boundry.TaskFacade;
 import com.umbrella.goalizer.entity.Deadline;
@@ -14,15 +13,14 @@ import com.umbrella.goalizer.entity.RecurringTask;
 import com.umbrella.goalizer.entity.Task;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
-import javax.inject.Inject;
+import javax.faces.bean.ViewScoped;
 
 /**
  *
  * @author 984272
  */
 @ManagedBean
-@RequestScoped
+@ViewScoped
 public class TaskMB {
     
     @EJB
@@ -85,7 +83,6 @@ public class TaskMB {
     public void setRecurrence(int recurrence) {
         this.recurrence = recurrence;
     }
-
     
     public String addNewTask(){
         Task cTask = getTaskType().equals("RecurringTast") ? recurringTask : task;
@@ -96,7 +93,6 @@ public class TaskMB {
         if (getTaskType().equals("RecurringTask")){
             recurringTask.setTitle(task.getTitle());
             recurringTask.setDescription(task.getDescription());
-            System.out.println("Recurring Task info: " + recurringTask.getPeriod());
             recurringTaskFacade.create(recurringTask);
         }
         else{

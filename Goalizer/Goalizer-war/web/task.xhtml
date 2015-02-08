@@ -49,21 +49,23 @@
                                                         <f:selectItem itemValue="SingleTask" class="btn btn-default" itemLabel="Single Task" />
                                                     </div>
                                                     <div class="btn-group" role="group">
-                                                        <f:selectItem itemValue="RecuuringTask" class="btn btn-default" itemLabel="Recuuring Task" />
+                                                        <f:selectItem itemValue="RecurringTask" class="btn btn-default" itemLabel="Recurring Task" />
                                                     </div>
                                                     </div>
                                                     <f:ajax render="results" />
                                                 </h:selectOneRadio>
                                                 <br></br>
                                                 <h:panelGroup id="results">   
-                                                    <h:panelGroup rendered="#{taskMB.taskType == 'RecuuringTask'}">
-                                                    <div class="form-group"><h:inputText value="#{taskMB.recurringTask.recurrence}" class="form-control input-sm" a:placeholder="Recurrence"/></div>
-                                                    <div class="form-group">
-                                                        <h:selectOneMenu value="#{taskMB.recurringTask.recurrence}" class="form-control"><f:selectItems value="#{periodMB.periods}" /></h:selectOneMenu>
-                                                    </div>
+                                                    <h:panelGroup rendered="#{taskMB.taskType == 'RecurringTask'}">
+                                                        <div class="form-group">
+                                                            <h:inputText value="#{taskMB.recurringTask.recurrence}" class="form-control input-sm" a:placeholder="Recurrence" />
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <h:selectOneMenu class="form-control"><f:selectItems value="#{periodMB.periods}" /></h:selectOneMenu>
+                                                        </div>
                                                     </h:panelGroup> 
                                                 </h:panelGroup>
-                                                <h:commandButton value="Add" class="btn btn-info btn-block" action="#{taskMB.addNewTask()}"/>
+                                                <h:commandButton value="Add" class="btn btn-info btn-block" action="#{taskMB.addNewTask()}" />
                                             </h:form>
                                         </div>
                                     </div>
