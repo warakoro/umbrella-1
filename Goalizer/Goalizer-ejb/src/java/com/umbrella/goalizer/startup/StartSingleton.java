@@ -48,12 +48,13 @@ public class StartSingleton {
         user.setEmail("email");
         user.setDob(new Date());
         user.setUsername("mamadou");
-        user.setPassword("8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918");
+        user.setPassword(encodePassword("admin"));
         user.setUrole("USER_ROLE");
         this.GUFacade.create(user);
     }
       public String encodePassword(String pw) {
-            String encodedPasswordHash ="8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918";
+          //8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918
+            String encodedPasswordHash ="";
             try {
                 String password = pw;
                 MessageDigest md = java.security.MessageDigest.getInstance("SHA-256");
