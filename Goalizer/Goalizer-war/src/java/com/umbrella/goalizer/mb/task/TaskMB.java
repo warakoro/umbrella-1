@@ -6,44 +6,65 @@
 
 package com.umbrella.goalizer.mb.task;
 
-import com.umbrella.goalizer.boundry.AbstractFacade;
+import com.umbrella.goalizer.boundry.GoalFacade;
 import com.umbrella.goalizer.boundry.RecurringTaskFacade;
 import com.umbrella.goalizer.boundry.TaskFacade;
 import com.umbrella.goalizer.entity.Deadline;
+import com.umbrella.goalizer.entity.Goal;
 import com.umbrella.goalizer.entity.RecurringTask;
 import com.umbrella.goalizer.entity.Task;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
-import javax.inject.Inject;
+import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 
 /**
  *
  * @author 984272
  */
+
 @ManagedBean
-@RequestScoped
+//@RequestScoped
+//@ViewScoped
+@SessionScoped
 public class TaskMB {
-    
+
+//    @ManagedProperty(value="#{param.id}")
+//    private int goalId;
+           
     @EJB
     private TaskFacade taskFacade;
     
     @EJB
     private RecurringTaskFacade recurringTaskFacade;
     
+    @EJB
+    private GoalFacade goalFacade;
+    
     private String taskType;
+    private Goal goal;
     private Task task;
     private RecurringTask recurringTask;
     private Deadline deadline;
-    private int recurrence;
 
     /**
      * Creates a new instance of TaskMB
      */
     public TaskMB() {
-        task = new Task();
-        recurringTask = new RecurringTask();
-        deadline = new Deadline();
+        restForm();
+    }
+    
+    @PostConstruct
+    private void init(){
+        if(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("id")!=null){
+            int goalId = Integer.valueOf(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("id"));
+            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("goalId", goalId);
+        }
+            
     }
 
     public Task getTask() {
@@ -78,19 +99,25 @@ public class TaskMB {
         this.recurringTask = recurringTask;
     }
 
-    public int getRecurrence() {
-        return recurrence;
+    public Goal getGoal() {
+        return goal;
     }
 
-    public void setRecurrence(int recurrence) {
-        this.recurrence = recurrence;
+    public void setGoal(Goal goal) {
+        this.goal = goal;
     }
-
     
     public String addNewTask(){
-        Task cTask = getTaskType().equals("RecurringTast") ? recurringTask : task;
+//        System.out.println("Goa Id is *********************"+goalId);
+//        if(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("id")!=null)
+//            goalId = Integer.valueOf(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("id"));
+
+        int goalId = Integer.valueOf(FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("goalId").toString());
+        goal = goalFacade.find(goalId);
+        Task cTask = getTaskType().equals("RecurringTask") ? recurringTask : task;
         deadline.setTask(cTask);
         cTask.addDeadline(deadline);
+        cTask.setGoalid(goal);
         
         
         if (getTaskType().equals("RecurringTask")){
@@ -102,7 +129,17 @@ public class TaskMB {
         else{
             taskFacade.create(task);
         }
+        restForm();
         return "task";
     }
+    
+    private void restForm(){
+        taskType = "";
+        task = new Task();
+        recurringTask = new RecurringTask();
+        deadline = new Deadline();
+    }
+    
+
     
 }

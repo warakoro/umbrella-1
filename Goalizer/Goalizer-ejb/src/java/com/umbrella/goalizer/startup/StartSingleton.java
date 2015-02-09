@@ -6,7 +6,9 @@
 
 package com.umbrella.goalizer.startup;
 
+import com.umbrella.goalizer.boundry.GoalFacade;
 import com.umbrella.goalizer.boundry.UserFacade;
+import com.umbrella.goalizer.entity.Goal;
 import com.umbrella.goalizer.entity.User;
 import java.util.Date;
 import javax.annotation.PostConstruct;
@@ -28,10 +30,15 @@ public class StartSingleton {
     // "Insert Code > Add Business Method")
    @EJB
    private UserFacade userFacade;
+   
+   @EJB
+   private GoalFacade goalFacade;
     
     @PostConstruct
     public void initApp(){
         System.out.println("Starting Singleton...");
+        
+        /******** User ********/
         User user = new User();
         user.setFirstName("test");
         user.setLastName("test");
@@ -42,5 +49,14 @@ public class StartSingleton {
         user.setEmail("email");
         user.setDob(new Date());
         userFacade.create(user);
+        
+        /******** Goal ********/
+        Goal goal = new Goal();
+        goal.setName("Test Goal");
+        goal.setDescription("Test Goal .... jshdjshd");
+        goal.setPriority("High");
+        goalFacade.create(goal);
+        
+        
     }
 }
