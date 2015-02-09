@@ -42,9 +42,7 @@ public class Goal implements Serializable, Comparable<Goal> {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
     private Integer id;
-    @Basic(optional = false)
     @NotNull
     private String name;
     @NotNull
@@ -54,10 +52,10 @@ public class Goal implements Serializable, Comparable<Goal> {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "goalid", fetch = FetchType.LAZY)
     private List<Score> scoreList;
     @JoinColumn(name = "categoryid", referencedColumnName = "id")
-    @ManyToOne(optional = false, fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @ManyToOne( fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private Category categoryid;
     @JoinColumn(name = "userid", referencedColumnName = "id")
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     private User userid;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "goalid", fetch = FetchType.LAZY)
     private List<Deadline> deadlineList = new ArrayList();

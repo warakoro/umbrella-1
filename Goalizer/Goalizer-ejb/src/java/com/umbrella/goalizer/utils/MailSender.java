@@ -35,7 +35,7 @@ public class MailSender {
         try {
             // Create email and headers.
             Message msg = new MimeMessage(session);
-            msg.setSubject("asd");
+            msg.setSubject("Goalizer Team");
             msg.setRecipient(Message.RecipientType.TO,
                     new InternetAddress(to));
             msg.setFrom(new InternetAddress(

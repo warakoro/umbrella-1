@@ -5,16 +5,12 @@
  */
 package com.umbrella.goalizer.startup;
 
-import static com.sun.org.apache.xalan.internal.lib.ExsltDatetime.year;
 import com.umbrella.goalizer.boundry.UserFacade;
+import com.umbrella.goalizer.entity.Category;
 import com.umbrella.goalizer.entity.Deadline;
 import com.umbrella.goalizer.entity.Goal;
 import com.umbrella.goalizer.entity.User;
-import java.time.LocalDate;
-import java.time.Month;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
@@ -48,24 +44,16 @@ public class StartSingleton {
         user.setEmail("lsfernandez@mum.edu");
         user.setDob(new Date());
         Goal goal = new Goal();
-        Date today = new Date();
-        goal.setName("loss 3 pounds");
+        goal.setCreationDate(new Date());
+        Deadline deadLine = new Deadline();
+        deadLine.setDate(new Date());
+        goal.addDeadline(deadLine);
+        goal.setDescription("asdasd");
         goal.setPriority("high");
-        goal.setCreationDate(today);
-        goal.setCurrentDeadline(new Deadline(1, new Date()));
-        goal.addDeadline(new Deadline(1, new Date()));
-        Goal goal2 = new Goal();
-        goal.setName("do something fancy");
-        goal.setPriority("fancy");
-        goal.setCreationDate(today);
-        Calendar cal = new GregorianCalendar();
-        int day =Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
-        int year = Calendar.getInstance().get(Calendar.YEAR);
-        int month = Calendar.getInstance().get(Calendar.MONTH);
-        cal.set(year,month,day+1);
-        goal.setCurrentDeadline(new Deadline(2,cal.getTime()));
-        goal.addDeadline(new Deadline(2,cal.getTime()));
-        user.addGoal(goal2);
+        goal.setName("asdasd");
+        Category cat = new Category();
+        cat.setName("hola");
+        goal.setCategoryid(cat);
         user.addGoal(goal);
         userFacade.create(user);
     }
