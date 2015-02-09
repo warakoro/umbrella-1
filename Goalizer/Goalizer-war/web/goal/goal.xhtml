@@ -69,12 +69,18 @@
 
                                 <h:outputText value="Goal description: " />
                                 <h:outputText value="#{goalMB.selectedGoal.description}" />
+                                
+                                <h:outputText value="Goal creation date: " />
+                                <h:outputText value="#{goalMB.selectedGoal.creationDate}" />
+                                
+                                <h:outputText value="Goal priority: " />
+                                <h:outputText value="#{goalMB.selectedGoal.priority}" />
 
                                 <h:outputText value="Deadline: " />
                                 <h:outputText value="#{goalMB.selectedGoal.currentDeadline.date}" />
                             </p:panelGrid>
-                            <p:commandButton actionListener="${goalMB.createGoal()}" value="Submit"/>
-                            <p:commandButton actionListener="${goalMB.createGoal()}" value="Submit"/>
+                            <p:commandButton actionListener="${goalMB.update()}" value="Update"/>
+                            <p:commandButton actionListener="${goalMB.delete()}" value="Delete"/>
 
 
                         </p:outputPanel>
