@@ -1,7 +1,5 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ *This set some default value to the database
  */
 
 package com.umbrella.goalizer.startup;
@@ -22,7 +20,7 @@ import javax.inject.Inject;
 
 /**
  *
- * @author 984272
+ * @author Mamadou
  */
 @Singleton
 @LocalBean
@@ -41,11 +39,11 @@ public class StartSingleton {
          
         System.out.println("Starting Singleton...");
         User user = new User();
-        user.setFirstname("test");
-        user.setLastname("test");
-        user.setAddress("address");
+        user.setFirstname("Mamadou");
+        user.setLastname("DIARRA");
+        user.setAddress("1000 n 4th");
         user.setGender("M");
-        user.setEmail("email");
+        user.setEmail("diarrao@gmail.com");
         user.setDob(new Date());
         user.setUsername("mamadou");
         user.setPassword(encodePassword("admin"));
