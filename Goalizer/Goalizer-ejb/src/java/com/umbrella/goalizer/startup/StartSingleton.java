@@ -41,7 +41,7 @@ public class StartSingleton {
         User user = new User();
         user.setFirstname("Mamadou");
         user.setLastname("DIARRA");
-        user.setAddress("1000 n 4th");
+        user.setAddress("1000 n");
         user.setGender("M");
         user.setEmail("diarrao@gmail.com");
         user.setDob(new Date());
