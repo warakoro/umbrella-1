@@ -59,22 +59,19 @@
                                                 <br></br>
                                                 <h:panelGroup id="results">   
                                                     <h:panelGroup rendered="#{taskMB.taskType == 'RecurringTask'}">
-                                                    <div class="form-group"><h:inputText value="#{taskMB.recurringTask.recurrence}" class="form-control input-sm" a:placeholder="Recurrence"/></div>
-                                                    <div class="form-group">
-                                                        <h:selectOneMenu value="#{taskMB.recurringTask.period}" class="form-control"><f:selectItems value="#{periodMB.periods}" /></h:selectOneMenu>
-                                                    </div>
-                                                    </h:panelGroup> 
-                                                </h:panelGroup>
-                                                 <h:commandButton class="btn btn-info btn-block" action="#{taskMB.addNewTask()}" value="Add"/>
-                                                
+                                                        <div class="form-group"><h:inputText value="#{taskMB.recurringTask.recurrence}" class="form-control input-sm" a:placeholder="Recurrence"/></div>
+                                                            <div class="form-group">
+                                                                <h:selectOneMenu value="#{taskMB.recurringTask.period}" class="form-control"><f:selectItems value="#{periodMB.periods}" /></h:selectOneMenu>
+                                                            </div>
+                                                        </h:panelGroup> 
+                                                    </h:panelGroup>
+                                                    <h:commandButton class="btn btn-info btn-block" action="#{taskMB.addNewTask()}" value="Add"/>
                                                  </p:panel>
                                             </h:form>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            
-                            
                         </p:tab>
                     </p:tabView>
                 </h:form>

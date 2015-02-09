@@ -16,10 +16,7 @@ import com.umbrella.goalizer.entity.Task;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
-import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
 /**
@@ -28,8 +25,7 @@ import javax.faces.context.FacesContext;
  */
 
 @ManagedBean
-//@RequestScoped
-//@ViewScoped
+
 @SessionScoped
 public class TaskMB {
 
@@ -123,7 +119,6 @@ public class TaskMB {
         if (getTaskType().equals("RecurringTask")){
             recurringTask.setTitle(task.getTitle());
             recurringTask.setDescription(task.getDescription());
-            System.out.println("Recurring Task info: " + recurringTask.getPeriod());
             recurringTaskFacade.create(recurringTask);
         }
         else{
