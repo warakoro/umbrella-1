@@ -5,27 +5,32 @@
  */
 package com.umbrella.goalizer.startup;
 
-import com.umbrella.goalizer.boundry.GoalFacade;
 import com.umbrella.goalizer.boundry.UserFacade;
 import com.umbrella.goalizer.entity.Category;
 import com.umbrella.goalizer.entity.Deadline;
 import com.umbrella.goalizer.entity.Goal;
 import com.umbrella.goalizer.entity.User;
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.ejb.Singleton;
 import javax.ejb.LocalBean;
+import javax.ejb.Singleton;
 import javax.ejb.Startup;
 
 /**
  *
- * @author 984272
+ * @author Mamadou
  */
 @Singleton
 @LocalBean
 @Startup
 public class StartSingleton {
+    private User mUser;
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
@@ -41,14 +46,16 @@ public class StartSingleton {
 
         /******** User ********/
         User user = new User();
-        user.setFirstName("test");
-        user.setLastName("test");
+        user.setFirstname("Mamadou");
+        user.setLastname("Diarra");
         user.setAddress("address");
         user.setGender("M");
-        user.setPassword("123");
-        user.setUsername("tesst");
+        user.setUsername("mamadou");
+        user.setPassword(encodePassword("admin"));
         user.setEmail("lsfernandez@mum.edu");
         user.setDob(new Date());
+        user.setUrole("USER_ROLE");
+        
         Goal goal = new Goal();
         goal.setCreationDate(new Date());
         Deadline deadLine = new Deadline();
@@ -57,8 +64,10 @@ public class StartSingleton {
         goal.setDescription("asdasd");
         goal.setPriority("high");
         goal.setName("asdasd");
+        
         Category cat = new Category();
         cat.setName("hola");
+        
         goal.setCategoryid(cat);
         user.addGoal(goal);
         userFacade.create(user);
@@ -70,4 +79,24 @@ public class StartSingleton {
 //        goal2.setPriority("High");
 //        goalFacade.create(goal2);
     }
+
+      public String encodePassword(String pw) {
+          //8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918
+            String encodedPasswordHash ="";
+            try {
+                String password = pw;
+                MessageDigest md = java.security.MessageDigest.getInstance("SHA-256");
+                try {
+                    md.update(password.getBytes("UTF-8"));
+                } catch (UnsupportedEncodingException ex) {
+                    Logger.getLogger(StartSingleton.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                byte[] passwordDigest = md.digest();
+               encodedPasswordHash = new sun.misc.BASE64Encoder().encode(passwordDigest);
+            } catch (NoSuchAlgorithmException ex) {
+                Logger.getLogger(StartSingleton.class.getName()).log(Level.SEVERE, null, ex);
+            }
+             return encodedPasswordHash;
+
+        }
 }

@@ -55,7 +55,7 @@ public class GoalsDailyEmailer {
                     if (today.get(Calendar.MONTH) == deadline.get(Calendar.MONTH)) {
                         if (today.get(Calendar.DAY_OF_MONTH) == deadline.get(Calendar.DAY_OF_MONTH)) {
 
-                            mailSender.send(user.getEmail(), "Dear " + user.getFirstName() + " the Deadline of your Goal"
+                            mailSender.send(user.getEmail(), "Dear " + user.getFirstname() + " the Deadline of your Goal"
                                     + " with name " + goal.getName() + " is today and you have not mark it as complete"
                                     + "we recommend you to finish this goal today and focus on it otherwise "
                                     + "you will get negative score in your profile. \n\n Best regards,\n The Goalizer Team");

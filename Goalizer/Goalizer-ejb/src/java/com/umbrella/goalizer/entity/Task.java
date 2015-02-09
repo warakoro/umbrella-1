@@ -24,11 +24,11 @@ import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-
+import javax.validation.constraints.Size;
 
 /**
  *
- * @author 984372
+ * @author Mamadou
  */
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -40,15 +40,15 @@ public class Task implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     private Integer id;
-    
+
     @Basic(optional = false)
     private String title;
-    
+
     private String description;
-   
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "task", fetch = FetchType.LAZY)
     private List<Deadline> deadlines;
-        
+
     @JoinColumn(name = "goalid", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Goal goalid;
@@ -126,5 +126,4 @@ public class Task implements Serializable {
     public String toString() {
         return "com.umbrella.goalizer.entity.Task[ id=" + id + " ]";
     }
-    
 }

@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <script>
+        $('#gender').puidropdown();  
+    </script>
+    <ui:composition template="default/main.xhtml" >
+        <ui:define name="content">
+            <h:body>
+                <h:form id="form">
+                    <!--                    <p:messages/>-->
+
+                    <p:panel header="Registration" >                    
+                        <h:panelGrid id="grid" columns="3" cellpadding="5" style="margin-bottom:10px">
+
+                            <p:outputLabel for="firstName" value="First Name" styleClass="requiredLbl"/>
+                            <p:inputText id="firstName" value="#{UserView.firstName}" required="true"/>
+                            <p:message for="firstName" display="text"/>
+
+                            <p:outputLabel for="lastName" value="Last Name" styleClass="requiredLbl"/>                            
+                            <p:inputText id="lastName" value="#{UserView.lastName}" required="true"/> 
+                            <p:message for="lastName" display="text"/>
+
+                            <p:outputLabel for="date" value="Date of Birth" styleClass="requiredLbl"/>                            
+                            <p:inputMask id="date" value="#{UserView.dob}" mask="99/99/9999" required="true">
+                                <f:convertDateTime type="date" pattern="dd/MM/yyyy" timeZone="Europe/Berlin" />
+                            </p:inputMask>
+                            <p:message for="date" display="text"/>
+
+                            <h:outputLabel for="gender" value="Gender " styleClass="requiredLbl"/>
+                            <h:selectOneMenu  id="gender" value="#{UserView.gender}">  
+                                <f:selectItem id="gender1" itemLabel="**select gender**" itemValue="*" />
+                                <f:selectItem id="gender2" itemLabel="Male" itemValue="Male" />
+                                <f:selectItem id="gender3" itemLabel="Female" itemValue="Female" />                                
+                            </h:selectOneMenu>
+                           <h:message for="gender" styleClass="requiredLbl" />
+
+
+                                                        
+                           
+
+
+
+                            <p:outputLabel for="userName" value="Username" styleClass="requiredLbl"/>
+                            <p:inputText id="userName" value="#{UserView.userName}" required="true"/>
+                            <p:message for="userName" display="text"/>
+
+                            <p:outputLabel for="password" value="Password" styleClass="requiredLbl"/>
+                            <p:password id="password" value="#{UserView.password}" required="true"/>
+                            <p:message for="password" display="text"/>
+
+                            <p:outputLabel for="email" value="Email" styleClass="requiredLbl"/>
+                            <p:inputText id="email" value="#{UserView.email}" required="true">                                
+                                <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                            </p:inputText>
+                            <p:message for="email" display="text"/>
+
+                            <p:outputLabel for="address" value="Address" styleClass="requiredLbl"/>
+                            <p:inputText id="address" value="#{UserView.address}" required="true"/>
+                            <p:message for="address" display="text"/>
+
+
+                            <p:commandButton value="submit" action="#{UserView.MakeRegistration}" ajax="false"/>
+
+
+
+                        </h:panelGrid>
+
+                    </p:panel>
+                </h:form>
+            </h:body>
+
+        </ui:define>
+    </ui:composition>
+</html>
+

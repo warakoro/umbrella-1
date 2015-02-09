@@ -13,6 +13,7 @@ import javax.persistence.PersistenceContext;
 /**
  *
  * @author donya
+ * @author Mamadou
  */
 @Stateless
 public class UserFacade extends AbstractFacade<User> {
@@ -27,5 +28,4 @@ public class UserFacade extends AbstractFacade<User> {
     public UserFacade() {
         super(User.class);
     }
-    
 }

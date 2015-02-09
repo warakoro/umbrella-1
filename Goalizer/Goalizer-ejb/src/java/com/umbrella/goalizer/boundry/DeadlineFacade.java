@@ -27,5 +27,4 @@ public class DeadlineFacade extends AbstractFacade<Deadline> {
     public DeadlineFacade() {
         super(Deadline.class);
     }
-    
 }

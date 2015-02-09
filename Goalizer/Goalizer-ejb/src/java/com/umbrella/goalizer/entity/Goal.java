@@ -9,7 +9,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -29,13 +28,12 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author 984372
+ * @author Mamadou
  */
 @Entity
 @NamedQueries({
     @NamedQuery(name = Goal.GOALSBYUSER, query = "SELECT g FROM Goal g WHERE g.userid.id = :userId")})
 public class Goal implements Serializable, Comparable<Goal> {
-    
     public static final String GOALSBYUSER = "Goal.getGoalsByUser";
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "goalid", fetch = FetchType.LAZY)
     private List<Task> taskList;
@@ -55,7 +53,7 @@ public class Goal implements Serializable, Comparable<Goal> {
     @ManyToOne( fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private Category categoryid;
     @JoinColumn(name = "userid", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private User userid;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "goalid", fetch = FetchType.LAZY)
     private List<Deadline> deadlineList = new ArrayList();
@@ -74,7 +72,7 @@ public class Goal implements Serializable, Comparable<Goal> {
     public void setCurrentDeadline(Deadline currentDeadline) {
         this.currentDeadline = currentDeadline;
     }
-    
+
     public void addDeadline(Deadline deadLine) {
         deadLine.setGoalid(this);
         deadlineList.add(deadLine);

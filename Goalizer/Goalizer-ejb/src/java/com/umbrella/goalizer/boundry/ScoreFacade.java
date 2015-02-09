@@ -27,5 +27,4 @@ public class ScoreFacade extends AbstractFacade<Score> {
     public ScoreFacade() {
         super(Score.class);
     }
-    
 }

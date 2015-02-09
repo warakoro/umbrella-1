@@ -27,5 +27,4 @@ public class TaskFacade extends AbstractFacade<Task> {
     public TaskFacade() {
         super(Task.class);
     }
-    
 }

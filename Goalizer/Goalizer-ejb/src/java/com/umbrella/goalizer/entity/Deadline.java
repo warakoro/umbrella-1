@@ -123,5 +123,4 @@ public class Deadline implements Serializable {
     public String toString() {
         return "mum.umbrella.goaltraker.Deadline[ id=" + id + " ]";
     }
-    
 }

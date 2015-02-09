@@ -15,7 +15,6 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
-import org.primefaces.context.RequestContext;
 
 /**
  * @author Luis
@@ -28,7 +27,7 @@ public class GoalMB {
      * Creates a new instance of GoalMB
      */
     @EJB
-    private GoalFacade goalEJB;
+    private GoalFacade goalFacade;
     public Goal goal;
     @EJB
     private UserFacade userFacade;
@@ -71,7 +70,7 @@ public class GoalMB {
         goal.addDeadline(deadLine);
         goal.setCreationDate(new Date());
         goal.setUserid(user);
-        goalEJB.create(goal);
+        goalFacade.create(goal);
 //        RequestContext.getCurrentInstance().closeDialog("goalDialog");
         return "index";
     }
@@ -79,20 +78,20 @@ public class GoalMB {
     public List<Goal> showAll() {
         User user = new User();
         user.setId(1);
-        List<Goal> goals = goalEJB.getGoalsByUser(user);
+        List<Goal> goals = goalFacade.getGoalsByUser(user);
         for (Goal goal1 : goals) {
-            goalEJB.getLastDeadLine(goal1);
+            goalFacade.getLastDeadLine(goal1);
         }
         return goals;
     }
 
     public String update() {
-        goalEJB.edit(selectedGoal);
+        goalFacade.edit(selectedGoal);
         return "index";
     }
 
     public String delete(){
-        goalEJB.remove(selectedGoal);
+        goalFacade.remove(selectedGoal);
         return "index";
     }
 }

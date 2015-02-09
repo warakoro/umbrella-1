@@ -10,7 +10,7 @@
                     <file>${reference.Goalizer-ejb.dist}</file>
                 </library>
                 <library dirs="200">
-                    <file>${file.reference.primefaces-5.1.jar}</file>
+                    <file>${libs.primefaces.classpath}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
             </web-module-libraries>
