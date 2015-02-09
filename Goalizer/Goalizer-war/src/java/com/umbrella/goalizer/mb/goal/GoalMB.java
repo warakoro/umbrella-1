@@ -72,7 +72,7 @@ public class GoalMB {
         goal.setCreationDate(new Date());
         goal.setUserid(user);
         goalEJB.create(goal);
-        RequestContext.getCurrentInstance().closeDialog("goalDialog");
+//        RequestContext.getCurrentInstance().closeDialog("goalDialog");
         return "index";
     }
 

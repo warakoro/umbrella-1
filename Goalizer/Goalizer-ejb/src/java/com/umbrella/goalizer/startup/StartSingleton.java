@@ -32,8 +32,8 @@ public class StartSingleton {
     @EJB
     private UserFacade userFacade;
 
-    @EJB
-    private GoalFacade goalFacade;
+//    @EJB
+//    private GoalFacade goalFacade;
 
     @PostConstruct
     public void initApp() {
@@ -64,10 +64,10 @@ public class StartSingleton {
         userFacade.create(user);
 
         /******** Goal ********/
-        Goal goal = new Goal();
-        goal.setName("Test Goal");
-        goal.setDescription("Test Goal .... jshdjshd");
-        goal.setPriority("High");
-        goalFacade.create(goal);
+//        Goal goal2 = new Goal();
+//        goal2.setName("Test Goal");
+//        goal2.setDescription("Test Goal .... jshdjshd");
+//        goal2.setPriority("High");
+//        goalFacade.create(goal2);
     }
 }
