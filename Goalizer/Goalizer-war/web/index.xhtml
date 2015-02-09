@@ -5,34 +5,8 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui">
-     
-    <h:head>
-        <meta http-equiv="Refresh" content="0; URL=#{request.contextPath}/goals.jsf"/>
+  <h:head>
+        <meta http-equiv="Refresh" content="0; URL=#{request.contextPath}/goal/goal.jsf"/>
     </h:head>
-    <!--<ui:composition template="default/main.xhtml">-->
-<!--
-        <ui:define name="content">
-            <h:body>
-                <p:commandButton value="Add New Goal" type="button" onclick="PF('addNewGoal').show();" />
-                
-                <p:dialog header="Add New Goal" widgetVar="addNewGoal" minHeight="40">
-                    <h:form>
-                        <h:panelGrid columns="2" cellpadding="5" width="400">
-                            <p:outputLabel value="Goal name: "/>
-                            <p:inputText id="goalName"/>
-                            <p:outputLabel value="Goal description: "/>
-                            <p:inputTextarea id="goalDescription"/>
-                            <p:outputLabel value="Goal priority: "/>
-                            <p:inputText id="goalPriority"/>
-                            <p:outputLabel value="Category: "/>
-                            <p:inputText id="category"/>
-                            <p:button onclick="/addGoal" value="Submit"/>
-                        </h:panelGrid>
-                        
-                    </h:form>
-                </p:dialog>
-            </h:body>
-        </ui:define>-->
-    <!--</ui:composition>-->
 </html>
 

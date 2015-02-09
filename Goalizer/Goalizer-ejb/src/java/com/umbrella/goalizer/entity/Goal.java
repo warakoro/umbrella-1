@@ -3,14 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.umbrella.goalizer.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -21,9 +21,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
@@ -31,15 +32,17 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author 984372
  */
 @Entity
-public class Goal implements Serializable {
+@NamedQueries({
+    @NamedQuery(name = Goal.GOALSBYUSER, query = "SELECT g FROM Goal g WHERE g.userid.id = :userId")})
+public class Goal implements Serializable, Comparable<Goal> {
+    
+    public static final String GOALSBYUSER = "Goal.getGoalsByUser";
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "goalid", fetch = FetchType.LAZY)
     private List<Task> taskList;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
     private Integer id;
-    @Basic(optional = false)
     @NotNull
     private String name;
     @NotNull
@@ -49,21 +52,32 @@ public class Goal implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "goalid", fetch = FetchType.LAZY)
     private List<Score> scoreList;
     @JoinColumn(name = "categoryid", referencedColumnName = "id")
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne( fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private Category categoryid;
     @JoinColumn(name = "userid", referencedColumnName = "id")
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     private User userid;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "goalid", fetch = FetchType.LAZY)
-    private List<Activity> activityList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "goalid", fetch = FetchType.LAZY)
-    private List<Deadline> deadlineList;
-
+    private List<Deadline> deadlineList = new ArrayList();
+    @Temporal(TemporalType.DATE)
+    private Date creationDate;
+    @Transient
+    private Deadline currentDeadline;
     public Goal() {
+        categoryid = new Category();
     }
 
-    public Goal(Integer id) {
-        this.id = id;
+    public Deadline getCurrentDeadline() {
+        return currentDeadline;
+    }
+
+    public void setCurrentDeadline(Deadline currentDeadline) {
+        this.currentDeadline = currentDeadline;
+    }
+    
+    public void addDeadline(Deadline deadLine) {
+        deadLine.setGoalid(this);
+        deadlineList.add(deadLine);
     }
 
     public Goal(Integer id, String name, String description, String priority) {
@@ -71,6 +85,14 @@ public class Goal implements Serializable {
         this.name = name;
         this.description = description;
         this.priority = priority;
+    }
+
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
     }
 
     public Integer getId() {
@@ -129,14 +151,6 @@ public class Goal implements Serializable {
         this.userid = userid;
     }
 
-    public List<Activity> getActivityList() {
-        return activityList;
-    }
-
-    public void setActivityList(List<Activity> activityList) {
-        this.activityList = activityList;
-    }
-
     public List<Deadline> getDeadlineList() {
         return deadlineList;
     }
@@ -167,7 +181,7 @@ public class Goal implements Serializable {
 
     @Override
     public String toString() {
-        return "mum.umbrella.goaltraker.Goal[ id=" + id + " ]";
+        return "Goal{" + "taskList=" + taskList + ", id=" + id + ", name=" + name + '}';
     }
 
     @XmlTransient
@@ -178,5 +192,10 @@ public class Goal implements Serializable {
     public void setTaskList(List<Task> taskList) {
         this.taskList = taskList;
     }
-    
+
+    @Override
+    public int compareTo(Goal o) {
+        return this.getCreationDate().compareTo(o.getCreationDate());
+    }
+
 }
