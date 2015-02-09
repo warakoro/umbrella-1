@@ -27,6 +27,8 @@ import javax.inject.Inject;
      
      @Inject
      private UserFacade userfacade;
+     @Inject
+     private EmailSender emailSender;
      
      private User myUser ;
      
@@ -45,6 +47,10 @@ import javax.inject.Inject;
          
          //saving the user in database
          userfacade.create(myUser);
+         
+         //sending the email
+         emailSender.sendMail(myUser);
+         
      }
     
      

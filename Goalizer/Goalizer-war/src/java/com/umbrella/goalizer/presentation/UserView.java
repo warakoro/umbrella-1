@@ -47,7 +47,7 @@ public class UserView implements Serializable{
     //saving user
       public String MakeRegistration(){
         //creation of acount created message
-          FacesMessage msg = new FacesMessage("Your account has been created succesfully, you may login now!");
+          FacesMessage msg = new FacesMessage("Your account has been created succesfully. \n An email has been sent to you for confirmation. You may loggin now!");
           msg.setSeverity(FacesMessage.SEVERITY_INFO);
           FacesContext.getCurrentInstance().addMessage(null, msg);
         this.setUrole("USER_ROLE");
