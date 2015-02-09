@@ -26,7 +26,7 @@
                                 <p:outputLabel for="deadline" value="Deadline: " />
                                 <p:calendar id="deadline" value="#{goalMB.deadLine.date}" showOn="button" required="true" />
                             </h:panelGrid>
-                            <p:commandButton update="creategoal" actionListener="#{goalMB.createGoal()}" value="Submit"/>
+                            <p:commandButton update="creategoal"  actionListener="#{goalMB.createGoal()}" value="Submit"/>
                         </p:panel>
 
                     </h:form>
@@ -48,7 +48,7 @@
                         <p:panel header="#{goal.name}" style="text-align:center">
                             <h:panelGrid columns="1" style="width:100%">
 
-                                <p:graphicImage name="images/category/#{goal.categoryid.id}.gif"/>
+                                <!--<p:graphicImage name="images/category/#{goal.categoryid.id}.gif"/>-->
 
                                 <h:outputText value="#{goal.description}" />
 
