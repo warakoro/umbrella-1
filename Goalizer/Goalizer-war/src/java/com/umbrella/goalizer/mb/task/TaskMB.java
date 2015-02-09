@@ -13,6 +13,8 @@ import com.umbrella.goalizer.entity.Deadline;
 import com.umbrella.goalizer.entity.Goal;
 import com.umbrella.goalizer.entity.RecurringTask;
 import com.umbrella.goalizer.entity.Task;
+import java.util.ArrayList;
+import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
@@ -46,6 +48,7 @@ public class TaskMB {
     private Task task;
     private RecurringTask recurringTask;
     private Deadline deadline;
+    private Task selectedTask;
 
     /**
      * Creates a new instance of TaskMB
@@ -60,9 +63,7 @@ public class TaskMB {
             int goalId = Integer.valueOf(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("id"));
             FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("goalId", goalId);
         }
-            
-    }
-
+     }
     public Task getTask() {
         return task;
     }
@@ -102,6 +103,14 @@ public class TaskMB {
     public void setGoal(Goal goal) {
         this.goal = goal;
     }
+
+    public Task getSelectedTask() {
+        return selectedTask;
+    }
+
+    public void setSelectedTask(Task selectedTask) {
+        this.selectedTask = selectedTask;
+    }
     
     public String addNewTask(){
 //        System.out.println("Goa Id is *********************"+goalId);
@@ -134,7 +143,21 @@ public class TaskMB {
         recurringTask = new RecurringTask();
         deadline = new Deadline();
     }
+     
+    public List<Task> showAllTasks(){
+        List <Task> tasks = new ArrayList<>();
+        tasks = taskFacade.findAll();
+        return tasks;
+    }
+    public String update() {
+        
+        return "task";
+    }
     
-
+    public String delete(){ 
+        
+        return "task";
+    }
+    
     
 }
