@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
@@ -37,11 +38,19 @@ public abstract class AbstractFacade<T> {
             while (iterator.hasNext()) {
                 ConstraintViolation<T> cv = iterator.next();
                 System.err.println(cv.getRootBeanClass().getName() + "." + cv.getPropertyPath() + " " + cv.getMessage());
-
-               // JsfUtil.addErrorMessage(cv.getRootBeanClass().getSimpleName() + "." + cv.getPropertyPath() + " " + cv.getMessage());
+                //JsfUtil.addErrorMessage(cv.getRootBeanClass().getSimpleName() + "." + cv.getPropertyPath() + " " + cv.getMessage());
             }
         } else {
-            getEntityManager().persist(entity);
+            try {
+                getEntityManager().persist(entity);
+            } catch (ConstraintViolationException ex) {
+                Iterator<ConstraintViolation<?>> it = ex.getConstraintViolations().iterator();
+                while (it.hasNext()) {
+                    ConstraintViolation<?> cv = it.next();
+                    System.err.println(cv.getRootBeanClass().getName() + "." + cv.getPropertyPath() + " " + cv.getMessage());
+
+                }
+            }
         }
     }
 

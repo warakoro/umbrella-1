@@ -3,10 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.umbrella.goalizer.startup;
 
 import com.umbrella.goalizer.boundry.UserFacade;
+import com.umbrella.goalizer.entity.Category;
+import com.umbrella.goalizer.entity.Deadline;
+import com.umbrella.goalizer.entity.Goal;
 import com.umbrella.goalizer.entity.User;
 import java.util.Date;
 import javax.annotation.PostConstruct;
@@ -26,11 +28,11 @@ public class StartSingleton {
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
-   @EJB
-   private UserFacade userFacade;
-    
+    @EJB
+    private UserFacade userFacade;
+
     @PostConstruct
-    public void initApp(){
+    public void initApp() {
         System.out.println("Starting Singleton...");
         User user = new User();
         user.setFirstName("test");
@@ -39,8 +41,20 @@ public class StartSingleton {
         user.setGender("M");
         user.setPassword("123");
         user.setUsername("tesst");
-        user.setEmail("email");
+        user.setEmail("lsfernandez@mum.edu");
         user.setDob(new Date());
+        Goal goal = new Goal();
+        goal.setCreationDate(new Date());
+        Deadline deadLine = new Deadline();
+        deadLine.setDate(new Date());
+        goal.addDeadline(deadLine);
+        goal.setDescription("asdasd");
+        goal.setPriority("high");
+        goal.setName("asdasd");
+        Category cat = new Category();
+        cat.setName("hola");
+        goal.setCategoryid(cat);
+        user.addGoal(goal);
         userFacade.create(user);
     }
 }

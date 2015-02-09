@@ -7,6 +7,7 @@
 package com.umbrella.goalizer.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -50,8 +51,8 @@ public class User implements Serializable {
     private String email;
     private String address;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userid", fetch = FetchType.LAZY)
-    private List<Goal> goalList;
-
+    private List<Goal> goalList = new ArrayList();
+    private Integer score;
     public User() {
     }
 
@@ -70,6 +71,19 @@ public class User implements Serializable {
         this.email = email;
     }
 
+    public void addGoal(Goal goal){
+        goal.setUserid(this);
+        goalList.add(goal);
+    }
+    public Integer getScore() {
+        return score;
+    }
+
+    public void setScore(Integer score) {
+        this.score = score;
+    }
+
+    
     public Integer getId() {
         return id;
     }
