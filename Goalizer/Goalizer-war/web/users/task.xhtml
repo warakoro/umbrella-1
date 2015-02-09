@@ -6,7 +6,6 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui"
       xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
-    
     <ui:composition template="../default/main.xhtml">
         <ui:define name="content">
             <h:body>
@@ -18,7 +17,22 @@
                                 <h:outputText value="This page will show all tasks of a certain goal (active and done) in a grid view (with all the information)" />
                                 <br></br>
                                 <br></br>
-                                <h:link outcome="task" value="Reading 100 pages on monday"></h:link>
+                                <p:dataTable var="taskRes" value="#{taskMB.showAllTasks()}">
+                                <p:column headerText="Id">
+                                    <h:outputText value="#{taskRes.id}" />
+                                </p:column>
+
+                                <p:column headerText="Title">
+                                    <h:outputText value="#{taskRes.title}" />
+                                </p:column>
+
+                                <p:column headerText="Description">
+                                    <h:outputText value="#{taskRes.description}" />
+                                </p:column>
+
+                            </p:dataTable>
+
+                                
                             </h:panelGrid>
                         </p:tab>
                         <p:tab title="Activites" >
@@ -41,7 +55,7 @@
                                             <h:form role="form">
                                                  <p:panel id="createTask">
                                                 <p:messages/>
-                                                
+
                                                 <div class="form-group"><h:inputText value="#{taskMB.task.title}" class="form-control input-sm" a:placeholder="Task Name" required="true"/></div>
                                                 <div class="form-group"><h:inputText value="#{taskMB.task.description}" class="form-control input-sm" a:placeholder="Task Description"/></div>
                                                 <div class="form-group"><p:calendar a:placeholder="DeadLine" value="#{taskMB.deadline.date}"/></div>
@@ -80,4 +94,3 @@
         </ui:define>
     </ui:composition>
 </html>
-
