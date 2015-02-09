@@ -5,10 +5,12 @@
  */
 package com.umbrella.goalizer.startup;
 
+import com.umbrella.goalizer.boundry.TaskFacade;
 import com.umbrella.goalizer.boundry.UserFacade;
 import com.umbrella.goalizer.entity.Category;
 import com.umbrella.goalizer.entity.Deadline;
 import com.umbrella.goalizer.entity.Goal;
+import com.umbrella.goalizer.entity.Task;
 import com.umbrella.goalizer.entity.User;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
@@ -36,6 +38,9 @@ public class StartSingleton {
     // "Insert Code > Add Business Method")
     @EJB
     private UserFacade userFacade;
+    
+    @EJB
+    private TaskFacade taskFacade;
 
 //    @EJB
 //    private GoalFacade goalFacade;
@@ -65,12 +70,22 @@ public class StartSingleton {
         goal.setPriority("high");
         goal.setName("asdasd");
         
+        Task t = new Task();
+        t.addDeadline(deadLine);
+        t.setTitle("Task1");
+        t.setDescription("Task 1 Description");
+        goal.addTask(t);
+        
+                
         Category cat = new Category();
         cat.setName("hola");
         
         goal.setCategoryid(cat);
         user.addGoal(goal);
         userFacade.create(user);
+        
+        
+        
 
         /******** Goal ********/
 //        Goal goal2 = new Goal();

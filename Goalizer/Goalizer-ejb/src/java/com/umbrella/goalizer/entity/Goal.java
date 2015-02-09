@@ -36,7 +36,7 @@ import javax.xml.bind.annotation.XmlTransient;
 public class Goal implements Serializable, Comparable<Goal> {
     public static final String GOALSBYUSER = "Goal.getGoalsByUser";
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "goalid", fetch = FetchType.LAZY)
-    private List<Task> taskList;
+    private List<Task> taskList = new ArrayList();
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -72,7 +72,10 @@ public class Goal implements Serializable, Comparable<Goal> {
     public void setCurrentDeadline(Deadline currentDeadline) {
         this.currentDeadline = currentDeadline;
     }
-
+    public void addTask(Task task){
+        task.setGoalid(this);
+        getTaskList().add(task);
+    }
     public void addDeadline(Deadline deadLine) {
         deadLine.setGoalid(this);
         deadlineList.add(deadLine);
