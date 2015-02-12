@@ -25,6 +25,7 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlTransient;
+import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  *
@@ -41,7 +42,8 @@ public class Goal implements Serializable, Comparable<Goal> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @NotNull
+    @NotNull(message = "this field doesn't accept nulls")
+    @NotEmpty(message = "this field doesn't accept empty")
     private String name;
     @NotNull
     private String description;

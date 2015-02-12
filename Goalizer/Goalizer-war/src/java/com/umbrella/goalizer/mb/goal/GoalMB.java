@@ -15,6 +15,7 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import org.primefaces.context.RequestContext;
 
 /**
  * @author Luis
@@ -66,15 +67,13 @@ public class GoalMB {
     public void createGoal() {
         User user = new User();
         user.setId(1);
-        System.err.println("antes de guardar "+user.getId());
         user = userFacade.find(user.getId());
-        System.err.println("luego de buscar "+user.getId());
         user.addGoal(goal);
         goal.addDeadline(deadLine);
         goal.setCreationDate(new Date());
         goal.getUserid().setId(1);
         goalFacade.edit(goal);
-
+        RequestContext.getCurrentInstance().execute("PF('addNewGoal').hide();");
         //return "index";
     }
 
