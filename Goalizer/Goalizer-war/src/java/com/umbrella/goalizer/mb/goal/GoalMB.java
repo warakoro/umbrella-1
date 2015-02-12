@@ -63,16 +63,19 @@ public class GoalMB {
         deadLine = new Deadline();
     }
 
-    public String createGoal() {
+    public void createGoal() {
         User user = new User();
         user.setId(1);
+        System.err.println("antes de guardar "+user.getId());
         user = userFacade.find(user.getId());
+        System.err.println("luego de buscar "+user.getId());
+        user.addGoal(goal);
         goal.addDeadline(deadLine);
         goal.setCreationDate(new Date());
-        goal.setUserid(user);
-        goalFacade.create(goal);
-//        RequestContext.getCurrentInstance().closeDialog("goalDialog");
-        return "index";
+        goal.getUserid().setId(1);
+        goalFacade.edit(goal);
+
+        //return "index";
     }
 
     public List<Goal> showAll() {
