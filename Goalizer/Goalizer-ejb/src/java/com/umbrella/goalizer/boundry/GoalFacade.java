@@ -9,6 +9,7 @@ import com.umbrella.goalizer.entity.Deadline;
 import com.umbrella.goalizer.entity.Goal;
 import com.umbrella.goalizer.entity.User;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -22,6 +23,7 @@ import javax.persistence.Query;
  */
 @Stateless
 public class GoalFacade extends AbstractFacade<Goal> {
+
     @PersistenceContext(unitName = "Goalizer-ejbPU")
     private EntityManager em;
 
@@ -34,16 +36,16 @@ public class GoalFacade extends AbstractFacade<Goal> {
         super(Goal.class);
     }
 
-    public List<Goal> getGoalsByUser(User user){
+    public List<Goal> getGoalsByUser(User user) {
         Query q = em.createNamedQuery(Goal.GOALSBYUSER).setParameter("userId", user.getId());
         List<Goal> goals = q.getResultList();
         Collections.sort(goals);
         return goals;
     }
 
-    public void getLastDeadLine(Goal goal){
+    public void getLastDeadLine(Goal goal) {
         List<Deadline> deadlines = goal.getDeadlineList();
-        Deadline deadLine = deadlines.get(deadlines.size()-1);
+        Deadline deadLine = deadlines.get(deadlines.size() - 1);
         goal.setCurrentDeadline(deadLine);
     }
 }

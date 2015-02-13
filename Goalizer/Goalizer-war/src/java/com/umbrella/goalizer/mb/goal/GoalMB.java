@@ -10,6 +10,9 @@ import com.umbrella.goalizer.boundry.UserFacade;
 import com.umbrella.goalizer.entity.Deadline;
 import com.umbrella.goalizer.entity.Goal;
 import com.umbrella.goalizer.entity.User;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
@@ -82,6 +85,7 @@ public class GoalMB {
         user.setId(1);
         List<Goal> goals = goalFacade.getGoalsByUser(user);
         for (Goal goal1 : goals) {
+            System.out.println(goal1.getName());
             goalFacade.getLastDeadLine(goal1);
         }
         return goals;

@@ -34,7 +34,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 @Entity
 @NamedQueries({
     @NamedQuery(name = Goal.GOALSBYUSER, query = "SELECT g FROM Goal g WHERE g.userid.id = :userId")})
-public class Goal implements Serializable, Comparable<Goal> {
+public class Goal implements Serializable ,Comparable<Goal>{
     public static final String GOALSBYUSER = "Goal.getGoalsByUser";
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "goalid", fetch = FetchType.LAZY)
     private List<Task> taskList = new ArrayList();
@@ -59,7 +59,7 @@ public class Goal implements Serializable, Comparable<Goal> {
     private User userid;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "goalid", fetch = FetchType.LAZY)
     private List<Deadline> deadlineList = new ArrayList();
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date creationDate;
     @Transient
     private Deadline currentDeadline;
@@ -198,7 +198,9 @@ public class Goal implements Serializable, Comparable<Goal> {
 
     @Override
     public int compareTo(Goal o) {
-        return this.getCreationDate().compareTo(o.getCreationDate());
+        return o.getCreationDate().compareTo(this.getCreationDate());
     }
+
+
 
 }

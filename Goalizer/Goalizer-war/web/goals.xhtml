@@ -56,6 +56,10 @@
                                     <h:outputText styleClass="ui-icon ui-icon-search" style="margin:0 auto;" />
                                     <f:setPropertyActionListener value="#{goal}" target="#{goalMB.selectedGoal}" />
                                 </p:commandLink>
+                                <p:commandLink update="goalForm"  title="Delete goal">
+                                    <h:outputText styleClass="ui-icon ui-icon-search" style="margin:0 auto;" />
+                                    <f:setPropertyActionListener value="#{goal}" target="#{goalMB.selectedGoal}" />
+                                </p:commandLink>
                             </h:panelGrid>
                         </p:panel>
 
