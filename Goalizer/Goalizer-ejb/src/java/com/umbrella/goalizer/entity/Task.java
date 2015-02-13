@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.DiscriminatorValue;
@@ -23,18 +24,25 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 import javax.validation.constraints.Size;
+
 
 /**
  *
  * @author Mamadou
  */
 @Entity
+@NamedQueries({@NamedQuery(name = Task.TASKBYGOALID, query = "SELECT t FROM Task t WHERE t.goalid.id = :goalId")})
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "disc", discriminatorType =  DiscriminatorType.STRING)
 @DiscriminatorValue("SINGLE_TASK")
+
 public class Task implements Serializable {
+    public static final String TASKBYGOALID = "Task.getTasksByGoalId";
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -44,7 +52,14 @@ public class Task implements Serializable {
     @Basic(optional = false)
     private String title;
 
+    @Column(length = 3000)
     private String description;
+    
+    @Transient
+    private Deadline currentDeadline;
+    
+    @Transient
+    private String taskType;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "task", fetch = FetchType.LAZY)
     private List<Deadline> deadlines;
@@ -99,6 +114,22 @@ public class Task implements Serializable {
 
     public void setGoalid(Goal goalid) {
         this.goalid = goalid;
+    }
+
+    public Deadline getCurrentDeadline() {
+        return currentDeadline;
+    }
+
+    public void setCurrentDeadline(Deadline currentDeadline) {
+        this.currentDeadline = currentDeadline;
+    }
+
+    public String getTaskType() {
+        return taskType;
+    }
+
+    public void setTaskType(String taskType) {
+        this.taskType = taskType;
     }
 
 

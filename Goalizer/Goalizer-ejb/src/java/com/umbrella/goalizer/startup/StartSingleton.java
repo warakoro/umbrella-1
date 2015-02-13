@@ -10,6 +10,8 @@ import com.umbrella.goalizer.boundry.UserFacade;
 import com.umbrella.goalizer.entity.Category;
 import com.umbrella.goalizer.entity.Deadline;
 import com.umbrella.goalizer.entity.Goal;
+import com.umbrella.goalizer.entity.Period;
+import com.umbrella.goalizer.entity.RecurringTask;
 import com.umbrella.goalizer.entity.Task;
 import com.umbrella.goalizer.entity.User;
 import java.io.UnsupportedEncodingException;
@@ -66,21 +68,50 @@ public class StartSingleton {
         Deadline deadLine = new Deadline();
         deadLine.setDate(new Date());
         goal.addDeadline(deadLine);
-        goal.setDescription("asdasd");
+        goal.setDescription("Find a good job in California");
         goal.setPriority("high");
-        goal.setName("asdasd");
+        goal.setName("Find a good job in California");
+
+        Goal goal2 = new Goal();
+        goal2.setCreationDate(new Date());
+        deadLine.setDate(new Date());
+        goal2.addDeadline(deadLine);
+        goal2.setDescription("Lose weight");
+        goal2.setPriority("high");
+        goal2.setName("Lose weight...");
         
         Task t = new Task();
         t.addDeadline(deadLine);
-        t.setTitle("Task1");
+        t.setTitle("Practice EJB");
         t.setDescription("Task 1 Description");
         goal.addTask(t);
         
-                
+        Task t1 = new Task();
+        t1.addDeadline(deadLine);
+        t1.setTitle("Practice Spring");
+        t1.setDescription("Task 2 Description");
+        goal.addTask(t1);
+        
+        RecurringTask t2 = new RecurringTask();
+        t2.addDeadline(deadLine);
+        t2.setTitle("Update your linkedln");
+        t2.setDescription("Task 3 Description");
+        t2.setRecurrence(3);
+        t2.setPeriod(Period.MONTH);
+        goal.addTask(t2);
+        
+        Task t3 = new Task();
+        t3.addDeadline(deadLine);
+        t3.setTitle("Go to the gym reqularly");
+        t3.setDescription("Task Description");
+        goal2.addTask(t3);
+        
         Category cat = new Category();
         cat.setName("hola");
         
         goal.setCategoryid(cat);
+        goal2.setCategoryid(cat);
+        user.addGoal(goal2);
         user.addGoal(goal);
         userFacade.create(user);
         

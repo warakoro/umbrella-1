@@ -13,13 +13,18 @@ import com.umbrella.goalizer.entity.Deadline;
 import com.umbrella.goalizer.entity.Goal;
 import com.umbrella.goalizer.entity.RecurringTask;
 import com.umbrella.goalizer.entity.Task;
-import java.util.ArrayList;
+import java.io.IOException;
 import java.util.List;
-import javax.annotation.PostConstruct;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.RequestScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  *
@@ -27,12 +32,11 @@ import javax.faces.context.FacesContext;
  */
 
 @ManagedBean
-
-@SessionScoped
+@RequestScoped
 public class TaskMB {
 
-//    @ManagedProperty(value="#{param.id}")
-//    private int goalId;
+    @ManagedProperty(value="#{param.id}")
+    private int goalId;
            
     @EJB
     private TaskFacade taskFacade;
@@ -43,27 +47,29 @@ public class TaskMB {
     @EJB
     private GoalFacade goalFacade;
     
-    private String taskType;
-    private Goal goal;
+//    private Goal goal;
     private Task task;
     private RecurringTask recurringTask;
     private Deadline deadline;
-    private Task selectedTask;
+    private String taskType;
 
     /**
      * Creates a new instance of TaskMB
      */
     public TaskMB() {
-        restForm();
+        task = new Task();
+        recurringTask = new RecurringTask();
+        deadline = new Deadline();        
     }
-    
-    @PostConstruct
-    private void init(){
-        if(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("id")!=null){
-            int goalId = Integer.valueOf(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("id"));
-            FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("goalId", goalId);
-        }
-     }
+
+    public int getGoalId() {
+        return goalId;
+    }
+
+    public void setGoalId(int goalId) {
+        this.goalId = goalId;
+    }
+
     public Task getTask() {
         return task;
     }
@@ -72,12 +78,12 @@ public class TaskMB {
         this.task = task;
     }
 
-    public String getTaskType() {
-        return taskType;
+    public RecurringTask getRecurringTask() {
+        return recurringTask;
     }
 
-    public void setTaskType(String taskType) {
-        this.taskType = taskType;
+    public void setRecurringTask(RecurringTask recurringTask) {
+        this.recurringTask = recurringTask;
     }
 
     public Deadline getDeadline() {
@@ -88,43 +94,21 @@ public class TaskMB {
         this.deadline = deadline;
     }
 
-     public RecurringTask getRecurringTask() {
-        return recurringTask;
+    public String getTaskType() {
+        return taskType;
     }
 
-    public void setRecurringTask(RecurringTask recurringTask) {
-        this.recurringTask = recurringTask;
-    }
-
-    public Goal getGoal() {
-        return goal;
-    }
-
-    public void setGoal(Goal goal) {
-        this.goal = goal;
-    }
-
-    public Task getSelectedTask() {
-        return selectedTask;
-    }
-
-    public void setSelectedTask(Task selectedTask) {
-        this.selectedTask = selectedTask;
+    public void setTaskType(String taskType) {
+        this.taskType = taskType;
     }
     
     public String addNewTask(){
-//        System.out.println("Goa Id is *********************"+goalId);
-//        if(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("id")!=null)
-//            goalId = Integer.valueOf(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("id"));
-
-        int goalId = Integer.valueOf(FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("goalId").toString());
-        goal = goalFacade.find(goalId);
+        Goal goal = goalFacade.find(goalId);
         Task cTask = getTaskType().equals("RecurringTask") ? recurringTask : task;
         deadline.setTask(cTask);
         cTask.addDeadline(deadline);
         cTask.setGoalid(goal);
-        
-        
+        //goal.addTask(task);
         if (getTaskType().equals("RecurringTask")){
             recurringTask.setTitle(task.getTitle());
             recurringTask.setDescription(task.getDescription());
@@ -133,31 +117,23 @@ public class TaskMB {
         else{
             taskFacade.create(task);
         }
-        restForm();
-        return "task";
+       return "task";
     }
     
-    private void restForm(){
-        taskType = "";
-        task = new Task();
-        recurringTask = new RecurringTask();
-        deadline = new Deadline();
-    }
-     
     public List<Task> showAllTasks(){
-        List <Task> tasks = new ArrayList<>();
-        tasks = taskFacade.findAll();
-        return tasks;
-    }
-    public String update() {
-        
-        return "task";
+        return taskFacade.getTasksByGoalId(goalId);
     }
     
-    public String delete(){ 
-        
-        return "task";
+    public void delete(Task task){
+        System.out.println("Delete**********"+task.getId());
+        taskFacade.remove(task);
     }
     
+    public void update(Task task){
+        System.out.println("Update************"+task.getId());
+    }
     
+    public void addactivity(Task task){
+        System.out.println("Add activity************"+task.getId());
+    }
 }

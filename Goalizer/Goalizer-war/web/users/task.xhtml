@@ -5,35 +5,48 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <ui:composition template="../default/main.xhtml">
         <ui:define name="content">
             <h:body>
-                <h:form id="form">  
+                <!--<h:form id="form">-->  
                     <p:growl id="msgs" showDetail="true" />
-                    <p:tabView>
-                        <p:tab title="Tasks">
-                            <h:panelGrid columns="1" cellpadding="10">
-                                <h:outputText value="This page will show all tasks of a certain goal (active and done) in a grid view (with all the information)" />
-                                <br></br>
-                                <br></br>
-                                <p:dataTable var="taskRes" value="#{taskMB.showAllTasks()}">
-                                <p:column headerText="Id">
-                                    <h:outputText value="#{taskRes.id}" />
-                                </p:column>
+                    <p:tabView id="tabview">
+                        <p:tab id="tasks" title="Tasks">
+                            
 
-                                <p:column headerText="Title">
-                                    <h:outputText value="#{taskRes.title}" />
-                                </p:column>
+                            <div class="container" id="container">
+                                <div class="panel-body" id="pbody">
+                                    <ul class="list-group" id="ul">
+                                    <form id="showAll">
+                                        <ui:repeat value="#{taskMB.showAllTasks()}" var="t" varStatus="loopStatus" id="ui">
+                                        <li class="list-group-item" style="background-color: ${loopStatus.index % 2 == 0 ? '#ffffff' : '#c7ddef'}">
+                                        <h:outputText value="#{t.title} due to #{t.currentDeadline.date}"/>
 
-                                <p:column headerText="Description">
-                                    <h:outputText value="#{taskRes.description}" />
-                                </p:column>
+                                        <div class="pull-right action-buttons" id="right">
+                                            
+                                            <h:form>
+                                                <h:commandLink id="trash" style="color:rgb(209, 91, 71);"><span class="glyphicon glyphicon-trash" id="s1"></span>
+                                                    <f:ajax listener="#{taskMB.delete(t)}" render="@all" />
+                                                </h:commandLink>
+                                                <h:commandLink id="pencil" style="color:rgb(128, 144, 160);"><span class="glyphicon glyphicon-pencil" id="s2"></span>
+                                                    <f:ajax listener="#{taskMB.update(t)}" />
+                                                </h:commandLink>
+                                                <h:commandLink id="eye" style="color:rgb(0, 153, 0);"><span class="glyphicon glyphicon-eye-open" id="s3"></span>
+                                                    <f:ajax listener="#{taskMB.addactivity(t)}" />
+                                                </h:commandLink>
+                                            </h:form>
 
-                            </p:dataTable>
+                                        </div>
+                                    </li>
+                                    </ui:repeat>
+                                    </form>
+                                </ul>
+                            </div>
+                        </div>
 
-                                
-                            </h:panelGrid>
+
                         </p:tab>
                         <p:tab title="Activites" >
                             <h:panelGrid columns="2" cellpadding="10">
@@ -52,34 +65,34 @@
                                     <div class="panel panel-default">
                                         <div class="panel-heading"><h3 class="panel-title text-center">New Task</h3></div>
                                         <div class="panel-body">
-                                            <h:form role="form">
+                                            <h:form>
                                                  <p:panel id="createTask">
-                                                <p:messages/>
-
-                                                <div class="form-group"><h:inputText value="#{taskMB.task.title}" class="form-control input-sm" a:placeholder="Task Name" required="true"/></div>
-                                                <div class="form-group"><h:inputText value="#{taskMB.task.description}" class="form-control input-sm" a:placeholder="Task Description"/></div>
-                                                <div class="form-group"><p:calendar a:placeholder="DeadLine" value="#{taskMB.deadline.date}"/></div>
-                                                <h:selectOneRadio value="#{taskMB.taskType}">
-                                                    <div class="btn-group btn-group-justified" role="group" aria-label="...">
-                                                    <div class="btn-group" role="group">
-                                                        <f:selectItem itemValue="SingleTask" class="btn btn-default" itemLabel="Single Task" />
-                                                    </div>
-                                                    <div class="btn-group" role="group">
-                                                        <f:selectItem itemValue="RecurringTask" class="btn btn-default" itemLabel="Recurring Task" />
-                                                    </div>
-                                                    </div>
-                                                    <f:ajax render="results" />
-                                                </h:selectOneRadio>
-                                                <br></br>
-                                                <h:panelGroup id="results">   
-                                                    <h:panelGroup rendered="#{taskMB.taskType == 'RecurringTask'}">
-                                                        <div class="form-group"><h:inputText value="#{taskMB.recurringTask.recurrence}" class="form-control input-sm" a:placeholder="Recurrence"/></div>
+                                                    <p:messages/>
+                                                    <h:inputText value="#{taskMB.goalId}"/>
+                                                    <div class="form-group"><h:inputText value="#{taskMB.task.title}" class="form-control input-sm" a:placeholder="Task Name" required="true"/></div>
+                                                    <div class="form-group"><h:inputTextarea cols="20" rows="10" value="#{taskMB.task.description}" class="form-control input-sm" a:placeholder="Task Description"/></div>
+                                                    <div class="form-group"><p:calendar a:placeholder="DeadLine" value="#{taskMB.deadline.date}"/></div>
+                                                    <h:selectOneRadio value="#{taskMB.taskType}">
+                                                        <div class="btn-group btn-group-justified" role="group" aria-label="...">
+                                                            <div class="btn-group" role="group">
+                                                                <f:selectItem itemValue="SingleTask" class="btn btn-default" itemLabel="Single Task" />
+                                                            </div>
+                                                            <div class="btn-group" role="group">
+                                                                <f:selectItem itemValue="RecurringTask" class="btn btn-default" itemLabel="Recurring Task" />
+                                                            </div>
+                                                        </div>
+                                                        <f:ajax render="results" />
+                                                    </h:selectOneRadio>
+                                                    <br></br>
+                                                    <h:panelGroup id="results">   
+                                                        <h:panelGroup rendered="#{taskMB.taskType == 'RecurringTask'}">
+                                                            <div class="form-group"><h:inputText value="#{taskMB.recurringTask.recurrence}" class="form-control input-sm" a:placeholder="Recurrence"/></div>
                                                             <div class="form-group">
                                                                 <h:selectOneMenu value="#{taskMB.recurringTask.period}" class="form-control"><f:selectItems value="#{periodMB.periods}" /></h:selectOneMenu>
                                                             </div>
                                                         </h:panelGroup> 
                                                     </h:panelGroup>
-                                                    <h:commandButton class="btn btn-info btn-block" action="#{taskMB.addNewTask()}" value="Add"/>
+                                                    <p:commandButton class="btn btn-info btn-block" value="Add" actionListener="#{taskMB.addNewTask()}" update="createTask" oncomplete="if(!args.validationFailed){window.location.replace(window.location.href);}"/>
                                                  </p:panel>
                                             </h:form>
                                         </div>
@@ -88,7 +101,7 @@
                             </div>
                         </p:tab>
                     </p:tabView>
-                </h:form>
+                <!--</h:form>-->
             </h:body>
 
         </ui:define>
