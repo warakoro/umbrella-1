@@ -36,7 +36,7 @@
                 <br/>
 
                 <h:form id="goalForm">
-                    <p:dataGrid var="goal" value="#{goalMB.showAll()}" columns="1" 
+                    <p:dataGrid var="singleGoal" value="#{goalMB.showAllByUser()}" columns="1" 
                                 rows="12" paginator="true" id="goals"
                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                 rowsPerPageTemplate="6,12,16">
@@ -45,21 +45,25 @@
                             Goals
                         </f:facet>
 
-                        <p:panel header="#{goal.name}" style="text-align:center">
+                        <p:panel header="#{singleGoal.name}" style="text-align:center">
                             <h:panelGrid columns="1" style="width:100%">
 
-                                <!--<p:graphicImage name="images/category/#{goal.categoryid.id}.gif"/>-->
+                                <!--<p:graphicImage name="images/category/#{singleGoal.categoryid.id}.gif"/>-->
+                                <h:form>
+                                    <h:outputText value="#{singleGoal.description}" />
+                                    <h:inputHidden value="#{singleGoal.id}"/>
+                                    <p:commandLink update=":goalForm:goalDetail" oncomplete="PF('goalViewDialog').show()" title="Goal Detail">
+                                        <h:outputText styleClass="ui-icon ui-icon-search" style="margin:0 auto;" />
+                                        <f:setPropertyActionListener value="#{singleGoal}" target="#{goalMB.selectedGoal}" />
+                                    </p:commandLink>
+                                    <p:commandButton  value="Edit" update=":goalForm:editGoal" oncomplete="PF('goalEditDialog').show()" title="Goal Edit">
+                                        <f:setPropertyActionListener value="#{singleGoal}" target="#{goalMB.selectedGoal}" />
+                                    </p:commandButton>
+                                    <p:commandButton value="Delete" actionListener="#{goalMB.delete(singleGoal)}" update=":goalForm">
+                                        <p:confirm header="Confirmation" message="Are you sure?" icon="ui-icon-alert" />
+                                    </p:commandButton>
 
-                                <h:outputText value="#{goal.description}" />
-
-                                <p:commandLink update=":goalForm:goalDetail" oncomplete="PF('goalViewDialog').show()" title="Goal Detail">
-                                    <h:outputText styleClass="ui-icon ui-icon-search" style="margin:0 auto;" />
-                                    <f:setPropertyActionListener value="#{goal}" target="#{goalMB.selectedGoal}" />
-                                </p:commandLink>
-                                <p:commandLink update="goalForm"  title="Delete goal">
-                                    <h:outputText styleClass="ui-icon ui-icon-search" style="margin:0 auto;" />
-                                    <f:setPropertyActionListener value="#{goal}" target="#{goalMB.selectedGoal}" />
-                                </p:commandLink>
+                                </h:form>
                             </h:panelGrid>
                         </p:panel>
 
@@ -87,6 +91,29 @@
                             </p:panelGrid>
 
                             <h:button outcome="task.xhtml?id=#{goalMB.selectedGoal.id}" value="add Task"></h:button>
+                        </p:outputPanel>
+                    </p:dialog>
+                    <p:confirmDialog global="true" showEffect="fade" hideEffect="explode">
+                        <p:commandButton value="Yes" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+                    </p:confirmDialog>
+                    <p:dialog header="Edit goal" widgetVar="goalEditDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="true" minHeight="40">
+                        <p:outputPanel id="editGoal" style="text-align:center;" rendered="true">
+
+                            <p:panelGrid  columns="2" rendered="#{not empty goalMB.selectedGoal}">
+                                <h:outputText value="Goal name:"/>
+                                <p:inputText value="#{goalMB.selectedGoal.name}" required="true"/>
+                                <h:outputText value="Goal description: " />
+                                <p:inputText value="#{goalMB.selectedGoal.description}" required="true"/>
+
+                                <h:outputText value="Goal priority: " />
+                                <p:inputText value="#{goalMB.selectedGoal.priority}" required="true"/>
+
+                                <h:outputText value="Deadline: " />
+                                <p:calendar id="deadline" value="#{goalMB.selectedGoal.currentDeadline.date}" showOn="button" required="true" />
+                                <!--<h:inputHidden value="#{goalMB.selectedGoal.id}"/>-->
+                            </p:panelGrid>
+                            <p:commandButton update=":goalForm, editGoal "  value="Edit" actionListener="#{goalMB.update(goalMB.selectedGoal)}"/>
                         </p:outputPanel>
                     </p:dialog>
                 </h:form>

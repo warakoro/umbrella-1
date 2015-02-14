@@ -7,24 +7,25 @@ package com.umbrella.goalizer.mb.goal;
 
 import com.umbrella.goalizer.boundry.GoalFacade;
 import com.umbrella.goalizer.boundry.UserFacade;
+import com.umbrella.goalizer.controller.GoalController;
 import com.umbrella.goalizer.entity.Deadline;
 import com.umbrella.goalizer.entity.Goal;
 import com.umbrella.goalizer.entity.User;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 import org.primefaces.context.RequestContext;
 
 /**
  * @author Luis
  */
 @ManagedBean(name = "goalMB")
-@RequestScoped
+@ViewScoped
 public class GoalMB {
 
     /**
@@ -37,6 +38,8 @@ public class GoalMB {
     private UserFacade userFacade;
     private Deadline deadLine;
     private Goal selectedGoal;
+    @EJB
+    GoalController goalController;
 
     public Goal getSelectedGoal() {
         return selectedGoal;
@@ -63,41 +66,36 @@ public class GoalMB {
     }
 
     public GoalMB() {
+
+    }
+
+    @PostConstruct
+    public void init() {
         goal = new Goal();
         deadLine = new Deadline();
     }
 
     public void createGoal() {
-        User user = new User();
-        user.setId(1);
-        user = userFacade.find(user.getId());
-        user.addGoal(goal);
-        goal.addDeadline(deadLine);
-        goal.setCreationDate(new Date());
-        goal.getUserid().setId(1);
-        goalFacade.edit(goal);
+        goalController.create(goal, deadLine);
         RequestContext.getCurrentInstance().execute("PF('addNewGoal').hide();");
-        //return "index";
     }
 
-    public List<Goal> showAll() {
-        User user = new User();
-        user.setId(1);
-        List<Goal> goals = goalFacade.getGoalsByUser(user);
-        for (Goal goal1 : goals) {
-            System.out.println(goal1.getName());
-            goalFacade.getLastDeadLine(goal1);
-        }
-        return goals;
+    public List<Goal> showAllByUser() {
+
+        return goalController.getAllByUser();
     }
 
-    public String update() {
-        goalFacade.edit(selectedGoal);
-        return "index";
+    public void update(Goal goalToUpdate) {
+        goalController.update(goalToUpdate);
+        RequestContext.getCurrentInstance().execute("PF('goalEditDialog').hide();");
     }
 
-    public String delete(){
-        goalFacade.remove(selectedGoal);
-        return "index";
+    public void delete(Goal goalToDelete) {
+        goalController.delete(goalToDelete);
+    }
+
+    public void addMessage(String summary, String detail) {
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
+        FacesContext.getCurrentInstance().addMessage(null, message);
     }
 }

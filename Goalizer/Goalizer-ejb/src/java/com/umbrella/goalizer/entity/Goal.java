@@ -55,7 +55,7 @@ public class Goal implements Serializable ,Comparable<Goal>{
     @ManyToOne( fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private Category categoryid;
     @JoinColumn(name = "userid", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     private User userid;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "goalid", fetch = FetchType.LAZY)
     private List<Deadline> deadlineList = new ArrayList();
