@@ -67,8 +67,7 @@ public class UserView implements Serializable{
           }catch(Exception e){
                 System.out.println(e.getStackTrace());
           }
-          
-          return "login.jsf";
+          return "login.jsf?faces-redirect=false";
       }
 
     public String getGender() {
