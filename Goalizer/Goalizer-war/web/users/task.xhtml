@@ -16,8 +16,8 @@
                         <p:tab id="tasks" title="Tasks">
                             
 
-                            <div class="container" id="container">
-                                <div class="panel-body" id="pbody">
+                            <div class="container">
+                                <div class="panel-body" >
                                     <ul class="list-group" id="ul">
                                     <form id="showAll">
                                         <ui:repeat value="#{taskMB.showAllTasks()}" var="t" varStatus="loopStatus" id="ui">
@@ -26,18 +26,22 @@
 
                                         <div class="pull-right action-buttons" id="right">
                                             
-                                            <h:form>
-                                                <h:commandLink id="trash" style="color:rgb(209, 91, 71);"><span class="glyphicon glyphicon-trash" id="s1"></span>
+                                            <h:form id="btns">
+                                                <h:commandLink style="color:rgb(209, 91, 71);"><span class="glyphicon glyphicon-trash" id="s1"></span>
                                                     <f:ajax listener="#{taskMB.delete(t)}" render="@all" />
                                                 </h:commandLink>
-                                                <h:commandLink id="pencil" style="color:rgb(128, 144, 160);"><span class="glyphicon glyphicon-pencil" id="s2"></span>
-                                                    <f:ajax listener="#{taskMB.update(t)}" />
+                                                <h:commandLink style="color:rgb(128, 144, 160);" onclick="PF('dlg1').show();"><span class="glyphicon glyphicon-pencil" id="s2"></span>
+                                                    
                                                 </h:commandLink>
-                                                <h:commandLink id="eye" style="color:rgb(0, 153, 0);"><span class="glyphicon glyphicon-eye-open" id="s3"></span>
+                                                <h:commandLink style="color:rgb(0, 153, 0);"><span class="glyphicon glyphicon-eye-open" id="s3"></span>
                                                     <f:ajax listener="#{taskMB.addactivity(t)}" />
                                                 </h:commandLink>
                                             </h:form>
 
+                                                         <p:dialog header="Basic Dialog" widgetVar="dlg1" minHeight="40">
+                                                             <h:outputText value="#{t.title}" />
+                                                         </p:dialog>
+                                            
                                         </div>
                                     </li>
                                     </ui:repeat>
@@ -60,44 +64,37 @@
                         </p:tab>
                             
                         <p:tab title="Add task">
-                            <div class="row centered-form">
-                                <div class="col-xs-12 col-sm-8 col-md-4 col-sm-offset-2 col-md-offset-4">
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading"><h3 class="panel-title text-center">New Task</h3></div>
-                                        <div class="panel-body">
-                                            <h:form>
-                                                 <p:panel id="createTask">
-                                                    <p:messages/>
-                                                    <h:inputText value="#{taskMB.goalId}"/>
-                                                    <div class="form-group"><h:inputText value="#{taskMB.task.title}" class="form-control input-sm" a:placeholder="Task Name" required="true"/></div>
-                                                    <div class="form-group"><h:inputTextarea cols="20" rows="10" value="#{taskMB.task.description}" class="form-control input-sm" a:placeholder="Task Description"/></div>
-                                                    <div class="form-group"><p:calendar a:placeholder="DeadLine" value="#{taskMB.deadline.date}"/></div>
-                                                    <h:selectOneRadio value="#{taskMB.taskType}">
-                                                        <div class="btn-group btn-group-justified" role="group" aria-label="...">
-                                                            <div class="btn-group" role="group">
-                                                                <f:selectItem itemValue="SingleTask" class="btn btn-default" itemLabel="Single Task" />
-                                                            </div>
-                                                            <div class="btn-group" role="group">
-                                                                <f:selectItem itemValue="RecurringTask" class="btn btn-default" itemLabel="Recurring Task" />
-                                                            </div>
-                                                        </div>
-                                                        <f:ajax render="results" />
-                                                    </h:selectOneRadio>
-                                                    <br></br>
-                                                    <h:panelGroup id="results">   
-                                                        <h:panelGroup rendered="#{taskMB.taskType == 'RecurringTask'}">
-                                                            <div class="form-group"><h:inputText value="#{taskMB.recurringTask.recurrence}" class="form-control input-sm" a:placeholder="Recurrence"/></div>
-                                                            <div class="form-group">
-                                                                <h:selectOneMenu value="#{taskMB.recurringTask.period}" class="form-control"><f:selectItems value="#{periodMB.periods}" /></h:selectOneMenu>
-                                                            </div>
-                                                        </h:panelGroup> 
-                                                    </h:panelGroup>
-                                                    <p:commandButton class="btn btn-info btn-block" value="Add" actionListener="#{taskMB.addNewTask()}" update="createTask" oncomplete="if(!args.validationFailed){window.location.replace(window.location.href);}"/>
-                                                 </p:panel>
-                                            </h:form>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class="panel-body">
+                                <h:form>
+                                     <p:panel id="createTask">
+                                        <p:messages/>
+                                        <h:inputHidden value="#{taskMB.goalId}"/>
+                                        <div class="form-group"><h:inputText id="title" value="#{taskMB.task.title}" class="form-control input-sm" a:placeholder="Task Name" required="true"/><h:message for="title" style="color:red" /></div>
+                                        <div class="form-group"><h:inputTextarea cols="20" rows="10" value="#{taskMB.task.description}" class="form-control input-sm" a:placeholder="Task Description"/></div>
+                                        <div class="form-group"><p:calendar id="cal" a:placeholder="DeadLine" value="#{taskMB.deadline.date}" required="true"/><h:message for="cal" style="color:red" /></div>
+                                        <h:selectOneRadio value="#{taskMB.taskType}">
+                                            <div class="btn-group btn-group-justified" role="group" aria-label="...">
+                                                <div class="btn-group" role="group">
+                                                    <f:selectItem itemValue="SingleTask" itemLabel="Single Task" />
+                                                </div>
+                                                <div class="btn-group" role="group">
+                                                    <f:selectItem itemValue="RecurringTask" itemLabel="Recurring Task" />
+                                                </div>
+                                            </div>
+                                            <f:ajax render="results" />
+                                        </h:selectOneRadio>
+                                        <br></br>
+                                        <h:panelGroup id="results">   
+                                            <h:panelGroup rendered="#{taskMB.taskType == 'RecurringTask'}">
+                                                <div class="form-group"><h:inputText value="#{taskMB.recurringTask.recurrence}" class="form-control input-sm" a:placeholder="Recurrence"/></div>
+                                                <div class="form-group">
+                                                    <h:selectOneMenu value="#{taskMB.recurringTask.period}" class="form-control"><f:selectItems value="#{periodMB.periods}" /></h:selectOneMenu>
+                                                </div>
+                                            </h:panelGroup> 
+                                        </h:panelGroup>
+                                        <p:commandButton styleClass="btn btn-info btn-block" value="Add" actionListener="#{taskMB.addNewTask()}" update="createTask" oncomplete="if(!args.validationFailed){window.location.replace(window.location.href);}"/>
+                                     </p:panel>
+                                </h:form>
                             </div>
                         </p:tab>
                     </p:tabView>

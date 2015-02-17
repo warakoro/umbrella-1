@@ -7,7 +7,6 @@ package com.umbrella.goalizer.boundry;
 
 import com.umbrella.goalizer.entity.Deadline;
 import com.umbrella.goalizer.entity.Task;
-import java.util.Collections;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;

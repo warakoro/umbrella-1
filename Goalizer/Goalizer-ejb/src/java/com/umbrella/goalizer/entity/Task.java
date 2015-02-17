@@ -29,6 +29,8 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 
 /**
@@ -41,6 +43,7 @@ import javax.validation.constraints.Size;
 @DiscriminatorColumn(name = "disc", discriminatorType =  DiscriminatorType.STRING)
 @DiscriminatorValue("SINGLE_TASK")
 
+@XmlRootElement
 public class Task implements Serializable {
     public static final String TASKBYGOALID = "Task.getTasksByGoalId";
     private static final long serialVersionUID = 1L;
@@ -60,6 +63,9 @@ public class Task implements Serializable {
     
     @Transient
     private String taskType;
+
+    @Transient
+    private Boolean editable;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "task", fetch = FetchType.LAZY)
     private List<Deadline> deadlines;
@@ -100,14 +106,25 @@ public class Task implements Serializable {
         this.description = description;
     }
 
+    @XmlTransient
     public List<Deadline> getDeadlines() {
         return deadlines;
+    }
+
+    @XmlTransient
+    public Boolean getEditable() {
+        return editable;
+    }
+
+    public void setEditable(Boolean editable) {
+        this.editable = editable;
     }
 
     public void setDeadlines(List<Deadline> deadlines) {
         this.deadlines = deadlines;
     }
 
+    @XmlTransient
     public Goal getGoalid() {
         return goalid;
     }
@@ -116,6 +133,7 @@ public class Task implements Serializable {
         this.goalid = goalid;
     }
 
+    @XmlTransient
     public Deadline getCurrentDeadline() {
         return currentDeadline;
     }
@@ -124,6 +142,7 @@ public class Task implements Serializable {
         this.currentDeadline = currentDeadline;
     }
 
+    @XmlTransient
     public String getTaskType() {
         return taskType;
     }

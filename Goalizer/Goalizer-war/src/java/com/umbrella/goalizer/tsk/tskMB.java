@@ -3,40 +3,37 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
-package com.umbrella.goalizer.mb.task;
+package com.umbrella.goalizer.tsk;
 
 import com.umbrella.goalizer.boundry.GoalFacade;
 import com.umbrella.goalizer.boundry.RecurringTaskFacade;
 import com.umbrella.goalizer.boundry.TaskFacade;
 import com.umbrella.goalizer.entity.Deadline;
-import com.umbrella.goalizer.entity.Goal;
 import com.umbrella.goalizer.entity.RecurringTask;
 import com.umbrella.goalizer.entity.Task;
-import java.io.IOException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.RequestScoped;
-import javax.faces.context.ExternalContext;
+import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import org.primefaces.event.SelectEvent;
+import org.primefaces.event.UnselectEvent;
 
 /**
  *
- * @author 984272
+ * @author donya
  */
-
 @ManagedBean
-@RequestScoped
-public class TaskMB {
+@SessionScoped
+public class tskMB {
 
-    @ManagedProperty(value="#{param.id}")
-    private int goalId;
+    /**
+     * Creates a new instance of tskMB
+     */
+//    @ManagedProperty(value="#{param.id}")
+    private int goalId = 1;
            
     @EJB
     private TaskFacade taskFacade;
@@ -47,19 +44,16 @@ public class TaskMB {
     @EJB
     private GoalFacade goalFacade;
     
-//    private Goal goal;
+    private List<Task> tasks;
     private Task task;
     private RecurringTask recurringTask;
     private Deadline deadline;
     private String taskType;
 
-    /**
-     * Creates a new instance of TaskMB
-     */
-    public TaskMB() {
+    public tskMB() {
         task = new Task();
         recurringTask = new RecurringTask();
-        deadline = new Deadline();        
+        deadline = new Deadline();
     }
 
     public int getGoalId() {
@@ -68,6 +62,15 @@ public class TaskMB {
 
     public void setGoalId(int goalId) {
         this.goalId = goalId;
+    }
+
+    public List<Task> gettList() {
+        tasks = taskFacade.getTasksByGoalId(goalId);
+        return tasks;
+    }
+
+    public void settList(List<Task> tasks) {
+        this.tasks = tasks;
     }
 
     public Task getTask() {
@@ -101,41 +104,31 @@ public class TaskMB {
     public void setTaskType(String taskType) {
         this.taskType = taskType;
     }
-    
-    public String addNewTask(){
-        Goal goal = goalFacade.find(goalId);
-        Task cTask = getTaskType().equals("RecurringTask") ? recurringTask : task;
-        deadline.setTask(cTask);
-        cTask.addDeadline(deadline);
-        cTask.setGoalid(goal);
-        //goal.addTask(task);
-        if (getTaskType().equals("RecurringTask")){
-            recurringTask.setTitle(task.getTitle());
-            recurringTask.setDescription(task.getDescription());
-            recurringTaskFacade.create(recurringTask);
-        }
-        else{
-            taskFacade.create(task);
-        }
-       return "task";
+ 
+    public List<Task> getAllTasksList(){
+        tasks = taskFacade.getTasksByGoalId(goalId);
+        return tasks;
     }
     
-    public List<Task> showAllTasks(){
-        return taskFacade.getTasksByGoalId(goalId);
+    public void add(){
+        task = new Task();            
     }
-    
-    public void delete(Task task){
-        System.out.println("Delete**********"+task.getId());
-        taskFacade.remove(task);
+    public void save(Task task){
+     taskFacade.edit(task);
+        cancelEdit(task);
     }
-    
-    public void update(Task t){
-        System.out.println("Update************"+task.getId());
-//        task.setTitle(t.getTitle());
-        task = t;
+
+    public void remove(Task t){
+        taskFacade.remove(t);
     }
-    
-    public void addactivity(Task task){
-        System.out.println("Add activity************"+task.getId());
+
+    public void edit(Task task){
+        for(Task t: tasks)
+            t.setEditable(false);
+        task.setEditable(true);
     }
-}
+
+    public void cancelEdit(Task task){
+        task.setEditable(false);
+    }
+ }

@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <ui:composition template="default/main.xhtml">
+        <ui:define name="content">
+            <h:body>
+                <h:form id="form">
+                    <h:dataTable id="tTable" value="#{tskMB.allTasksList}" var="task">
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="Title"/>
+                            </f:facet>
+                            <h:inputText value="#{task.title}" rendered="#{task.editable}" />
+                            <h:outputText value="#{task.title}" rendered="#{not task.editable}" />
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="Description"/>
+                            </f:facet>
+                            <h:inputText value="#{task.deadlines}" rendered="#{task.editable}" />
+                            <h:outputText value="#{task.description}" rendered="#{not task.editable}" />
+                        </h:column>
+                        
+                        <h:column>
+                            <h:commandLink value="Edit" action="#{tskMB.edit(task)}" rendered="#{not task.editable}" >
+                                <f:ajax render=":form:tTable" />
+                            </h:commandLink>
+                            
+                            <h:commandLink value="Save" action="#{tskMB.save(task)}" rendered="#{task.editable}" >
+                                <f:ajax execute="@form" render=":form:tTable" />
+                            </h:commandLink>
+                        </h:column>
+                        <h:column>
+                            <h:commandLink value="Cancel" action="#{tskMB.cancelEdit(task)}" rendered="#{task.editable}" >
+                                <f:ajax render=":form:tTable" />
+                            </h:commandLink>
+                        </h:column>
+                        <h:column>
+                            <h:commandLink id="remove" value="delete" action="#{tskMB.remove(task)}"
+                                           onclick="return confirm('Are you sure?')">
+                                <f:ajax render=":form:tTable" />
+                            </h:commandLink>
+                        </h:column>
+                    </h:dataTable>
+
+                    <br></br><br></br>
+                    <h2>Add task to table</h2>
+                    <h:outputLabel value="Title: ">
+                        <h:inputText id="title" value="#{tskMB.task.title}" />
+                    </h:outputLabel>
+                    <br/>
+                    <h:outputLabel value="Description: ">
+                        <h:inputText id="description" value="#{tskMB.task.description}" />
+                    </h:outputLabel>
+
+                    <h:commandButton value="Add Task" action="#{tskMB.add()}">
+                        <f:ajax execute="form" render="form:tTable" />
+                    </h:commandButton>
+
+                </h:form>
+            </h:body>
+        </ui:define>
+    </ui:composition>
+</html>
