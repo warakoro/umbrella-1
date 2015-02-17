@@ -9,88 +9,119 @@
     <ui:composition template="../default/main.xhtml">
         <ui:define name="content">
             <h:body>
-                <h:form id="form">  
-                    <p:growl id="msgs" showDetail="true" />
-                    <p:tabView>
-                        <p:tab title="Tasks">
+                <p:growl id="msgs" showDetail="true" />
+                <p:tabView id="tabs">
+                    <p:tab title="Tasks">
+                        <h:form id="taskForm">
                             <h:panelGrid columns="1" cellpadding="10">
-                                <h:outputText value="This page will show all tasks of a certain goal (active and done) in a grid view (with all the information)" />
-                                <br></br>
-                                <br></br>
-                                <p:dataTable var="taskRes" value="#{taskMB.showAllTasks()}">
-                                <p:column headerText="Id">
-                                    <h:outputText value="#{taskRes.id}" />
+                                <p:dataTable var="task" value="#{taskMB.showAllTasks()}">
+                                    <p:column headerText="Task">
+                                        <p:commandLink value="#{task.title}" update=":tabs:taskDialogForm:taskDialog" oncomplete="PF('taskViewDialog').show()" title="Task Detail">
+                                            <f:setPropertyActionListener value="#{task}" target="#{taskMB.selectedTask}" />
+                                        </p:commandLink>
+                                    </p:column>
+
+                                    <p:column headerText="Details">
+                                        <h:outputText value="#{task.description}" />
+                                    </p:column>
+                                </p:dataTable>  
+                            </h:panelGrid>
+                        </h:form>
+                    
+                        <h:form id="taskDialogForm">
+                            <p:dialog id="taskDialog" header="#{taskMB.selectedTask.title}" widgetVar="taskViewDialog" modal="true" showEffect="fade" hideEffect="fade" minHeight="40" draggable="false" resizable="false">
+                                <p:outputPanel rendered="true">
+                                    <div style="text-align: left">
+                                        <p:panelGrid  columns="2" rendered="#{not empty taskMB.selectedTask}">
+                                            <h:outputText value="Task:" />
+                                            <h:outputText value="#{taskMB.selectedTask.title}" />
+
+                                            <h:outputText value="Task Description:" />
+                                            <h:outputText value="#{taskMB.selectedTask.description}" />
+                                            
+                                            <h:outputText value="Activities:" />
+                                            <p:dataTable var="activity" value="#{taskMB.selectedTask.activityList}" style="width: 400px;">
+                                                <p:column >
+                                                    <h:outputText value="#{activity.name}" />
+                                                </p:column>
+                                            </p:dataTable>
+                                        </p:panelGrid>
+                                    </div>
+                                    
+                                    <div style="text-align: center">
+                                        <h:button  outcome="task.xhtml?id=#{taskMB.selectedTask.id}" value="add Task"></h:button>
+                                    </div>
+                                    
+                                </p:outputPanel>
+                            </p:dialog>
+                        </h:form>
+                    </p:tab>
+                    <p:tab title="Activites" >
+                        <h:panelGrid columns="1" cellpadding="10">
+                            <p:dataTable var="activity" value="#{activityMB.showAllActivities()}">
+                                <p:column headerText="Activity">
+                                    <h:outputText value="#{activity.name}" />
                                 </p:column>
 
-                                <p:column headerText="Title">
-                                    <h:outputText value="#{taskRes.title}" />
+                                <p:column headerText="Task">
+                                    <h:outputText value="#{activity.task.title}" />
                                 </p:column>
 
-                                <p:column headerText="Description">
-                                    <h:outputText value="#{taskRes.description}" />
+                                <p:column headerText="Time">
+                                    <h:outputText value="#{activity.date}" />
                                 </p:column>
+                            </p:dataTable>  
+                        </h:panelGrid>
+                    </p:tab>
+                    <p:tab title="Postpone deadline" >
+                        <h:panelGrid columns="2" cellpadding="10">
+                            <h:outputText value="User can change the deadline of the goal or related tasks)" />
+                        </h:panelGrid>
+                    </p:tab>
 
-                            </p:dataTable>
+                    <p:tab title="Add task">
+                        <div class="row centered-form">
+                            <div class="col-xs-12 col-sm-8 col-md-4 col-sm-offset-2 col-md-offset-4">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading"><h3 class="panel-title text-center">New Task</h3></div>
+                                    <div class="panel-body">
+                                        <h:form role="form">
+                                             <p:panel id="createTask">
+                                            <p:messages/>
 
-                                
-                            </h:panelGrid>
-                        </p:tab>
-                        <p:tab title="Activites" >
-                            <h:panelGrid columns="2" cellpadding="10">
-                                <h:outputText value="This page will show all ACTIVE tasks in a grid view (with all the information)" />
-                            </h:panelGrid>
-                        </p:tab>
-                        <p:tab title="Postpone deadline" >
-                            <h:panelGrid columns="2" cellpadding="10">
-                                <h:outputText value="User can change the deadline of the goal or related tasks)" />
-                            </h:panelGrid>
-                        </p:tab>
-                            
-                        <p:tab title="Add task">
-                            <div class="row centered-form">
-                                <div class="col-xs-12 col-sm-8 col-md-4 col-sm-offset-2 col-md-offset-4">
-                                    <div class="panel panel-default">
-                                        <div class="panel-heading"><h3 class="panel-title text-center">New Task</h3></div>
-                                        <div class="panel-body">
-                                            <h:form role="form">
-                                                 <p:panel id="createTask">
-                                                <p:messages/>
-
-                                                <div class="form-group"><h:inputText value="#{taskMB.task.title}" class="form-control input-sm" a:placeholder="Task Name" required="true"/></div>
-                                                <div class="form-group"><h:inputText value="#{taskMB.task.description}" class="form-control input-sm" a:placeholder="Task Description"/></div>
-                                                <div class="form-group"><p:calendar a:placeholder="DeadLine" value="#{taskMB.deadline.date}"/></div>
-                                                <h:selectOneRadio value="#{taskMB.taskType}">
-                                                    <div class="btn-group btn-group-justified" role="group" aria-label="...">
-                                                    <div class="btn-group" role="group">
-                                                        <f:selectItem itemValue="SingleTask" class="btn btn-default" itemLabel="Single Task" />
-                                                    </div>
-                                                    <div class="btn-group" role="group">
-                                                        <f:selectItem itemValue="RecurringTask" class="btn btn-default" itemLabel="Recurring Task" />
-                                                    </div>
-                                                    </div>
-                                                    <f:ajax render="results" />
-                                                </h:selectOneRadio>
-                                                <br></br>
-                                                <h:panelGroup id="results">   
-                                                    <h:panelGroup rendered="#{taskMB.taskType == 'RecurringTask'}">
-                                                        <div class="form-group"><h:inputText value="#{taskMB.recurringTask.recurrence}" class="form-control input-sm" a:placeholder="Recurrence"/></div>
-                                                            <div class="form-group">
-                                                                <h:selectOneMenu value="#{taskMB.recurringTask.period}" class="form-control"><f:selectItems value="#{periodMB.periods}" /></h:selectOneMenu>
-                                                            </div>
-                                                        </h:panelGroup> 
-                                                    </h:panelGroup>
-                                                    <h:commandButton class="btn btn-info btn-block" action="#{taskMB.addNewTask()}" value="Add"/>
-                                                 </p:panel>
-                                            </h:form>
-                                        </div>
+                                            <div class="form-group"><h:inputText value="#{taskMB.task.title}" class="form-control input-sm" a:placeholder="Task Name" required="true"/></div>
+                                            <div class="form-group"><h:inputTextarea cols="20" rows="10" value="#{taskMB.task.description}" class="form-control input-sm" a:placeholder="Task Description"/></div>
+                                            <div class="form-group"><p:calendar a:placeholder="DeadLine" value="#{taskMB.deadline.date}"/></div>
+                                            <h:selectOneRadio value="#{taskMB.taskType}">
+                                                <div class="btn-group btn-group-justified" role="group" aria-label="...">
+                                                <div class="btn-group" role="group">
+                                                    <f:selectItem itemValue="SingleTask" class="btn btn-default" itemLabel="Single Task" />
+                                                </div>
+                                                <div class="btn-group" role="group">
+                                                    <f:selectItem itemValue="RecurringTask" class="btn btn-default" itemLabel="Recurring Task" />
+                                                </div>
+                                                </div>
+                                                <f:ajax render="results" />
+                                            </h:selectOneRadio>
+                                            <br></br>
+                                            <h:panelGroup id="results">   
+                                                <h:panelGroup rendered="#{taskMB.taskType == 'RecurringTask'}">
+                                                    <div class="form-group"><h:inputText value="#{taskMB.recurringTask.recurrence}" class="form-control input-sm" a:placeholder="Recurrence"/></div>
+                                                        <div class="form-group">
+                                                            <h:selectOneMenu value="#{taskMB.recurringTask.period}" class="form-control"><f:selectItems value="#{periodMB.periods}" /></h:selectOneMenu>
+                                                        </div>
+                                                    </h:panelGroup> 
+                                                </h:panelGroup>
+                                                <h:commandButton class="btn btn-info btn-block" action="#{taskMB.addNewTask()}" value="Add"/>
+                                             </p:panel>
+                                        </h:form>
                                     </div>
                                 </div>
                             </div>
-                        </p:tab>
-                    </p:tabView>
-                </h:form>
+                        </div>
+                    </p:tab>
+                </p:tabView>
             </h:body>
-
         </ui:define>
     </ui:composition>
 </html>

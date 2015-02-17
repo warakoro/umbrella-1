@@ -7,8 +7,8 @@
 package com.umbrella.goalizer.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Basic;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -16,10 +16,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.validation.constraints.Size;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -29,33 +28,45 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "ACTIVITY")
 @XmlRootElement
-@NamedQueries({
-    @NamedQuery(name = "Activity.findAll", query = "SELECT a FROM Activity a"),
-    @NamedQuery(name = "Activity.findById", query = "SELECT a FROM Activity a WHERE a.id = :id"),
-    @NamedQuery(name = "Activity.findByDate", query = "SELECT a FROM Activity a WHERE a.date = :date"),
-    @NamedQuery(name = "Activity.findByDescription", query = "SELECT a FROM Activity a WHERE a.description = :description")})
 public class Activity implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "ID")
     private Integer id;
-    @Size(max = 255)
-    @Column(name = "DATE")
-    private String date;
-    @Size(max = 255)
-    @Column(name = "DESCRIPTION")
-    private String description;
-    @JoinColumn(name = "goalid", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Goal goalid;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date date;
 
+    private String name;
+    
+    @JoinColumn(name = "task", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Task task;
+    
     public Activity() {
     }
+    
+    public Activity(Task task) {
+        this.task = task;
+        name = getDefaultName();
+    }
 
-    public Activity(Integer id) {
-        this.id = id;
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+    
+    private String getDefaultName() {
+        if (task.getTaskType().equals("SINGLE_TASK")) {
+            return "Finished task";
+        } else if (task.getTaskType().equals("RECURRING_TASK")) {
+            return "Finished one instance of the task";
+        }
+        
+        return "";
     }
 
     public Integer getId() {
@@ -66,28 +77,20 @@ public class Activity implements Serializable {
         this.id = id;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
-    public String getDescription() {
-        return description;
+    public Task getTask() {
+        return task;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Goal getGoalId() {
-        return goalid;
-    }
-
-    public void setGoalId(Goal goalId) {
-        this.goalid = goalId;
+    public void setTask(Task task) {
+        this.task = task;
     }
 
     @Override

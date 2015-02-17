@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.DiscriminatorValue;
@@ -24,7 +25,8 @@ import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -34,6 +36,7 @@ import javax.validation.constraints.Size;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "disc", discriminatorType =  DiscriminatorType.STRING)
 @DiscriminatorValue("SINGLE_TASK")
+@XmlRootElement
 public class Task implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -44,6 +47,7 @@ public class Task implements Serializable {
     @Basic(optional = false)
     private String title;
 
+    @Column(length = 3000)
     private String description;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "task", fetch = FetchType.LAZY)
@@ -52,6 +56,9 @@ public class Task implements Serializable {
     @JoinColumn(name = "goalid", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Goal goalid;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "task", fetch = FetchType.LAZY)
+    private List<Activity> activityList = new ArrayList();
 
     public Task() {
        this.deadlines = new ArrayList<>();
@@ -85,6 +92,7 @@ public class Task implements Serializable {
         this.description = description;
     }
 
+    @XmlTransient
     public List<Deadline> getDeadlines() {
         return deadlines;
     }
@@ -101,6 +109,28 @@ public class Task implements Serializable {
         this.goalid = goalid;
     }
 
+    public void addActivity(Activity activity) {
+        activityList.add(activity);
+    }
+    
+    @XmlTransient
+    public List<Activity> getActivityList() {
+        return activityList;
+    }
+
+    public void setActivityList(List<Activity> activityList) {
+        this.activityList = activityList;
+    }
+
+    public String getTaskType() {
+        if (this.getClass() == Task.class) {
+            return "SINGLE_TASK";
+        } else if (this.getClass() == RecurringTask.class) {
+            return "RECURRING_TASK";
+        }
+        
+        return "";
+    }
 
     @Override
     public int hashCode() {

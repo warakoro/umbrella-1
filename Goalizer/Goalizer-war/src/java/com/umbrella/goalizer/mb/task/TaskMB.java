@@ -13,6 +13,7 @@ import com.umbrella.goalizer.entity.Deadline;
 import com.umbrella.goalizer.entity.Goal;
 import com.umbrella.goalizer.entity.RecurringTask;
 import com.umbrella.goalizer.entity.Task;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
@@ -27,7 +28,6 @@ import javax.faces.context.FacesContext;
  */
 
 @ManagedBean
-
 @SessionScoped
 public class TaskMB {
 
@@ -112,7 +112,7 @@ public class TaskMB {
         this.selectedTask = selectedTask;
     }
     
-    public String addNewTask(){
+    public void addNewTask() throws IOException{
 //        System.out.println("Goa Id is *********************"+goalId);
 //        if(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("id")!=null)
 //            goalId = Integer.valueOf(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("id"));
@@ -134,7 +134,9 @@ public class TaskMB {
             taskFacade.create(task);
         }
         restForm();
-        return "task";
+        
+        FacesContext.getCurrentInstance().getExternalContext().redirect("task.jsf");
+//        return "task";
     }
     
     private void restForm(){

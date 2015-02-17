@@ -24,6 +24,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
@@ -33,6 +34,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @NamedQueries({
     @NamedQuery(name = Goal.GOALSBYUSER, query = "SELECT g FROM Goal g WHERE g.userid.id = :userId")})
+@XmlRootElement
 public class Goal implements Serializable, Comparable<Goal> {
     public static final String GOALSBYUSER = "Goal.getGoalsByUser";
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "goalid", fetch = FetchType.LAZY)
@@ -72,6 +74,7 @@ public class Goal implements Serializable, Comparable<Goal> {
     public void setCurrentDeadline(Deadline currentDeadline) {
         this.currentDeadline = currentDeadline;
     }
+    
     public void addTask(Task task){
         task.setGoalid(this);
         getTaskList().add(task);
@@ -128,6 +131,7 @@ public class Goal implements Serializable, Comparable<Goal> {
         this.priority = priority;
     }
 
+    @XmlTransient
     public List<Score> getScoreList() {
         return scoreList;
     }
@@ -152,6 +156,7 @@ public class Goal implements Serializable, Comparable<Goal> {
         this.userid = userid;
     }
 
+    @XmlTransient
     public List<Deadline> getDeadlineList() {
         return deadlineList;
     }

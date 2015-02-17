@@ -23,6 +23,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
@@ -34,6 +35,7 @@ import javax.validation.constraints.NotNull;
     @NamedQuery(name = "Deadline.findAll", query = "SELECT d FROM Deadline d"),
     @NamedQuery(name = "Deadline.findById", query = "SELECT d FROM Deadline d WHERE d.id = :id"),
     @NamedQuery(name = "Deadline.findByDate", query = "SELECT d FROM Deadline d WHERE d.date = :date")})
+@XmlRootElement
 public class Deadline implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -58,6 +60,10 @@ public class Deadline implements Serializable {
     public Deadline() {
     }
 
+    public Deadline(Deadline deadline) {
+        this.date = deadline.date;
+        
+    }
     public Deadline(Integer id) {
         this.id = id;
     }

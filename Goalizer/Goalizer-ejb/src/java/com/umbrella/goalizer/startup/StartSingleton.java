@@ -7,9 +7,11 @@ package com.umbrella.goalizer.startup;
 
 import com.umbrella.goalizer.boundry.TaskFacade;
 import com.umbrella.goalizer.boundry.UserFacade;
+import com.umbrella.goalizer.entity.Activity;
 import com.umbrella.goalizer.entity.Category;
 import com.umbrella.goalizer.entity.Deadline;
 import com.umbrella.goalizer.entity.Goal;
+import com.umbrella.goalizer.entity.RecurringTask;
 import com.umbrella.goalizer.entity.Task;
 import com.umbrella.goalizer.entity.User;
 import java.io.UnsupportedEncodingException;
@@ -66,17 +68,26 @@ public class StartSingleton {
         Deadline deadLine = new Deadline();
         deadLine.setDate(new Date());
         goal.addDeadline(deadLine);
-        goal.setDescription("asdasd");
+        goal.setDescription("Goal Description");
         goal.setPriority("high");
-        goal.setName("asdasd");
+        goal.setName("Goal 1");
         
-        Task t = new Task();
-        t.addDeadline(deadLine);
-        t.setTitle("Task1");
-        t.setDescription("Task 1 Description");
-        goal.addTask(t);
-        
-                
+        for (int i = 1; i <= 5; i++) {
+            Task t = (i < 3) ? new RecurringTask() : new Task();
+            Deadline d = new Deadline(deadLine);
+            t.addDeadline(d);
+            t.setTitle("Task " + i);
+            t.setDescription("Task " + i + " Description");
+            
+            Activity a = new Activity(t);
+            Date date = new Date();
+            date.setTime(date.getTime() + 100 * i);
+            a.setDate(date);
+            t.addActivity(a);
+            
+            goal.addTask(t);
+        }
+              
         Category cat = new Category();
         cat.setName("hola");
         
