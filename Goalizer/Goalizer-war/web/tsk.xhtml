@@ -9,40 +9,62 @@
         <ui:define name="content">
             <h:body>
                 <h:form id="form">
-                    <h:dataTable id="tTable" value="#{tskMB.allTasksList}" var="task">
+                    <h:dataTable id="tTable" value="#{tskMB.tasks}" var="task">
+                        <h:inputText value="#{tskMB.goalId}"/>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="TaskType"/>
+                            </f:facet>
+                            <h:outputText value="#{task.taskType}"/>
+                        </h:column>                          
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="DeadLine"/>
+                            </f:facet>
+                            <!--<p:calendar value="#{task.currentDeadline.date}" pattern="MM/dd/yyyy" rendered="#{task.editable}"/>-->
+                            <h:outputText value="#{task.currentDeadline.date}"/>
+                        </h:column>  
                         <h:column>
                             <f:facet name="header">
                                 <h:outputText value="Title"/>
                             </f:facet>
                             <h:inputText value="#{task.title}" rendered="#{task.editable}" />
-                            <h:outputText value="#{task.title}" rendered="#{not task.editable}" />
+                            <h:outputText value="#{task.title}" rendered="#{not task.editable}"/>
                         </h:column>
                         <h:column>
                             <f:facet name="header">
                                 <h:outputText value="Description"/>
                             </f:facet>
-                            <h:inputText value="#{task.deadlines}" rendered="#{task.editable}" />
+                            <h:inputText value="#{task.description}" rendered="#{task.editable}"/>
                             <h:outputText value="#{task.description}" rendered="#{not task.editable}" />
                         </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="Recurrance"/>
+                            </f:facet>
+                            <h:inputText value="#{task.recurrence}" rendered="#{task.editable}"/>
+                            <h:outputText value="#{task.description}" rendered="#{not task.editable}" />
+                        </h:column>
+          
                         
                         <h:column>
                             <h:commandLink value="Edit" action="#{tskMB.edit(task)}" rendered="#{not task.editable}" >
-                                <f:ajax render=":form:tTable" />
+                                <f:ajax render="form:tTable" />
                             </h:commandLink>
                             
-                            <h:commandLink value="Save" action="#{tskMB.save(task)}" rendered="#{task.editable}" >
-                                <f:ajax execute="@form" render=":form:tTable" />
+                            <h:commandLink value="Save" action="#{tskMB.saveChanges(task)}" rendered="#{task.editable}" >
+                                <f:ajax execute="@form" render="form:tTable" />
                             </h:commandLink>
                         </h:column>
                         <h:column>
-                            <h:commandLink value="Cancel" action="#{tskMB.cancelEdit(task)}" rendered="#{task.editable}" >
-                                <f:ajax render=":form:tTable" />
+                            <h:commandLink value="Cancel" action="#{tskMB.cancelEdit(task)}"  rendered="#{task.editable}">
+                                <f:ajax render="form:tTable" />
                             </h:commandLink>
                         </h:column>
                         <h:column>
                             <h:commandLink id="remove" value="delete" action="#{tskMB.remove(task)}"
                                            onclick="return confirm('Are you sure?')">
-                                <f:ajax render=":form:tTable" />
+                                <f:ajax render="form:tTable" />
                             </h:commandLink>
                         </h:column>
                     </h:dataTable>
@@ -50,15 +72,16 @@
                     <br></br><br></br>
                     <h2>Add task to table</h2>
                     <h:outputLabel value="Title: ">
-                        <h:inputText id="title" value="#{tskMB.task.title}" />
+                        <h:inputText id="title" value="#{tskMB.task.title}" class="form-control input-sm"/>
                     </h:outputLabel>
                     <br/>
                     <h:outputLabel value="Description: ">
-                        <h:inputText id="description" value="#{tskMB.task.description}" />
+                        <h:inputTextarea id="description" cols="25" rows="10" value="#{tskMB.task.description}" class="form-control input-sm"/>
                     </h:outputLabel>
+                    <br/>    
 
-                    <h:commandButton value="Add Task" action="#{tskMB.add()}">
-                        <f:ajax execute="form" render="form:tTable" />
+                    <h:commandButton value="Add Task" action="#{tskMB.add()}" styleClass="btn btn-info">
+                        <f:ajax execute="form" render="@all" />
                     </h:commandButton>
 
                 </h:form>

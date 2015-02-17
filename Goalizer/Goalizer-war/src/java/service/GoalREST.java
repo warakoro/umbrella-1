@@ -9,10 +9,8 @@ import com.umbrella.goalizer.boundry.GoalFacade;
 import com.umbrella.goalizer.boundry.TaskFacade;
 import com.umbrella.goalizer.entity.Goal;
 import com.umbrella.goalizer.entity.Task;
-import java.util.ArrayList;
 import java.util.List;
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
+import javax.inject.Inject;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -24,14 +22,15 @@ import javax.ws.rs.Produces;
  *
  * @author donya
  */
-@Stateless
+//@Stateless
 @Path("goals")
+@javax.enterprise.context.RequestScoped
 public class GoalREST {
     
-    @EJB
+    @Inject
     private GoalFacade goalFacade;
     
-    @EJB
+    @Inject
     private TaskFacade taskFacase;
 
     public GoalREST() {

@@ -41,7 +41,6 @@ public class TaskFacade extends AbstractFacade<Task> {
 
     public void getLastDeadLine(Task task){
         List<Deadline> deadlines = task.getDeadlines();
-        Deadline deadLine = deadlines.get(deadlines.size()-1);
-        task.setCurrentDeadline(deadLine);
+        task.setCurrentDeadline(!deadlines.isEmpty() ? deadlines.get(deadlines.size() - 1) : null);
     }    
 }

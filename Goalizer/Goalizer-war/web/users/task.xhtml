@@ -28,7 +28,7 @@
                                             
                                             <h:form id="btns">
                                                 <h:commandLink style="color:rgb(209, 91, 71);"><span class="glyphicon glyphicon-trash" id="s1"></span>
-                                                    <f:ajax listener="#{taskMB.delete(t)}" render="@all" />
+                                                    <f:ajax listener="#{taskMB.delete(t)}" render="tabview:showAll" />
                                                 </h:commandLink>
                                                 <h:commandLink style="color:rgb(128, 144, 160);" onclick="PF('dlg1').show();"><span class="glyphicon glyphicon-pencil" id="s2"></span>
                                                     

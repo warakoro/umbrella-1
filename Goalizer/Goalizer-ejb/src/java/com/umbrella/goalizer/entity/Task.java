@@ -28,7 +28,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -64,8 +63,7 @@ public class Task implements Serializable {
     @Transient
     private String taskType;
 
-    @Transient
-    private Boolean editable;
+    private transient boolean editable;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "task", fetch = FetchType.LAZY)
     private List<Deadline> deadlines;
@@ -76,6 +74,7 @@ public class Task implements Serializable {
 
     public Task() {
        this.deadlines = new ArrayList<>();
+       this.editable = false;
     }
 
     public void addDeadline(Deadline deadline){
@@ -111,15 +110,15 @@ public class Task implements Serializable {
         return deadlines;
     }
 
-    @XmlTransient
-    public Boolean getEditable() {
+    public boolean isEditable() {
         return editable;
     }
 
-    public void setEditable(Boolean editable) {
+    public void setEditable(boolean editable) {
         this.editable = editable;
     }
 
+    
     public void setDeadlines(List<Deadline> deadlines) {
         this.deadlines = deadlines;
     }
@@ -150,7 +149,6 @@ public class Task implements Serializable {
     public void setTaskType(String taskType) {
         this.taskType = taskType;
     }
-
 
     @Override
     public int hashCode() {

@@ -12,28 +12,27 @@ import com.umbrella.goalizer.entity.Deadline;
 import com.umbrella.goalizer.entity.RecurringTask;
 import com.umbrella.goalizer.entity.Task;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
-import org.primefaces.event.SelectEvent;
-import org.primefaces.event.UnselectEvent;
+
 
 /**
  *
  * @author donya
  */
 @ManagedBean
-@SessionScoped
+@ViewScoped
 public class tskMB {
 
     /**
      * Creates a new instance of tskMB
      */
 //    @ManagedProperty(value="#{param.id}")
-    private int goalId = 1;
+    private int goalId;
            
     @EJB
     private TaskFacade taskFacade;
@@ -48,29 +47,25 @@ public class tskMB {
     private Task task;
     private RecurringTask recurringTask;
     private Deadline deadline;
-    private String taskType;
-
+    
     public tskMB() {
         task = new Task();
         recurringTask = new RecurringTask();
         deadline = new Deadline();
     }
 
+    @PostConstruct
+    public void init(){
+        goalId = Integer.valueOf(FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get("id")); 
+        tasks = showAllTasks();
+    }
+    
     public int getGoalId() {
         return goalId;
     }
 
     public void setGoalId(int goalId) {
         this.goalId = goalId;
-    }
-
-    public List<Task> gettList() {
-        tasks = taskFacade.getTasksByGoalId(goalId);
-        return tasks;
-    }
-
-    public void settList(List<Task> tasks) {
-        this.tasks = tasks;
     }
 
     public Task getTask() {
@@ -97,29 +92,48 @@ public class tskMB {
         this.deadline = deadline;
     }
 
-    public String getTaskType() {
-        return taskType;
-    }
-
-    public void setTaskType(String taskType) {
-        this.taskType = taskType;
-    }
- 
-    public List<Task> getAllTasksList(){
-        tasks = taskFacade.getTasksByGoalId(goalId);
+    public List<Task> getTasks() {
         return tasks;
     }
-    
-    public void add(){
-        task = new Task();            
+
+    public List<Task> showAllTasks(){
+        tasks = taskFacade.getTasksByGoalId(goalId);
+        for(Task t:tasks){
+            t.setTaskType(getTaskType(t));
+            if (t.getTaskType().equals("RECURRING TASK")) {
+                System.out.println("Recurrence: " + ((RecurringTask)t).getRecurrence());
+            }
+        }
+        return tasks;
     }
-    public void save(Task task){
-     taskFacade.edit(task);
-        cancelEdit(task);
+    public String getTaskType(Task t) {
+        String tType="";
+        if (t.getClass() == Task.class) {
+            tType = "SINGLE TASK";
+        } else if (t.getClass() == RecurringTask.class) {
+            tType = "RECURRING TASK";
+        }
+        return tType;
+    }    
+    public void setTasks(List<Task> tasks) {
+        this.tasks = showAllTasks();
+    }
+ 
+    public void add(){
+        task.setGoalid(goalFacade.find(goalId));
+        taskFacade.create(task);
+        task = new Task();
+        setTasks(tasks);
+    }
+    
+    public void saveChanges(Task t){
+        taskFacade.edit(t);
+        cancelEdit(t);
     }
 
     public void remove(Task t){
         taskFacade.remove(t);
+        setTasks(tasks);
     }
 
     public void edit(Task task){
