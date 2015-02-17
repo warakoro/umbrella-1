@@ -2,12 +2,27 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
     <ui:composition template="../default/main.xhtml" >
         <ui:define name="content">
             <h:body>
-                <h:form id="form">
-                    <h1>Waiting for Implementation</h1>  
+                <p:commandButton value="Add Image" type="button" onclick="PF('addImage').show();" />
+
+                <p:dialog id="goalDialog" header="Upload Image" widgetVar="addImage" minHeight="40">
+                    <h:form id="formImage" enctype="multipart/form-data">
+                        <p:fileUpload fileUploadListener="#{UserView.upload}" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" sizeLimit="100000" />
+                    </h:form>
+                    <p:growl id="messages" showDetail="true" />
+                </p:dialog>
+                <h:form id="form" enctype="multipart/form-data">
+                    <p:panel header="Udate Profile" >
+
+
+
+
+                    </p:panel>  
                 </h:form>
             </h:body>
 

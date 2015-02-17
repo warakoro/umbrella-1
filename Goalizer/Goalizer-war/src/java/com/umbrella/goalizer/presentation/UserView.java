@@ -7,6 +7,11 @@
 package com.umbrella.goalizer.presentation;
 
 import com.umbrella.goalizer.controller.UserControler;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.Date;
 import javax.ejb.Stateless;
@@ -16,6 +21,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.Past;
+import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.UploadedFile;
 
 /**
  *
@@ -33,6 +40,10 @@ public class UserView implements Serializable{
     private String email;
     private String address;
     private String urole;
+    private UploadedFile file;
+    
+    private String destination="C:\\Users\\984372\\Desktop\\photo\\";
+    
     @Past
     private Date dob;
    // @Pattern(regexp="^[-_,A-Za-z0-9]$", message="you have to choose a gender")
@@ -70,6 +81,55 @@ public class UserView implements Serializable{
           System.out.println("Loged out");
           return "/login.jsf?faces-redirect=false";
       }
+
+      //uploading file
+       public void upload(FileUploadEvent event) {
+        if(file != null) {
+            FacesMessage message = new FacesMessage("Succesful", event.getFile().getFileName() + " is uploaded.");
+            FacesContext.getCurrentInstance().addMessage(null, message);
+        }
+        
+        try {
+            copyFile(event.getFile().getFileName(), event.getFile().getInputstream());
+            System.out.println("File moved");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    
+    }
+       
+       //copyring file ;
+        public void copyFile(String fileName, InputStream in) {
+           try {              
+                // write the inputStream to a FileOutputStream
+                OutputStream out = new FileOutputStream(new File(destination + fileName));
+              
+                int read = 0;
+                byte[] bytes = new byte[1024];
+              
+                while ((read = in.read(bytes)) != -1) {
+                    out.write(bytes, 0, read);
+                }
+              
+                in.close();
+                out.flush();
+                out.close();
+              
+                System.out.println("New file created!");
+                } catch (IOException e) {
+                System.out.println(e.getMessage());
+                }
+    }
+       
+       
+       
+    public UploadedFile getFile() {
+        return file;
+    }
+
+    public void setFile(UploadedFile file) {
+        this.file = file;
+    }
 
     public String getGender() {
         return gender;
