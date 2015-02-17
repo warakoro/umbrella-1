@@ -10,13 +10,12 @@ import com.umbrella.goalizer.boundry.UserFacade;
 import com.umbrella.goalizer.controller.GoalController;
 import com.umbrella.goalizer.entity.Deadline;
 import com.umbrella.goalizer.entity.Goal;
-import com.umbrella.goalizer.entity.User;
+import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import org.primefaces.context.RequestContext;
@@ -40,7 +39,17 @@ public class GoalMB {
     private Goal selectedGoal;
     @EJB
     GoalController goalController;
+    private String criteria;
 
+    public String getCriteria() {
+        return criteria;
+    }
+
+    public void setCriteria(String criteria) {
+        this.criteria = criteria;
+    }
+    
+    
     public Goal getSelectedGoal() {
         return selectedGoal;
     }
@@ -73,6 +82,7 @@ public class GoalMB {
     public void init() {
         goal = new Goal();
         deadLine = new Deadline();
+        criteria = "";
     }
 
     public void createGoal() {
@@ -80,9 +90,14 @@ public class GoalMB {
         RequestContext.getCurrentInstance().execute("PF('addNewGoal').hide();");
     }
 
-    public List<Goal> showAllByUser() {
-
-        return goalController.getAllByUser();
+    public List<Goal> showAll() {
+        List<Goal> goals;
+        if(criteria.isEmpty()){
+          goals =  goalController.getAllByUser();
+        }else{
+          goals =  goalController.getAllByCriteria(criteria);
+        }
+        return goals;
     }
 
     public void update(Goal goalToUpdate) {

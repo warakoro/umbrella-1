@@ -10,6 +10,7 @@ import com.umbrella.goalizer.boundry.UserFacade;
 import com.umbrella.goalizer.entity.Category;
 import com.umbrella.goalizer.entity.Deadline;
 import com.umbrella.goalizer.entity.Goal;
+import com.umbrella.goalizer.entity.GoalStatus;
 import com.umbrella.goalizer.entity.Task;
 import com.umbrella.goalizer.entity.User;
 import java.io.UnsupportedEncodingException;
@@ -66,8 +67,10 @@ public class StartSingleton {
         Deadline deadLine = new Deadline();
         deadLine.setDate(new Date());
         goal.addDeadline(deadLine);
+        goal.setGoalStatus(GoalStatus.TODO);
         goal.setDescription("asdasd");
-        goal.setPriority("high");
+        goal.setPriority("High");
+       
         goal.setName("asdasd");
         
         Task t = new Task();

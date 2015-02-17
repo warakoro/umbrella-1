@@ -8,8 +8,19 @@
     <ui:composition template="default/main.xhtml">
         <ui:define name="content">
             <h:body>
+                <div class="row">
                 <p:commandButton value="Add New Goal" type="button" onclick="PF('addNewGoal').show();" />
-
+                </div>
+                <br/>
+                <h:form>
+                    <div class="row">
+                        <p:outputLabel class="col-md-1" value="Search"/>
+                        <p:inputText class="col-md-10" value="#{goalMB.criteria}">
+                            <p:ajax event="keyup" update=":goalForm" />
+                        </p:inputText>
+                        
+                    </div>
+                </h:form>
                 <p:dialog id="goalDialog" header="Add New Goal" widgetVar="addNewGoal" minHeight="40">
                     <h:form>
                         <p:panel id="creategoal">
@@ -20,7 +31,12 @@
                                 <p:outputLabel for="goalDescription" value="Goal description: "/>
                                 <p:inputTextarea id="goalDescription" value="#{goalMB.goal.description}" required="true" label="Goal description" />
                                 <p:outputLabel for="goalPriority" value="Goal priority: "/>
-                                <p:inputText id="goalPriority" value="#{goalMB.goal.priority}" required="true" label="Goal priority" />
+                                <p:selectOneMenu id="goalPriority" value="#{goalMB.goal.priority}" required="true" style="width:125px">
+                                    <f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
+                                    <f:selectItem itemLabel="High" itemValue="High" />
+                                    <f:selectItem itemLabel="Medium" itemValue="Medium" />
+                                    <f:selectItem itemLabel="Low" itemValue="Low" />
+                                </p:selectOneMenu>
                                 <p:outputLabel for="category" value="Category: "/>
                                 <p:inputText id="category" value="#{goalMB.goal.categoryid.name}" required="true" label="Category" />
                                 <p:outputLabel for="deadline" value="Deadline: " />
@@ -32,11 +48,10 @@
                     </h:form>
                 </p:dialog>
                 <br/>
-                <br/>
-                <br/>
-
+                <div class="row">
+                    
                 <h:form id="goalForm">
-                    <p:dataGrid var="singleGoal" value="#{goalMB.showAllByUser()}" columns="1" 
+                    <p:dataGrid var="singleGoal" value="#{goalMB.showAll()}" columns="1" 
                                 rows="12" paginator="true" id="goals"
                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                 rowsPerPageTemplate="6,12,16">
@@ -107,7 +122,12 @@
                                 <p:inputText value="#{goalMB.selectedGoal.description}" required="true"/>
 
                                 <h:outputText value="Goal priority: " />
-                                <p:inputText value="#{goalMB.selectedGoal.priority}" required="true"/>
+                                <p:selectOneMenu id="goalPriority" value="#{goalMB.goal.priority}" required="true" style="width:125px">
+                                    <f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
+                                    <f:selectItem itemLabel="High" itemValue="High" />
+                                    <f:selectItem itemLabel="Medium" itemValue="Medium" />
+                                    <f:selectItem itemLabel="Low" itemValue="Low" />
+                                </p:selectOneMenu>
 
                                 <h:outputText value="Deadline: " />
                                 <p:calendar id="deadline" value="#{goalMB.selectedGoal.currentDeadline.date}" showOn="button" required="true" />
@@ -117,6 +137,7 @@
                         </p:outputPanel>
                     </p:dialog>
                 </h:form>
+                </div>
             </h:body>
 
         </ui:define>

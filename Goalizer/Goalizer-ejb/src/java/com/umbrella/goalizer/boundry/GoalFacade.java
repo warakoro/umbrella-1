@@ -42,6 +42,14 @@ public class GoalFacade extends AbstractFacade<Goal> {
         Collections.sort(goals);
         return goals;
     }
+    
+    public List<Goal> getGoalsByCriteria(String criteria,User user){
+        Query q = em.createNamedQuery(Goal.GOALSBYCRITERIA).setParameter("criteria", "%"+criteria+"%")
+                .setParameter("userId", user.getId());
+        List<Goal> goals = q.getResultList();
+        Collections.sort(goals);
+        return goals;
+    }
 
     public void getLastDeadLine(Goal goal) {
         List<Deadline> deadlines = goal.getDeadlineList();

@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.umbrella.goalizer.entity;
 
 import java.io.Serializable;
@@ -34,25 +33,21 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Score.findAll", query = "SELECT s FROM Score s"),
-    @NamedQuery(name = "Score.findById", query = "SELECT s FROM Score s WHERE s.id = :id"),
-    @NamedQuery(name = "Score.findByDate", query = "SELECT s FROM Score s WHERE s.date = :date"),
-    @NamedQuery(name = "Score.findByValue", query = "SELECT s FROM Score s WHERE s.value = :value")})
+    @NamedQuery(name = "Score.findById", query = "SELECT s FROM Score s WHERE s.id = :id")})
 public class Score implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "ID")
     private Integer id;
-    @Column(name = "DATE")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date date;
-    @Size(max = 255)
-    @Column(name = "VALUE")
-    private String value;
-    @JoinColumn(name = "goalid", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Goal goalid;
+    private Date scoreDate;
+    private Integer score;
+    //@JoinColumn()
+    @ManyToOne()
+    private Goal goal;
 
     public Score() {
     }
@@ -69,28 +64,28 @@ public class Score implements Serializable {
         this.id = id;
     }
 
-    public Date getDate() {
-        return date;
+    public Date getScoreDate() {
+        return scoreDate;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setScoreDate(Date scoreDate) {
+        this.scoreDate = scoreDate;
     }
 
-    public String getValue() {
-        return value;
+    public Integer getScore() {
+        return score;
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    public void setScore(Integer score) {
+        this.score = score;
     }
 
-    public Goal getGoalId() {
-        return goalid;
+    public Goal getGoal() {
+        return goal;
     }
 
-    public void setGoalId(Goal goalid) {
-        this.goalid = goalid;
+    public void setGoal(Goal goal) {
+        this.goal = goal;
     }
 
     @Override
@@ -117,5 +112,5 @@ public class Score implements Serializable {
     public String toString() {
         return "com.umbrella.goalizer.entity.Score[ id=" + id + " ]";
     }
-    
+
 }

@@ -9,6 +9,7 @@ import com.umbrella.goalizer.boundry.GoalFacade;
 import com.umbrella.goalizer.boundry.UserFacade;
 import com.umbrella.goalizer.entity.Deadline;
 import com.umbrella.goalizer.entity.Goal;
+import com.umbrella.goalizer.entity.GoalStatus;
 import com.umbrella.goalizer.entity.User;
 import java.util.Date;
 import java.util.List;
@@ -33,7 +34,7 @@ public class GoalController {
         User user = new User();
         user.setId(1);
         user = userFacade.find(user.getId());
-
+        goal.setGoalStatus(GoalStatus.TODO);
         user.addGoal(goal);
         goal.addDeadline(deadLine);
         goal.setCreationDate(new Date());
@@ -51,14 +52,29 @@ public class GoalController {
         User user = new User();
         user.setId(1);
         List<Goal> goals = goalFacade.getGoalsByUser(user);
+        return setAllDeadlines(goals);
+    }
+    
+    private List<Goal> setAllDeadlines(List<Goal> goals){
         for (Goal goal1 : goals) {
             goalFacade.getLastDeadLine(goal1);
         }
         return goals;
     }
-
+    
+    public List<Goal> getAllByCriteria(String criteria){
+        User user = new User();
+        user.setId(1);
+        List<Goal> goals = goalFacade.getGoalsByCriteria(criteria,user);
+        return setAllDeadlines(goals);
+    }
+    
     public void delete(Goal goalToDelete) {
         goalFacade.remove(goalToDelete);
+    }
+    
+    public int computeScore(){
+        return 0;
     }
 
 }
