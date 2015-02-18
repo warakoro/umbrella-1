@@ -85,6 +85,10 @@ public class GoalMB {
         deadLine = new Deadline();
         criteria = "";
     }
+    
+    public int getScore(){
+        return goalController.computeScore();
+    }
 
     public void createGoal() {
         goalController.create(goal, deadLine);

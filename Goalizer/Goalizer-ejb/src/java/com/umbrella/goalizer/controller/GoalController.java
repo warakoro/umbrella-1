@@ -93,7 +93,7 @@ public class GoalController {
         List<Goal> goals = getAllByUser();
         int score = 0;
         for (Goal goal : goals) {
-
+            System.out.println("EXECUTING");
             if (goal.getScore() != null) {
                 score += goal.getScore().getScore();
             }

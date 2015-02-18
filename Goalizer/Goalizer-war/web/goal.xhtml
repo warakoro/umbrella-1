@@ -9,6 +9,11 @@
         <ui:define name="content">
             <h:body>
                 <div class="row">
+                    <h:form id="score">
+                    <h3>Current Score: ${goalMB.score}</h3>
+                    </h:form>
+                </div>
+                <div class="row">
                     <p:commandButton value="Add New Goal" type="button" onclick="PF('addNewGoal').show();" />
                 </div>
                 <br></br>
@@ -137,7 +142,7 @@
                                     <h:outputText value="Deadline: " />
                                     <p:calendar id="deadline" value="#{goalMB.selectedGoal.currentDeadline.date}" showOn="button" required="true" />
                                 </p:panelGrid>
-                                <p:commandButton update=":goalForm, editGoal "  value="Edit" actionListener="#{goalMB.update(goalMB.selectedGoal)}"/>
+                                <p:commandButton update=":goalForm, editGoal,:score "  value="Edit" actionListener="#{goalMB.update(goalMB.selectedGoal)}"/>
                             </p:outputPanel>
                         </p:dialog>
                     </h:form>
