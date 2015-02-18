@@ -11,6 +11,7 @@ import com.umbrella.goalizer.controller.GoalController;
 import com.umbrella.goalizer.entity.Deadline;
 import com.umbrella.goalizer.entity.Goal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -49,8 +50,7 @@ public class GoalMB {
     public void setCriteria(String criteria) {
         this.criteria = criteria;
     }
-    
-    
+
     public Goal getSelectedGoal() {
         return selectedGoal;
     }
@@ -93,21 +93,22 @@ public class GoalMB {
 
     public List<Goal> showAll() {
         List<Goal> goals;
-        if(criteria.isEmpty()){
-          goals =  goalController.getAllByUser();
-        }else{
-          goals =  goalController.getAllByCriteria(criteria);
+        if (criteria.isEmpty()) {
+            goals = goalController.getAllByUser();
+        } else {
+            goals = goalController.getAllByCriteria(criteria);
         }
         return goals;
     }
 
     public void update(Goal goalToUpdate) {
+       
         goalController.update(goalToUpdate);
         RequestContext.getCurrentInstance().execute("PF('goalEditDialog').hide();");
     }
 
     public void delete(Goal goalToDelete) {
-        System.out.println("GOAL TO DELETE " + goalToDelete != null );
+        System.out.println("GOAL TO DELETE " + goalToDelete != null);
         goalController.delete(goalToDelete);
     }
 

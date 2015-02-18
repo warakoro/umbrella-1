@@ -127,7 +127,7 @@
                                     <p:inputText value="#{goalMB.selectedGoal.description}" required="true"/>
 
                                     <h:outputText value="Goal priority: " />
-                                    <p:selectOneMenu id="goalPriority" value="#{goalMB.goal.priority}" required="true" style="width:125px">
+                                    <p:selectOneMenu id="goalPriority" value="#{goalMB.selectedGoal.priority}" required="true" style="width:125px">
                                         <f:selectItem itemLabel="Select One" itemValue="" noSelectionOption="true" />
                                         <f:selectItem itemLabel="High" itemValue="High" />
                                         <f:selectItem itemLabel="Medium" itemValue="Medium" />
@@ -136,7 +136,6 @@
 
                                     <h:outputText value="Deadline: " />
                                     <p:calendar id="deadline" value="#{goalMB.selectedGoal.currentDeadline.date}" showOn="button" required="true" />
-                                    <!--<h:inputHidden value="#{goalMB.selectedGoal.id}"/>-->
                                 </p:panelGrid>
                                 <p:commandButton update=":goalForm, editGoal "  value="Edit" actionListener="#{goalMB.update(goalMB.selectedGoal)}"/>
                             </p:outputPanel>
