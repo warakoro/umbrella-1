@@ -17,6 +17,7 @@ import com.umbrella.goalizer.entity.User;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -52,6 +53,10 @@ public class StartSingleton {
         System.out.println("Starting Singleton...");
 
         /******** User ********/
+        Calendar c = Calendar.getInstance();
+        c.setTime(new Date()); // Now use today date.
+        c.add(Calendar.DATE, 1);
+        
         User user = new User();
         user.setFirstname("Mamadou");
         user.setLastname("Diarra");
@@ -60,21 +65,26 @@ public class StartSingleton {
         user.setUsername("mamadou");
         user.setPassword(encodePassword("admin"));
         user.setEmail("lsfernandez@mum.edu");
-        user.setDob(new Date());
+//        user.setDob(new Date());
+        user.setDob(c.getTime());
         user.setUrole("USER_ROLE");
         
         Goal goal = new Goal();
-        goal.setCreationDate(new Date());
+//        goal.setCreationDate(new Date());
+        goal.setCreationDate(c.getTime());
         Deadline deadLine = new Deadline();
-        deadLine.setDate(new Date());
+//        deadLine.setDate(new Date());
+        deadLine.setDate(c.getTime());
         goal.addDeadline(deadLine);
         goal.setDescription("Find a good job in California");
         goal.setPriority("high");
         goal.setName("Find a good job in California");
 
         Goal goal2 = new Goal();
-        goal2.setCreationDate(new Date());
-        deadLine.setDate(new Date());
+//        goal2.setCreationDate(new Date());
+        goal2.setCreationDate(c.getTime());
+//        deadLine.setDate(new Date());
+        deadLine.setDate(c.getTime());
         goal2.addDeadline(deadLine);
         goal2.setDescription("Lose weight");
         goal2.setPriority("high");

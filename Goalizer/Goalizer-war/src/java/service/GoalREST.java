@@ -24,7 +24,8 @@ import javax.ws.rs.Produces;
  */
 //@Stateless
 @Path("goals")
-@javax.enterprise.context.RequestScoped
+
+//@javax.enterprise.context.RequestScoped
 public class GoalREST {
     
     @Inject

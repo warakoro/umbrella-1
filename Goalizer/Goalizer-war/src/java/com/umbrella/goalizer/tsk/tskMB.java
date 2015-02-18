@@ -9,13 +9,13 @@ import com.umbrella.goalizer.boundry.GoalFacade;
 import com.umbrella.goalizer.boundry.RecurringTaskFacade;
 import com.umbrella.goalizer.boundry.TaskFacade;
 import com.umbrella.goalizer.entity.Deadline;
+import com.umbrella.goalizer.entity.Goal;
 import com.umbrella.goalizer.entity.RecurringTask;
 import com.umbrella.goalizer.entity.Task;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
@@ -47,6 +47,7 @@ public class tskMB {
     private Task task;
     private RecurringTask recurringTask;
     private Deadline deadline;
+    private String taskType;
     
     public tskMB() {
         task = new Task();
@@ -96,6 +97,14 @@ public class tskMB {
         return tasks;
     }
 
+    public String getTaskType() {
+        return taskType;
+    }
+
+    public void setTaskType(String taskType) {
+        this.taskType = taskType;
+    }
+
     public List<Task> showAllTasks(){
         tasks = taskFacade.getTasksByGoalId(goalId);
         for(Task t:tasks){
@@ -120,9 +129,26 @@ public class tskMB {
     }
  
     public void add(){
-        task.setGoalid(goalFacade.find(goalId));
-        taskFacade.create(task);
+        Goal goal = goalFacade.find(goalId);
+        Task cTask = getTaskType().equals("RecurringTask") ? recurringTask : task;
+        deadline.setTask(cTask);
+        cTask.addDeadline(deadline);
+        cTask.setGoalid(goal);
+        //goal.addTask(task);
+        if (getTaskType().equals("RecurringTask")){
+            recurringTask.setTitle(task.getTitle());
+            recurringTask.setDescription(task.getDescription());
+            recurringTaskFacade.create(recurringTask);
+        }
+        else{
+            taskFacade.create(task);
+        }        
+//        task.setGoalid(goalFacade.find(goalId));
+//        taskFacade.create(task);
         task = new Task();
+        recurringTask = new RecurringTask();
+        deadline = new Deadline();
+        taskType = "";
         setTasks(tasks);
     }
     

@@ -28,6 +28,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -51,7 +52,7 @@ public class Task implements Serializable {
     @Basic(optional = false)
     private Integer id;
 
-    @Basic(optional = false)
+    @NotNull (message = "Task title can not be empty.")
     private String title;
 
     @Column(length = 3000)

@@ -22,6 +22,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.Future;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -45,6 +46,7 @@ public class Deadline implements Serializable {
     private Integer id;
     @Basic(optional = false)
     @NotNull
+    @Future(message = "Deadline should be a date in future.")
     @Column(name = "d_date")
     @Temporal(TemporalType.DATE)
     private Date date;

@@ -9,6 +9,7 @@
         <ui:define name="content">
             <h:body>
                 <h:form id="form">
+                <div class="container">
                     <h:dataTable id="tTable" value="#{tskMB.tasks}" var="task">
                         <h:inputText value="#{tskMB.goalId}"/>
                         <h:column>
@@ -40,20 +41,26 @@
                         </h:column>
                         <h:column>
                             <f:facet name="header">
-                                <h:outputText value="Recurrance"/>
+                                <h:outputText value="Recurrence"/>
                             </f:facet>
-                            <h:inputText value="#{task.recurrence}" rendered="#{task.editable}"/>
-                            <h:outputText value="#{task.description}" rendered="#{not task.editable}" />
+                            <h:inputText value="#{task.recurrence}" rendered="${(task.taskType == 'RECURRING TASK' ? 'true' : 'false') and (task.editable)}"/>
+                            <h:outputText value="#{task.recurrence}" rendered="${(task.taskType == 'RECURRING TASK' ? 'true' : 'false') and (not task.editable)}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="Period"/>
+                            </f:facet>
+                            <h:selectOneMenu value="#{task.period}" rendered="${(task.taskType == 'RECURRING TASK' ? 'true' : 'false') and (task.editable)}"><f:selectItems value="#{periodMB.periods}" /></h:selectOneMenu>
+                            <h:outputText value="#{task.period}" rendered="${(task.taskType == 'RECURRING TASK' ? 'true' : 'false') and (not task.editable)}"/>
                         </h:column>
           
-                        
                         <h:column>
                             <h:commandLink value="Edit" action="#{tskMB.edit(task)}" rendered="#{not task.editable}" >
                                 <f:ajax render="form:tTable" />
                             </h:commandLink>
                             
                             <h:commandLink value="Save" action="#{tskMB.saveChanges(task)}" rendered="#{task.editable}" >
-                                <f:ajax execute="@form" render="form:tTable" />
+                                <f:ajax execute="form:tTable" render="form:tTable" />
                             </h:commandLink>
                         </h:column>
                         <h:column>
@@ -68,18 +75,41 @@
                             </h:commandLink>
                         </h:column>
                     </h:dataTable>
+                    </div>   
 
                     <br></br><br></br>
+                    <h:messages style="color: red" globalOnly="false"/>
                     <h2>Add task to table</h2>
                     <h:outputLabel value="Title: ">
-                        <h:inputText id="title" value="#{tskMB.task.title}" class="form-control input-sm"/>
-                    </h:outputLabel>
+                        <h:inputText id="title" value="#{tskMB.task.title}" class="form-control input-sm" required="true" requiredMessage="Task title can not be empty."/>
+                    </h:outputLabel><h:message id="titlem" for="title" style="color:red; font:bold"/>
                     <br/>
                     <h:outputLabel value="Description: ">
                         <h:inputTextarea id="description" cols="25" rows="10" value="#{tskMB.task.description}" class="form-control input-sm"/>
                     </h:outputLabel>
-                    <br/>    
-
+                    <br/>
+                    <h:outputLabel value="DeadLine: "><br/>
+                        <p:calendar id="deadline" value="#{tskMB.deadline.date}" pattern="dd-MM-yyyy" required="true" requiredMessage="Task deadLine can not be empty."/>
+                        <h:message id="deadlinem" for="deadline" style="color:red"/>
+                    </h:outputLabel>
+                    <br/>
+                    <h:outputLabel value="Task Type: ">
+                        <h:selectOneRadio value="#{tskMB.taskType}">
+                            <f:selectItem itemValue="SingleTask" itemLabel="Single Task" />
+                            <f:selectItem itemValue="RecurringTask" itemLabel="Recurring Task" />
+                            <f:ajax render="result" />
+                        </h:selectOneRadio>
+                    </h:outputLabel>
+                    <br/>
+                    <h:panelGroup id="result">   
+                        <h:panelGroup rendered="#{tskMB.taskType == 'RecurringTask'}">
+                            <h:outputLabel value="Recurrence: "><br/><h:inputText id="recurrence" value="#{tskMB.recurringTask.recurrence}" class="form-control input-sm"/></h:outputLabel>
+                            <h:message id="recurrencem" for="recurrence" style="color:red; font:bold"/>
+                            <br/>
+                            <h:outputLabel value="Period: "><br/><h:selectOneMenu value="#{tskMB.recurringTask.period}" class="form-control"><f:selectItems value="#{periodMB.periods}" /></h:selectOneMenu></h:outputLabel>
+                        </h:panelGroup> 
+                    </h:panelGroup>
+                    <br/>
                     <h:commandButton value="Add Task" action="#{tskMB.add()}" styleClass="btn btn-info">
                         <f:ajax execute="form" render="@all" />
                     </h:commandButton>
