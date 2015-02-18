@@ -110,7 +110,6 @@ public class GoalController {
             score.setScore(howMuch);
             goal.setScore(score);
         } else {
-            System.out.println("HOLITA");
             int score = goal.getScore().getScore();
             goal.getScore().setScore(score + howMuch);
         }
