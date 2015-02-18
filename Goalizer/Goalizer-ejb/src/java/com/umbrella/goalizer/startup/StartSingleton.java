@@ -11,12 +11,14 @@ import com.umbrella.goalizer.entity.Activity;
 import com.umbrella.goalizer.entity.Category;
 import com.umbrella.goalizer.entity.Deadline;
 import com.umbrella.goalizer.entity.Goal;
+import com.umbrella.goalizer.entity.Period;
 import com.umbrella.goalizer.entity.RecurringTask;
 import com.umbrella.goalizer.entity.Task;
 import com.umbrella.goalizer.entity.User;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -67,43 +69,108 @@ public class StartSingleton {
         goal.setCreationDate(new Date());
         Deadline deadLine = new Deadline();
         deadLine.setDate(new Date());
-        goal.addDeadline(deadLine);
-        goal.setDescription("Goal Description");
+        Calendar goalDeadlineCal = Calendar.getInstance();
+        goalDeadlineCal.setTime(goal.getCreationDate());
+        goalDeadlineCal.add(Calendar.DATE, 14);
+        Deadline goalDeadline = new Deadline(goalDeadlineCal.getTime());
+        goalDeadline.setGoalid(goal);
+        goal.addDeadline(goalDeadline);
+        goal.setDescription("Workout and Get Fit");
         goal.setPriority("high");
-        goal.setName("Goal 1");
+        goal.setName("Workout");
         
-        for (int i = 1; i <= 5; i++) {
-            Task t = (i < 3) ? new RecurringTask() : new Task();
-            Deadline d = new Deadline(deadLine);
-            t.addDeadline(d);
-            t.setTitle("Task " + i);
-            t.setDescription("Task " + i + " Description");
-            
-            Activity a = new Activity(t);
-            Date date = new Date();
-            date.setTime(date.getTime() + 100 * i);
-            a.setDate(date);
-            t.addActivity(a);
-            
-            goal.addTask(t);
+        RecurringTask runTask = new RecurringTask();
+        runTask.setTitle("Run");
+        runTask.setDescription("Run for 10 Minutes 3 Times a Week");
+        runTask.setPeriod(Period.WEEK);
+        runTask.setRecurrence(3);
+        runTask.setCreationDate(new Date());
+        Calendar runDeadlineCal = Calendar.getInstance();
+        runDeadlineCal.setTime(runTask.getCreationDate());
+        runDeadlineCal.add(Calendar.DATE, 14);
+        Deadline runDeadline = new Deadline(runDeadlineCal.getTime());
+        runDeadline.setTask(runTask);
+        runTask.addDeadline(runDeadline);
+        Activity runActivity = new Activity(runTask);
+        Calendar runActivityCreation = Calendar.getInstance();
+        runActivityCreation.setTime(runTask.getCreationDate());
+        runActivityCreation.add(Calendar.DATE, 1);
+        runActivity.setCreationDate(runActivityCreation.getTime());
+        runTask.addActivity(runActivity);
+        goal.addTask(runTask);
+        runTask.setGoalid(goal);
+        
+        
+        RecurringTask tunaTask = new RecurringTask();
+        tunaTask.setTitle("Eat Tuna");
+        tunaTask.setDescription("Eat 25g Protein Tuna 6 Times a Day");
+        tunaTask.setPeriod(Period.DAY);
+        tunaTask.setRecurrence(6);
+        tunaTask.setCreationDate(new Date());
+        Calendar tunaDeadlineCal = Calendar.getInstance();
+        tunaDeadlineCal.setTime(tunaTask.getCreationDate());
+        tunaDeadlineCal.add(Calendar.DATE, 7);
+        Deadline tunaDeadline = new Deadline(tunaDeadlineCal.getTime());
+        tunaDeadline.setTask(tunaTask);
+        tunaTask.addDeadline(tunaDeadline);
+        for (int i = 0; i < 7; i++) {
+            for (int j = 0; j < 4; j++) {
+                System.out.println("Loop: " + j);
+                Activity tunaActivity = new Activity(tunaTask);
+                Calendar tunaActivityCreation = Calendar.getInstance();
+                tunaActivityCreation.setTime(tunaTask.getCreationDate());
+                tunaActivityCreation.add(Calendar.DATE, i);
+                tunaActivity.setCreationDate(tunaActivityCreation.getTime());
+                tunaTask.addActivity(tunaActivity);
+            }
         }
+        goal.addTask(tunaTask);
+        tunaTask.setGoalid(goal);
+        
+        
+        RecurringTask waterTask = new RecurringTask();
+        waterTask.setTitle("Drink Water");
+        waterTask.setDescription("Drink 2L of Water a Day");
+        waterTask.setPeriod(Period.DAY);
+        waterTask.setRecurrence(1);
+        waterTask.setCreationDate(new Date());
+        Calendar waterDeadlineCal = Calendar.getInstance();
+        waterDeadlineCal.setTime(waterTask.getCreationDate());
+        waterDeadlineCal.add(Calendar.DATE, 14);
+        Deadline waterDeadline = new Deadline(waterDeadlineCal.getTime());
+        waterDeadline.setTask(waterTask);
+        waterTask.addDeadline(waterDeadline);
+        int[] times = {1, 2, 3, 6, 7, 9, 11, 13};
+        for (int i = 0; i < times.length; i++) {
+            Activity waterActivity = new Activity(waterTask);
+            Calendar waterActivityCreation = Calendar.getInstance();
+            waterActivityCreation.setTime(waterTask.getCreationDate());
+            waterActivityCreation.add(Calendar.DATE, times[i]);
+            waterActivity.setCreationDate(waterActivityCreation.getTime());
+            waterTask.addActivity(waterActivity);
+        }
+        goal.addTask(waterTask);
+        waterTask.setGoalid(goal);
+        
+        Task readBookTask = new Task();
+        readBookTask.setTitle("Read Workout Book");
+        readBookTask.setDescription("Read a Book About Working Out");
+        readBookTask.setCreationDate(new Date());
+        Calendar readBookDeadlineCal = Calendar.getInstance();
+        readBookDeadlineCal.setTime(readBookTask.getCreationDate());
+        readBookDeadlineCal.add(Calendar.DATE, 14);
+        Deadline readBookDeadline = new Deadline(readBookDeadlineCal.getTime());
+        readBookDeadline.setTask(readBookTask);
+        readBookTask.addDeadline(readBookDeadline);
+        goal.addTask(readBookTask);
+        readBookTask.setGoalid(goal);
               
         Category cat = new Category();
-        cat.setName("hola");
+        cat.setName("Physical");
         
         goal.setCategoryid(cat);
         user.addGoal(goal);
         userFacade.create(user);
-        
-        
-        
-
-        /******** Goal ********/
-//        Goal goal2 = new Goal();
-//        goal2.setName("Test Goal");
-//        goal2.setDescription("Test Goal .... jshdjshd");
-//        goal2.setPriority("High");
-//        goalFacade.create(goal2);
     }
 
       public String encodePassword(String pw) {
@@ -118,7 +185,7 @@ public class StartSingleton {
                     Logger.getLogger(StartSingleton.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 byte[] passwordDigest = md.digest();
-               encodedPasswordHash = new sun.misc.BASE64Encoder().encode(passwordDigest);
+                encodedPasswordHash = new sun.misc.BASE64Encoder().encode(passwordDigest);
             } catch (NoSuchAlgorithmException ex) {
                 Logger.getLogger(StartSingleton.class.getName()).log(Level.SEVERE, null, ex);
             }

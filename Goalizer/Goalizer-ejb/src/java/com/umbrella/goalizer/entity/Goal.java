@@ -79,8 +79,8 @@ public class Goal implements Serializable, Comparable<Goal> {
         task.setGoalid(this);
         getTaskList().add(task);
     }
+    
     public void addDeadline(Deadline deadLine) {
-        deadLine.setGoalid(this);
         deadlineList.add(deadLine);
     }
 

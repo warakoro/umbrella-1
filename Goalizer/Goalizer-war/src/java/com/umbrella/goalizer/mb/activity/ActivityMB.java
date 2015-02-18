@@ -37,7 +37,7 @@ public class ActivityMB {
         Collections.sort(activities, new Comparator<Activity>() {
             @Override
             public int compare(Activity a1, Activity a2) {
-                return a2.getDate().compareTo(a1.getDate());
+                return a2.getCreationDate().compareTo(a1.getCreationDate());
             }
         });
         

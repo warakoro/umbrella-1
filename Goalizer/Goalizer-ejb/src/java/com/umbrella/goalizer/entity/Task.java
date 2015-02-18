@@ -8,6 +8,7 @@ package com.umbrella.goalizer.entity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -25,6 +26,8 @@ import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -59,9 +62,20 @@ public class Task implements Serializable {
     
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "task", fetch = FetchType.LAZY)
     private List<Activity> activityList = new ArrayList();
+    
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date creationDate;
 
     public Task() {
        this.deadlines = new ArrayList<>();
+    }
+
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
     }
 
     public void addDeadline(Deadline deadline){
@@ -130,6 +144,14 @@ public class Task implements Serializable {
         }
         
         return "";
+    }
+    
+    public boolean isSingle() {
+        return getTaskType().equals("SINGLE_TASK");
+    }
+    
+    public boolean isRecurring() {
+        return getTaskType().equals("RECURRING_TASK");
     }
 
     @Override

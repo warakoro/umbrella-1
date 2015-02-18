@@ -35,7 +35,7 @@ public class Activity implements Serializable {
     @Basic(optional = false)
     private Integer id;
     @Temporal(TemporalType.TIMESTAMP)
-    private Date date;
+    private Date creationDate;
 
     private String name;
     
@@ -77,12 +77,12 @@ public class Activity implements Serializable {
         this.id = id;
     }
 
-    public Date getDate() {
-        return date;
+    public Date getCreationDate() {
+        return creationDate;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
     }
 
     public Task getTask() {
