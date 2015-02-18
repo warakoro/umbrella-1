@@ -28,10 +28,10 @@
                                     <h:commandLink value="Logout" action="#{UserView.Logout}" />
                                 </h:form>
                             </li>
-                            <li><a href="#{facesContext.externalContext.requestContextPath}/users/editProfile.jsf">Profile</a></li>
+                            <li><h:form><h:commandLink value="Profile" action="#{UserView.GoToUserProfile}" /></h:form></li>
 
                         </c:if>
-
+                        
                     </ul>
                     <!--<form class="navbar-form navbar-right">
                         <input type="text" class="form-control" placeholder="Search..." />

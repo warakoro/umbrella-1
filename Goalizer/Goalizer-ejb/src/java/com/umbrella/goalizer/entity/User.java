@@ -17,6 +17,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -32,6 +34,10 @@ import javax.xml.bind.annotation.XmlTransient;
 @Entity
 @Table(name = "GOALUSER")
 @XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "User.findByUsername",
+        query = "SELECT u FROM User u WHERE u.username = :name")    
+})
 public class User implements Serializable {
 
     private static final long serialVersionUID = 1L;
