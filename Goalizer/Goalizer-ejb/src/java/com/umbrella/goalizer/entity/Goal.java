@@ -31,6 +31,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import org.hibernate.validator.constraints.NotEmpty;
 
+
 /**
  *
  * @author Mamadou
@@ -97,7 +98,6 @@ public class Goal implements Serializable, Comparable<Goal> {
     }
     
     public void addTask(Task task){
-        task.setGoalid(this);
         getTaskList().add(task);
     }
 
@@ -168,6 +168,7 @@ public class Goal implements Serializable, Comparable<Goal> {
         this.categoryid = categoryid;
     }
 
+    @XmlTransient
     public User getUserid() {
         return userid;
     }

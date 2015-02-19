@@ -77,7 +77,7 @@ public class StartSingleton {
         goalDeadline.setGoalid(goal);
         goal.addDeadline(goalDeadline);
         goal.setDescription("Workout and Get Fit");
-        goal.setPriority("High");
+        goal.setPriority("high");
         goal.setName("Workout");
         
         RecurringTask runTask = new RecurringTask();
@@ -85,7 +85,6 @@ public class StartSingleton {
         runTask.setDescription("Run for 10 Minutes 3 Times a Week");
         runTask.setPeriod(Period.WEEK);
         runTask.setRecurrence(3);
-        runTask.setCreationDate(new Date());
         Calendar runDeadlineCal = Calendar.getInstance();
         runDeadlineCal.setTime(runTask.getCreationDate());
         runDeadlineCal.add(Calendar.DATE, 14);
@@ -107,7 +106,6 @@ public class StartSingleton {
         tunaTask.setDescription("Eat 25g Protein Tuna 6 Times a Day");
         tunaTask.setPeriod(Period.DAY);
         tunaTask.setRecurrence(6);
-        tunaTask.setCreationDate(new Date());
         Calendar tunaDeadlineCal = Calendar.getInstance();
         tunaDeadlineCal.setTime(tunaTask.getCreationDate());
         tunaDeadlineCal.add(Calendar.DATE, 7);
@@ -134,7 +132,6 @@ public class StartSingleton {
         waterTask.setDescription("Drink 2L of Water a Day");
         waterTask.setPeriod(Period.DAY);
         waterTask.setRecurrence(1);
-        waterTask.setCreationDate(new Date());
         Calendar waterDeadlineCal = Calendar.getInstance();
         waterDeadlineCal.setTime(waterTask.getCreationDate());
         waterDeadlineCal.add(Calendar.DATE, 14);
@@ -156,7 +153,6 @@ public class StartSingleton {
         Task readBookTask = new Task();
         readBookTask.setTitle("Read Workout Book");
         readBookTask.setDescription("Read a Book About Working Out");
-        readBookTask.setCreationDate(new Date());
         Calendar readBookDeadlineCal = Calendar.getInstance();
         readBookDeadlineCal.setTime(readBookTask.getCreationDate());
         readBookDeadlineCal.add(Calendar.DATE, 14);

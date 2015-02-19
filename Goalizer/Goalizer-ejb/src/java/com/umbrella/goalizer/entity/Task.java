@@ -25,33 +25,53 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+
 
 /**
  *
  * @author Mamadou
  */
 @Entity
+@NamedQueries({@NamedQuery(name = Task.TASKBYGOALID, query = "SELECT DISTINCT t FROM Task t WHERE t.goalid.id = :goalId"),
+@NamedQuery(name = Task.TASKSBYCRITERIA, query = "SELECT DISTINCT t FROM Task t WHERE t.title LIKE :criteria OR t.description LIKE :criteria AND t.goalid.id = :goalId")
+})
+
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "disc", discriminatorType =  DiscriminatorType.STRING)
 @DiscriminatorValue("SINGLE_TASK")
+
 @XmlRootElement
 public class Task implements Serializable {
+    public static final String TASKBYGOALID = "Task.getTasksByGoalId";
+    public static final String TASKSBYCRITERIA = "Task.getTasksByCriteria";
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     private Integer id;
 
-    @Basic(optional = false)
+    @NotNull (message = "Task title can not be empty.")
     private String title;
 
     @Column(length = 3000)
     private String description;
+    
+    @Transient
+    private Deadline currentDeadline;
+    
+    @Transient
+    private String taskType;
+
+    private transient boolean editable;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "task", fetch = FetchType.LAZY)
     private List<Deadline> deadlines;
@@ -60,18 +80,24 @@ public class Task implements Serializable {
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Goal goalid;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "task", fetch = FetchType.LAZY)
-    private List<Activity> activityList = new ArrayList();
-    
     @Temporal(TemporalType.TIMESTAMP)
     private Date creationDate;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "task", fetch = FetchType.LAZY)
+    private List<Activity> activityList = new ArrayList<>();
 
     public Task() {
        this.deadlines = new ArrayList<>();
+       this.editable = false;
+       this.creationDate = new Date();
     }
 
     public Date getCreationDate() {
         return creationDate;
+    }
+    
+    public void addActivity(Activity activity) {
+        activityList.add(activity);
     }
 
     public void setCreationDate(Date creationDate) {
@@ -111,10 +137,20 @@ public class Task implements Serializable {
         return deadlines;
     }
 
+    public boolean isEditable() {
+        return editable;
+    }
+
+    public void setEditable(boolean editable) {
+        this.editable = editable;
+    }
+
+    
     public void setDeadlines(List<Deadline> deadlines) {
         this.deadlines = deadlines;
     }
 
+    @XmlTransient
     public Goal getGoalid() {
         return goalid;
     }
@@ -123,10 +159,6 @@ public class Task implements Serializable {
         this.goalid = goalid;
     }
 
-    public void addActivity(Activity activity) {
-        activityList.add(activity);
-    }
-    
     @XmlTransient
     public List<Activity> getActivityList() {
         return activityList;
@@ -136,22 +168,36 @@ public class Task implements Serializable {
         this.activityList = activityList;
     }
 
-    public String getTaskType() {
-        if (this.getClass() == Task.class) {
-            return "SINGLE_TASK";
-        } else if (this.getClass() == RecurringTask.class) {
-            return "RECURRING_TASK";
-        }
-        
-        return "";
-    }
-    
     public boolean isSingle() {
         return getTaskType().equals("SINGLE_TASK");
     }
     
     public boolean isRecurring() {
         return getTaskType().equals("RECURRING_TASK");
+    }
+
+    @XmlTransient
+    public Deadline getCurrentDeadline() {
+        return currentDeadline;
+    }
+
+    public void setCurrentDeadline(Deadline currentDeadline) {
+        this.currentDeadline = currentDeadline;
+    }
+
+    @XmlTransient
+    public String getTaskType() {
+        String tType="";
+        if (this.getClass() == Task.class) {
+            tType = "SINGLE_TASK";
+        } else if (this.getClass() == RecurringTask.class) {
+            tType = "RECURRING_TASK";
+        }
+        return tType;
+    }
+
+    public void setTaskType(String taskType) {
+        this.taskType = taskType;
     }
 
     @Override

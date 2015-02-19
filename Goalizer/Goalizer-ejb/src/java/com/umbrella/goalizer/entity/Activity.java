@@ -16,6 +16,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -26,9 +28,14 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author 984372
  */
 @Entity
+@NamedQueries({@NamedQuery(name = Activity.ACTIVITIESBYTASKID, query = "SELECT DISTINCT a FROM Activity a WHERE a.task.id = :taskId")})
+
 @Table(name = "ACTIVITY")
 @XmlRootElement
 public class Activity implements Serializable {
+    
+    public static final String ACTIVITIESBYTASKID = "Task.ActivitiesByTaskId";
+    
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,6 +45,8 @@ public class Activity implements Serializable {
     private Date creationDate;
 
     private String name;
+    
+    private transient boolean editable;
     
     @JoinColumn(name = "task", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)
@@ -49,6 +58,8 @@ public class Activity implements Serializable {
     public Activity(Task task) {
         this.task = task;
         name = getDefaultName();
+        creationDate = new Date();
+        this.editable = false;
     }
 
     public String getName() {
@@ -91,6 +102,14 @@ public class Activity implements Serializable {
 
     public void setTask(Task task) {
         this.task = task;
+    }
+
+    public boolean isEditable() {
+        return editable;
+    }
+
+    public void setEditable(boolean editable) {
+        this.editable = editable;
     }
 
     @Override

@@ -5,10 +5,13 @@
  */
 package com.umbrella.goalizer.boundry;
 
+import com.umbrella.goalizer.entity.Deadline;
 import com.umbrella.goalizer.entity.Task;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -27,4 +30,22 @@ public class TaskFacade extends AbstractFacade<Task> {
     public TaskFacade() {
         super(Task.class);
     }
+    public List<Task> getTasksByGoalId(int goalId){
+        Query q = em.createNamedQuery(Task.TASKBYGOALID).setParameter("goalId", goalId);
+        List<Task> tasks = q.getResultList();
+        for(Task t: tasks)
+            getLastDeadLine(t);
+        return tasks;
+    }
+    public List<Task> getTasksByCriteria(String criteria, int goalId){    
+        Query q = em.createNamedQuery(Task.TASKSBYCRITERIA).setParameter("criteria", "%"+criteria+"%").setParameter("goalId", goalId);
+        List<Task> tasks = q.getResultList();  
+        for(Task t: tasks)
+            getLastDeadLine(t);
+        return tasks;
+    }
+    public void getLastDeadLine(Task task){
+        List<Deadline> deadlines = task.getDeadlines();
+        task.setCurrentDeadline(!deadlines.isEmpty() ? deadlines.get(deadlines.size() - 1) : null);
+    }    
 }

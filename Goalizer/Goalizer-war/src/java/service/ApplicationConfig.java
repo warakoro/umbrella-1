@@ -10,9 +10,9 @@ import javax.ws.rs.core.Application;
 
 /**
  *
- * @author mjanki
+ * @author donya
  */
-@javax.ws.rs.ApplicationPath("webresources")
+@javax.ws.rs.ApplicationPath("rest")
 public class ApplicationConfig extends Application {
 
     @Override
@@ -29,12 +29,7 @@ public class ApplicationConfig extends Application {
      * If required, comment out calling this method in getClasses().
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
-        resources.add(service.ActivityFacadeREST.class);
-        resources.add(service.CategoryFacadeREST.class);
-        resources.add(service.DeadlineFacadeREST.class);
-        resources.add(service.GoalFacadeREST.class);
-        resources.add(service.TaskFacadeREST.class);
-        resources.add(service.UserFacadeREST.class);
+        resources.add(service.GoalREST.class);
     }
     
 }

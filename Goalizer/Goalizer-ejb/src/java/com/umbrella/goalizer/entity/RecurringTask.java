@@ -13,6 +13,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -25,6 +27,9 @@ public class RecurringTask extends Task implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    
+    @NotNull (message = "Recurrence can not be null.") 
+    @Min(value = 1, message = "Recurrence should be more than one.") 
     private int recurrence;
     
     @Enumerated(EnumType.STRING)

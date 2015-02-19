@@ -6,9 +6,11 @@
 package com.umbrella.goalizer.boundry;
 
 import com.umbrella.goalizer.entity.Activity;
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -27,4 +29,9 @@ public class ActivityFacade extends AbstractFacade<Activity> {
     public ActivityFacade() {
         super(Activity.class);
     }
+    public List<Activity> getActivitiesByTskId(int taskId){
+        Query q = em.createNamedQuery(Activity.ACTIVITIESBYTASKID).setParameter("taskId", taskId);
+        List<Activity> activities = q.getResultList();
+        return activities;
+    }    
 }
