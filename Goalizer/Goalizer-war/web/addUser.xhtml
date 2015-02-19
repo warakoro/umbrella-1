@@ -40,12 +40,6 @@
                             </h:selectOneMenu>
                            <h:message for="gender" styleClass="requiredLbl" />
 
-
-                                                        
-                           
-
-
-
                             <p:outputLabel for="userName" value="Username" styleClass="requiredLbl"/>
                             <p:inputText id="userName" value="#{UserView.userName}" required="true"/>
                             <p:message for="userName" display="text"/>
@@ -63,12 +57,7 @@
                             <p:outputLabel for="address" value="Address" styleClass="requiredLbl"/>
                             <p:inputText id="address" value="#{UserView.address}" required="true"/>
                             <p:message for="address" display="text"/>
-
-
-                            <p:commandButton value="submit" action="#{UserView.MakeRegistration}" ajax="false"/>
-
-
-
+                            <p:commandButton value="submit" class="btn btn-info" action="#{UserView.MakeRegistration}" ajax="false"/>
                         </h:panelGrid>
 
                     </p:panel>

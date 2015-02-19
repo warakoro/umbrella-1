@@ -9,7 +9,7 @@ import com.umbrella.goalizer.entity.Deadline;
 import com.umbrella.goalizer.entity.Goal;
 import com.umbrella.goalizer.entity.User;
 import java.util.Collections;
-import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -54,6 +54,9 @@ public class GoalFacade extends AbstractFacade<Goal> {
     public void getLastDeadLine(Goal goal) {
         List<Deadline> deadlines = goal.getDeadlineList();
         Deadline deadLine = deadlines.get(deadlines.size() - 1);
-        goal.setCurrentDeadline(deadLine);
+        Deadline deadLine1 = new Deadline();
+        deadLine1.setDate((Date)deadLine.getDate().clone());
+        goal.setCurrentDeadline(deadLine1);
+        goal.setRealDeadline(deadLine1);
     }
 }

@@ -78,12 +78,13 @@ public class GoalMB {
     public GoalMB() {
 
     }
-
+   
     @PostConstruct
     public void init() {
         goal = new Goal();
         deadLine = new Deadline();
         criteria = "";
+        goalController.init();
     }
     
     public int getScore(){
@@ -92,6 +93,8 @@ public class GoalMB {
 
     public void createGoal() {
         goalController.create(goal, deadLine);
+        goal = new Goal();
+        deadLine = new Deadline();
         RequestContext.getCurrentInstance().execute("PF('addNewGoal').hide();");
     }
 
