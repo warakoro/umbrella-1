@@ -51,7 +51,6 @@ public class GoalController {
     public void update(Goal goalToUpdate) {
 
         int last = goalToUpdate.getDeadlineList().size() - 1;
-        if (goalToUpdate.getDeadlineList().get(last).getDate().compareTo(goalToUpdate.getCurrentDeadline().getDate()) == 0) {
             if (goalToUpdate.getDeadlineList().get(last).getDate().after(new Date()) == true) {
                 addDifDeadline(goalToUpdate);
                 addScore(goalToUpdate, -10);
@@ -61,7 +60,7 @@ public class GoalController {
                     addDifDeadline(goalToUpdate);
                 }
             }
-        }
+        
         goalFacade.edit(goalToUpdate);
     }
 
