@@ -51,13 +51,15 @@ public class GoalController {
     public void update(Goal goalToUpdate) {
 
         int last = goalToUpdate.getDeadlineList().size() - 1;
-        if (goalToUpdate.getDeadlineList().get(last).getDate().after(new Date()) == true) {
-            addDifDeadline(goalToUpdate);
-            addScore(goalToUpdate, -10);
-
-        } else {
-            if (goalToUpdate.getDeadlineList().get(last).getDate().before(new Date())) {
+        if (goalToUpdate.getDeadlineList().get(last).getDate().compareTo(goalToUpdate.getCurrentDeadline().getDate()) == 0) {
+            if (goalToUpdate.getDeadlineList().get(last).getDate().after(new Date()) == true) {
                 addDifDeadline(goalToUpdate);
+                addScore(goalToUpdate, -10);
+
+            } else {
+                if (goalToUpdate.getDeadlineList().get(last).getDate().before(new Date())) {
+                    addDifDeadline(goalToUpdate);
+                }
             }
         }
         goalFacade.edit(goalToUpdate);
