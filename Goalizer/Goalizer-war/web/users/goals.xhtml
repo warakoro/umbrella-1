@@ -11,11 +11,11 @@
             <h:body>
                 <br/>
                 <h:panelGrid columns="3">
-                    <h:form><a class="btn btn-large btn-success" href="#"><i class="icon-star"></i> Your current Score is ${goalMB.score}</a></h:form>
-                    <h:form id="score"><p:commandButton value="Add New Goal" class="btn btn-large btn-info" type="button" onclick="PF('addNewGoal').show();" /></h:form>
+                    <h:form id="score"><a class="btn btn-large btn-success" href="#"><i class="icon-star"></i> Your current Score is ${goalMB.score}</a></h:form>
+                    <h:form ><p:commandButton value="Add New Goal" class="btn btn-large btn-info" type="button" onclick="PF('addNewGoal').show();" /></h:form>
                     <h:form class="form-search">
                         <p:inputText class="input-medium search-query" a:placeholder="Search..." value="#{goalMB.criteria}">
-                        <p:ajax event="keyup" update=":goalForm" />
+                            <p:ajax event="keyup" update=":goalForm" />
                         </p:inputText>
                     </h:form>
                 </h:panelGrid>
@@ -68,7 +68,13 @@
                                             <h:outputText value="Goal Description"/>
                                         </f:facet>
                                         <h:outputText value="#{goal.description}" />
-                                    </h:column>  
+                                    </h:column> 
+                                    <h:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Goal Status"/>
+                                        </f:facet>
+                                        <h:outputText value="#{goal.goalStatus}" />
+                                    </h:column>
                                     <h:column>
                                         <p:commandLink update=":goalForm:goalDetail" oncomplete="PF('goalViewDialog').show()" title="Goal Detail" class="btn btn-link">
                                             <span class="glyphicon glyphicon-zoom-in">Details</span>
@@ -77,8 +83,8 @@
                                     </h:column>
                                     <h:column>
                                         <p:commandLink update=":goalForm:editGoal" oncomplete="PF('goalEditDialog').show()" class="btn btn-link" style="color:rgb(0, 153, 0);">
-                                         <span class="glyphicon glyphicon-pencil">Edit</span>
-                                         <f:setPropertyActionListener value="#{goal}" target="#{goalMB.selectedGoal}" />
+                                            <span class="glyphicon glyphicon-pencil">Edit</span>
+                                            <f:setPropertyActionListener value="#{goal}" target="#{goalMB.selectedGoal}" />
                                         </p:commandLink>
                                     </h:column>    
                                     <h:column>   
@@ -113,6 +119,7 @@
 
                                 <h:button outcome="task.xhtml?id=#{goalMB.selectedGoal.id}" value="add Task" class="btn btn-info"></h:button>
 
+
                             </p:outputPanel>
                         </p:dialog>
 
@@ -136,11 +143,12 @@
                                         <f:selectItem itemLabel="Medium" itemValue="Medium" />
                                         <f:selectItem itemLabel="Low" itemValue="Low" />
                                     </p:selectOneMenu>
-                                    
+
                                     <h:outputText value="Deadline: " />
                                     <p:calendar id="deadline" value="#{goalMB.selectedGoal.currentDeadline.date}" showOn="button" required="true" />
                                 </p:panelGrid>
                                 <p:commandButton update=":goalForm, editGoal,:score "  value="Edit" actionListener="#{goalMB.update(goalMB.selectedGoal)}" class="btn btn-info"/>
+                                <p:commandButton update=":goalForm, editGoal,:score "  value="Finish" actionListener="#{goalMB.completeGoal(goalMB.selectedGoal)}" class="btn btn-info"/>
                             </p:outputPanel>
                         </p:dialog>
                     </h:form>

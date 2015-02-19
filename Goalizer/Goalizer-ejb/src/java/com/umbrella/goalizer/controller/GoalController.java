@@ -110,7 +110,6 @@ public class GoalController {
         List<Goal> goals = getAllByUser();
         int score = 0;
         for (Goal goal : goals) {
-
             if (goal.getScore() != null) {
                 score += goal.getScore().getScore();
             }
@@ -147,9 +146,11 @@ public class GoalController {
     }
 
     public void markAsDone(Goal goal) {
-        if (goal.getCurrentDeadline().getDate().before(new Date()) && goal.getGoalStatus() != GoalStatus.EXPIRED) {
+        if (goal.getCurrentDeadline().getDate().after(new Date()) && goal.getGoalStatus() != GoalStatus.EXPIRED  && goal.getGoalStatus() != GoalStatus.FINISHED) {
+            System.out.println("HOALAA");
             goal.setGoalStatus(GoalStatus.FINISHED);
             addScore(goal, 20);
+            goalFacade.edit(goal);
         }
     }
 
