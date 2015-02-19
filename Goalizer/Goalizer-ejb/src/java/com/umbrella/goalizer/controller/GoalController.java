@@ -12,10 +12,14 @@ import com.umbrella.goalizer.entity.Goal;
 import com.umbrella.goalizer.entity.GoalStatus;
 import com.umbrella.goalizer.entity.Score;
 import com.umbrella.goalizer.entity.User;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import javax.annotation.PostConstruct;
+import javax.annotation.Resource;
 import javax.ejb.Stateless;
 import javax.ejb.LocalBean;
+import javax.ejb.SessionContext;
 import javax.inject.Inject;
 
 /**
@@ -30,17 +34,18 @@ public class GoalController {
     GoalFacade goalFacade;
     @Inject
     UserFacade userFacade;
-
+    @Resource
+    SessionContext sessionContext;
+    private User user;
+    
     public void create(Goal goal, Deadline deadLine) {
-        User user = new User();
-        user.setId(1);
-        user = userFacade.find(user.getId());
         goal.setGoalStatus(GoalStatus.TODO);
-        user.addGoal(goal);
+        //user.addGoal(goal);
+        goal.setUserid(user);
         goal.addDeadline(deadLine);
         goal.setCreationDate(new Date());
         goal.getUserid().setId(1);
-        goalFacade.edit(goal);
+        goalFacade.create(goal);
     }
 
     private void addDifDeadline(Goal goalToUpdate) {
@@ -51,22 +56,35 @@ public class GoalController {
     public void update(Goal goalToUpdate) {
 
         int last = goalToUpdate.getDeadlineList().size() - 1;
-            if (goalToUpdate.getDeadlineList().get(last).getDate().after(new Date()) == true) {
+        Calendar cal1 = Calendar.getInstance();
+        Calendar cal2 = Calendar.getInstance();
+        Date dat = ((Date) goalToUpdate.getDeadlineList().get(last).getDate().clone());
+        cal1.setTime(dat);
+        cal1.set(Calendar.HOUR_OF_DAY, 00);
+        cal1.set(Calendar.MINUTE, 00);
+        cal1.set(Calendar.SECOND, 00);
+        cal1.set(Calendar.MILLISECOND, 00);
+        Date dat2 = (Date) goalToUpdate.getCurrentDeadline().getDate().clone();
+        cal2.setTime(dat2);
+        cal2.set(Calendar.HOUR_OF_DAY, 00);
+        cal2.set(Calendar.MINUTE, 00);
+        cal2.set(Calendar.SECOND, 00);
+        cal2.set(Calendar.MILLISECOND, 00);
+        if (cal1.getTime().compareTo(cal2.getTime()) != 0) {
+            if (cal1.getTime().after(new Date()) == true) {
                 addDifDeadline(goalToUpdate);
                 addScore(goalToUpdate, -10);
 
             } else {
-                if (goalToUpdate.getDeadlineList().get(last).getDate().before(new Date())) {
+                if (cal1.getTime().before(new Date())) {
                     addDifDeadline(goalToUpdate);
                 }
             }
-        
+        }
         goalFacade.edit(goalToUpdate);
     }
 
     public List<Goal> getAllByUser() {
-        User user = new User();
-        user.setId(1);
         List<Goal> goals = goalFacade.getGoalsByUser(user);
         return setAllDeadlines(goals);
     }
@@ -79,8 +97,6 @@ public class GoalController {
     }
 
     public List<Goal> getAllByCriteria(String criteria) {
-        User user = new User();
-        user.setId(1);
         List<Goal> goals = goalFacade.getGoalsByCriteria(criteria, user);
         return setAllDeadlines(goals);
     }
@@ -94,7 +110,7 @@ public class GoalController {
         List<Goal> goals = getAllByUser();
         int score = 0;
         for (Goal goal : goals) {
-            System.out.println("EXECUTING");
+
             if (goal.getScore() != null) {
                 score += goal.getScore().getScore();
             }
@@ -134,8 +150,9 @@ public class GoalController {
             addScore(goal, 20);
         }
     }
-
+    
     public void init() {
+        user = userFacade.findByUsername(sessionContext.getCallerPrincipal().getName());
         checkExpiredGoals();
     }
 

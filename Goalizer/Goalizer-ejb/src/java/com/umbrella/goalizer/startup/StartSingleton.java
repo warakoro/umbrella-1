@@ -11,9 +11,9 @@ import com.umbrella.goalizer.entity.Activity;
 import com.umbrella.goalizer.entity.Category;
 import com.umbrella.goalizer.entity.Deadline;
 import com.umbrella.goalizer.entity.Goal;
+import com.umbrella.goalizer.entity.GoalStatus;
 import com.umbrella.goalizer.entity.Period;
 import com.umbrella.goalizer.entity.RecurringTask;
-import com.umbrella.goalizer.entity.GoalStatus;
 import com.umbrella.goalizer.entity.Task;
 import com.umbrella.goalizer.entity.User;
 import java.io.UnsupportedEncodingException;
@@ -77,9 +77,9 @@ public class StartSingleton {
         goalDeadline.setGoalid(goal);
         goal.addDeadline(goalDeadline);
         goal.setDescription("Workout and Get Fit");
-        goal.setPriority("high");
+        goal.setPriority("High");
         goal.setName("Workout");
-        
+        goal.setGoalStatus(GoalStatus.TODO);
         RecurringTask runTask = new RecurringTask();
         runTask.setTitle("Run");
         runTask.setDescription("Run for 10 Minutes 3 Times a Week");
@@ -148,6 +148,7 @@ public class StartSingleton {
             waterTask.addActivity(waterActivity);
         }
         goal.addTask(waterTask);
+        
         waterTask.setGoalid(goal);
         
         Task readBookTask = new Task();

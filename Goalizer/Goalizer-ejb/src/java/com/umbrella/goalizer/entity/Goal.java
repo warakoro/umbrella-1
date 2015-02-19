@@ -75,7 +75,18 @@ public class Goal implements Serializable, Comparable<Goal> {
     private Date creationDate;
     @Transient
     private Deadline currentDeadline;
+    @Transient
+    private Deadline realDeadline;
 
+    public Deadline getRealDeadline() {
+        return realDeadline;
+    }
+
+    public void setRealDeadline(Deadline realDeadline) {
+        this.realDeadline = realDeadline;
+    }
+    
+    
     public Goal() {
         categoryid = new Category();
     }
