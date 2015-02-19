@@ -6,8 +6,11 @@
 package com.umbrella.goalizer.mb.activity;
 
 import com.umbrella.goalizer.boundry.ActivityFacade;
+import com.umbrella.goalizer.boundry.GoalFacade;
 import com.umbrella.goalizer.boundry.TaskFacade;
 import com.umbrella.goalizer.entity.Activity;
+import com.umbrella.goalizer.entity.Goal;
+import com.umbrella.goalizer.entity.GoalStatus;
 import com.umbrella.goalizer.entity.RecurringTask;
 import com.umbrella.goalizer.entity.Task;
 import com.umbrella.goalizer.logic.ProgressEJB;
@@ -44,6 +47,9 @@ public class ActivityMB {
     
     @EJB
     private ActivityFacade activityFacade;
+    
+    @EJB
+    private GoalFacade goalFacade;
     
     @EJB
     private ProgressEJB progressEJB;
@@ -125,24 +131,34 @@ public class ActivityMB {
         }
     }
     
+    public String getPeriod() {
+        RecurringTask cTask = (RecurringTask)task;
+        String period = cTask.getPeriod().toString().toLowerCase();    
+        period = period.equals("until_deadline") ? "deadline you set" : period;
+        
+        return period;
+    }
+    
     public int getCurrentRecurrence() {
         Calendar cDateCal = Calendar.getInstance();
         cDateCal.setTime(new Date());
         cDateCal.add(Calendar.DATE, 14);
         Date cDate = cDateCal.getTime();
         
-        long period = progressEJB.getPeriod((RecurringTask)task);
-        long elapsedDiff = cDate.getTime() - task.getCreationDate().getTime();
+        RecurringTask cTask = (RecurringTask)taskFacade.find(taskId);
+        
+        long period = progressEJB.getPeriod((RecurringTask)cTask);
+        long elapsedDiff = cDate.getTime() - cTask.getCreationDate().getTime();
         long elapsed = TimeUnit.DAYS.convert(elapsedDiff, TimeUnit.MILLISECONDS);
         double periods = (double)elapsed / (double)period;
         
         Calendar lDeadlineCal = Calendar.getInstance();
-        lDeadlineCal.setTime(task.getCreationDate());
+        lDeadlineCal.setTime(cTask.getCreationDate());
         lDeadlineCal.add(Calendar.DATE, (int)(Math.ceil(periods) - 1) * (int)period);
         Date lDeadline = lDeadlineCal.getTime();
             
         int cPeriodTimes = 0;
-        for (Activity cActivity : task.getActivityList()) {
+        for (Activity cActivity : cTask.getActivityList()) {
             if (cActivity.getCreationDate().getTime() >= lDeadline.getTime()) {
                 cPeriodTimes++;
             }
@@ -171,21 +187,64 @@ public class ActivityMB {
         }
         return null;
     }    
-  public void add(){
-      Calendar cDateCal = Calendar.getInstance();
-      cDateCal.setTime(new Date());
-      cDateCal.add(Calendar.DATE, 14);
-      Date cDate = cDateCal.getTime();
+    
+    public void add(){
+        Calendar cDateCal = Calendar.getInstance();
+        cDateCal.setTime(new Date());
+        cDateCal.add(Calendar.DATE, 14);
+        Date cDate = cDateCal.getTime();
+
+        Task cTask = taskFacade.find(taskId);
+        Activity newActivity = new Activity(cTask);
+        newActivity.setCreationDate(cDate);
+        cTask.addActivity(newActivity);
+
+        taskFacade.edit(cTask);
+        task.setActivityList(new ArrayList());
+        setActivities(activities);
+
         
-      System.out.println("Task Type: " + task.getTaskType());
-      Activity newActivity = new Activity(task);
-      newActivity.setCreationDate(cDate);
-      task.addActivity(newActivity);
-      
-      taskFacade.edit(task);
-      task.setActivityList(new ArrayList());
-      setActivities(activities);
-  }
+        checkGoalFinished(goalFacade.find(cTask.getGoalid().getId()));
+    }
+    
+    private void checkGoalFinished(Goal goal) {
+        boolean finished = true;
+        
+        if (goal.getTaskList() == null || goal.getTaskList().isEmpty()) {
+            finished = false;
+        }
+        
+        for (Task cTask : goal.getTaskList()) {
+            if (cTask.isSingle()) {
+                if (cTask.getActivityList() == null && cTask.getActivityList().isEmpty()) {
+                    finished = false;
+                    break;
+                }
+            } else if (cTask.isRecurring()) {
+                RecurringTask cRTask = (RecurringTask)cTask;
+                long period = progressEJB.getPeriod(cRTask);
+        
+                long allDiff = cRTask.getDeadlines().get(cRTask.getDeadlines().size() - 1).getDate().getTime() - cRTask.getCreationDate().getTime();
+                long allDays = TimeUnit.DAYS.convert(allDiff, TimeUnit.MILLISECONDS);
+
+                double allPeriods = (double)allDays / (double)period;
+
+                double progress = ((double)cRTask.getActivityList().size() / ((double)cRTask.getRecurrence() * (double)allPeriods));
+                progress = progress * 100;
+                
+                if (progress < 100.0) {
+                    finished = false;
+                    break;
+                }
+            }
+        }
+        
+        if (finished) {
+            goal.setGoalStatus(GoalStatus.FINISHED);
+            goalFacade.edit(goal);
+        }
+    }
+  
   
     public void saveChanges(Activity a){
         activityFacade.edit(a);

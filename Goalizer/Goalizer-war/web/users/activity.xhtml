@@ -14,18 +14,26 @@
                         <div class="panel panel-default">
                             <div class="panel-heading"><h3 class="panel-title text-center">Add Activity for ${activityMB.task.title}</h3></div>
                             <div class="panel-body" align="center">
-                                <h:panelGrid id="singleTaskActivity" rendered="${(activityMB.single) and (not activityMB.done)}" columns="3"> 
+                                <h:panelGrid id="singleTaskActivityUndone" rendered="${(activityMB.single) and (not activityMB.done)}" columns="3"> 
                                     ${activityMB.task.title} is done?&nbsp;&nbsp;
                                     <h:commandButton value="Done!" action="#{activityMB.add()}" class="btn btn-success">
                                             <f:ajax execute="form" render="@all" />
                                     </h:commandButton>
                                     <h:button value="Back" outcome="task.html?id=#{activityMB.task.goalid.id}" class="btn btn-info"/>
                                 </h:panelGrid>
-                                <h:panelGrid id="recurringTaskActivity" rendered="${(not activityMB.single) and (not activityMB.done)}" columns="3"> 
+                                <h:panelGrid id="singleTaskActivityDone" rendered="${(activityMB.single) and (activityMB.done)}" columns="3"> 
+                                    You have finished ${activityMB.task.title}
+                                    <h:button value="Back" outcome="task.html?id=#{activityMB.task.goalid.id}" class="btn btn-info"/>
+                                </h:panelGrid>
+                                <h:panelGrid id="recurringTaskActivityUndone" rendered="${(not activityMB.single) and (not activityMB.done)}" columns="3"> 
                                     Did ${activityMB.task.title}?&nbsp;&nbsp;  
                                     <h:commandButton value="${activityMB.currentRecurrence} out of ${activityMB.task.recurrence} times" action="#{activityMB.add()}" class="btn btn-primary">
                                             <f:ajax execute="form" render="@all" />
                                     </h:commandButton>
+                                    <h:button value="Back" outcome="task.html?id=#{activityMB.task.goalid.id}" class="btn btn-info"/>
+                                </h:panelGrid>
+                                <h:panelGrid id="recurringTaskActivityDone" rendered="${(not activityMB.single) and (activityMB.done)}" columns="3"> 
+                                    You have finished ${activityMB.task.title} for the ${activityMB.period}
                                     <h:button value="Back" outcome="task.html?id=#{activityMB.task.goalid.id}" class="btn btn-info"/>
                                 </h:panelGrid>
                             </div>
@@ -64,7 +72,7 @@
                             </h:commandLink>
                             
                             <h:commandLink value="Save" action="#{activityMB.saveChanges(activity)}" rendered="#{activity.editable}" class="btn btn-link">
-                                <f:ajax execute="form:aTable" render="form:aTable" />
+                                <f:ajax execute="form:aTable" render="@form" />
                             </h:commandLink>
                         </h:column>
                         <h:column>
