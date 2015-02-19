@@ -39,7 +39,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 @Entity
 @NamedQueries({
     @NamedQuery(name = Goal.GOALSBYUSER, query = "SELECT g FROM Goal g WHERE g.userid.id = :userId"),
-    @NamedQuery(name = Goal.GOALSBYCRITERIA, query = "SELECT DISTINCT g FROM Goal g WHERE g.name LIKE :criteria OR g.priority LIKE :criteria OR g.description LIKE :criteria OR g.name LIKE :criteria AND g.userid.id = :userId")
+    @NamedQuery(name = Goal.GOALSBYCRITERIA, query = "SELECT DISTINCT g FROM Goal g WHERE g.name LIKE :criteria OR g.priority LIKE :criteria OR g.description LIKE :criteria OR g.name LIKE :criteria OR g.goalStatus LIKE :criteria AND g.userid.id = :userId")
 })
 
 @XmlRootElement

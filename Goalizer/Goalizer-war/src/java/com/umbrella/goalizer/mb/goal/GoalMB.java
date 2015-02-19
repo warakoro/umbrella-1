@@ -122,4 +122,10 @@ public class GoalMB {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
         FacesContext.getCurrentInstance().addMessage(null, message);
     }
+    
+    public void completeGoal(Goal goal){
+        //System.out.println("ASAAAA");
+        //System.out.println(444444444);
+        goalController.markAsDone(goal);
+    }
 }
