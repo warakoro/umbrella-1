@@ -2,15 +2,94 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:ui="http://java.sun.com/jsf/facelets">
 
  <ui:composition template="default/main.xhtml">
         <ui:define name="content">
             <h:body>
-                    <h1>Welcome to GOALIZER where the impossible becomes possible </h1>
-                    <h2>Click <a href="#{request.contextPath}/users/goals.jsf">here</a> to add a goal</h2>
+        <div class="container">
+
+        <!-- Jumbotron Header -->
+        <header class="jumbotron hero-spacer">
+            <h1>A Warm Welcome!</h1>
+            <p>Welcome to GOALIZER where the impossible becomes possible.</p>
+            <p><a href="#{request.contextPath}/users/goals.jsf" class="btn btn-primary btn-large">Click here!</a>
+            </p>
+        </header>
+
+        <hr/>
+
+        <!-- Title -->
+        <div class="row">
+            <div class="col-lg-12">
+                <h3>Have you ever wanted to read that book but somehow never had the chance to do so? Maybe you wanted to lose weight but thought you're can't be dedicated enough? With Goalizer, you'll never fail to achieve your Goals. Set your goals, track them, and then achieve them! Sign up now and live your dreams.</h3>
+            </div>
+        </div>
+        <hr/><br/>
+        <!-- /.row -->
+
+        <div class="row text-center">
+
+            <div class="col-md-3 col-sm-6 hero-feature">
+                <div class="thumbnail">
+                    <img src="resources/image/signup.jpg" alt="" style="height:180px"/>
+                    <div class="caption">
+                        <h3>Sign Up Now</h3>
+                        <p>Sign up now and start achieving your goals</p>
+                        <!--<p><a href="#" class="btn btn-default">Sign up</a></p>-->
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3 col-sm-6 hero-feature">
+                <div class="thumbnail">
+                    <img src="resources/image/settingGoal.jpg" alt="" style="height:200px"/>
+                    <div class="caption">
+                        <h3>Set Your Goals</h3>
+                        <p>Create a list of goals to achieve</p>
+                        <!--<p><a href="#" class="btn btn-default">Goals</a></p>-->
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3 col-sm-6 hero-feature">
+                <div class="thumbnail">
+                    <img src="resources/image/progress1.jpg" alt="" style="height:185px"/>
+                    <div class="caption">
+                        <h3>Track Your Goals</h3>
+                        <p>Track your progress and get advice to get better</p>
+                        <!--<p><a href="#" class="btn btn-default">Track</a></p>-->
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-3 col-sm-6 hero-feature">
+                <div class="thumbnail">
+                    <img src="resources/image/progress.jpg" alt="" style="height:200px"/>
+                    <div class="caption">
+                        <h3>Achieve Your Goals</h3>
+                        <p>Voila! Your goals have been achieve!</p>
+                        <!--<p><a href="#" class="btn btn-default">More Info</a></p>-->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- /.row -->
+
+        <hr/>
+
+        <!-- Footer -->
+        <footer>
+            <div class="row">
+                <div class="col-lg-12">
+                    <p>Copyright &copy; Umbrella Group 2015</p>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+    <!-- /.container -->
             </h:body>
         </ui:define>
     </ui:composition>
