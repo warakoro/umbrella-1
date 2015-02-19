@@ -10,9 +10,13 @@ import com.umbrella.goalizer.boundry.TaskFacade;
 import com.umbrella.goalizer.entity.Activity;
 import com.umbrella.goalizer.entity.RecurringTask;
 import com.umbrella.goalizer.entity.Task;
+import com.umbrella.goalizer.logic.ProgressEJB;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
@@ -39,6 +43,9 @@ public class ActivityMB {
     
     @EJB
     private ActivityFacade activityFacade;
+    
+    @EJB
+    private ProgressEJB progressEJB;
     
     private List<Activity> activities;
     private Activity activity;
@@ -104,6 +111,41 @@ public class ActivityMB {
         this.task = task;
     }
     
+    public Boolean getDone() {
+        if (task.isSingle()) {
+            System.out.println("Size: " + task.getActivityList().size());
+            return task.getActivityList().size() > 0;
+        } else {
+            return getCurrentRecurrence() == ((RecurringTask)task).getRecurrence();
+        }
+    }
+    
+    public int getCurrentRecurrence() {
+        Calendar cDateCal = Calendar.getInstance();
+        cDateCal.setTime(new Date());
+        cDateCal.add(Calendar.DATE, 14);
+        Date cDate = cDateCal.getTime();
+        
+        long period = progressEJB.getPeriod((RecurringTask)task);
+        long elapsedDiff = cDate.getTime() - task.getCreationDate().getTime();
+        long elapsed = TimeUnit.DAYS.convert(elapsedDiff, TimeUnit.MILLISECONDS);
+        double periods = (double)elapsed / (double)period;
+        
+        Calendar lDeadlineCal = Calendar.getInstance();
+        lDeadlineCal.setTime(task.getCreationDate());
+        lDeadlineCal.add(Calendar.DATE, (int)(Math.ceil(periods) - 1) * (int)period);
+        Date lDeadline = lDeadlineCal.getTime();
+            
+        int cPeriodTimes = 0;
+        for (Activity cActivity : task.getActivityList()) {
+            if (cActivity.getCreationDate().getTime() >= lDeadline.getTime()) {
+                cPeriodTimes++;
+            }
+        }
+            
+        return cPeriodTimes;
+    }
+    
     public String sortByDate(String order) {
         if(order.equals("ASC")){
             //ascending order
@@ -125,8 +167,20 @@ public class ActivityMB {
         return null;
     }    
   public void add(){
+      Calendar cDateCal = Calendar.getInstance();
+      cDateCal.setTime(new Date());
+      cDateCal.add(Calendar.DATE, 14);
+      Date cDate = cDateCal.getTime();
+        
+      System.out.println("Task Type: " + task.getTaskType());
+      Activity newActivity = new Activity(task);
+      newActivity.setCreationDate(cDate);
+      task.addActivity(newActivity);
+      
+      taskFacade.edit(task);
       setActivities(activities);
   }
+  
     public void saveChanges(Activity a){
         activityFacade.edit(a);
         cancelEdit(a);
