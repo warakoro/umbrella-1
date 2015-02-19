@@ -11,6 +11,7 @@ import com.umbrella.goalizer.entity.Activity;
 import com.umbrella.goalizer.entity.RecurringTask;
 import com.umbrella.goalizer.entity.Task;
 import com.umbrella.goalizer.logic.ProgressEJB;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
@@ -112,9 +113,13 @@ public class ActivityMB {
     }
     
     public Boolean getDone() {
+//        System.out.println("**************"+taskFacade.find(taskId).getActivityList().size());
         if (task.isSingle()) {
             System.out.println("Size: " + task.getActivityList().size());
-            return task.getActivityList().size() > 0;
+//            return task.getActivityList().size() > 0;
+            Task tsk = taskFacade.find(taskId);
+//            System.out.println("********************Size: " + tsk.getActivityList().size());
+            return (tsk.getActivityList() == null || tsk.getActivityList().size() > 0);
         } else {
             return getCurrentRecurrence() == ((RecurringTask)task).getRecurrence();
         }
@@ -178,6 +183,7 @@ public class ActivityMB {
       task.addActivity(newActivity);
       
       taskFacade.edit(task);
+      task.setActivityList(new ArrayList());
       setActivities(activities);
   }
   
@@ -187,6 +193,9 @@ public class ActivityMB {
     }
 
     public void remove(Activity a){
+        Task cTask = taskFacade.find(taskId);
+        cTask.getActivityList().remove(a);
+        taskFacade.edit(cTask);
         activityFacade.remove(a);
         setActivities(activities);
     }
