@@ -28,11 +28,10 @@
                                     <h:commandLink value="Logout" action="#{UserView.Logout}" />
                                 </h:form>
                             </li>
+                            <li><h:form><h:commandLink value="Profile" action="#{UserView.GoToUserProfile}" /></h:form></li>
+
                         </c:if>
-<!--                            <h:form rendered="#{not empty request.remoteUser}">
-                            <h:commandLink value="Logout" action="#{auth.logout}" />
-                        </h:form>-->
-                        <li><a href="#">Profile</a></li>
+                        
                     </ul>
                     <!--<form class="navbar-form navbar-right">
                         <input type="text" class="form-control" placeholder="Search..." />

@@ -1,0 +1,78 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <ui:composition template="../default/main.xhtml" >
+        <ui:define name="content">
+            <h:body>
+                <h:graphicImage library="image" name="#{request.userPrincipal}.png" width="200" height="171"/><br/>
+                <p:commandButton value="Change Image" type="button" onclick="PF('addImage').show();" />
+
+                <p:dialog id="goalDialog" header="Upload Image" widgetVar="addImage" minHeight="40">
+                    <h:form id="formImage" enctype="multipart/form-data">
+                        <p:fileUpload fileUploadListener="#{UserView.upload}" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" sizeLimit="10000000" />
+                    </h:form>
+                </p:dialog>
+                <h:form id="form" enctype="multipart/form-data">
+                    <p:panel header="Udate Profile" >
+                        <p:messages/>
+                        <p:inputText id="id" value="#{UserView.id}" type="hidden"/>
+                        <p:inputText id="gender" value="#{UserView.gender}" type="hidden"/>
+
+
+                        <h:panelGrid id="grid" columns="3" cellpadding="5" style="margin-bottom:10px">
+
+                            <p:outputLabel for="firstName" value="First Name" styleClass="requiredLbl"/>
+                            <p:inputText id="firstName" value="#{UserView.firstName}" required="true"/>
+                            <p:message for="firstName" display="text"/>
+
+                            <p:outputLabel for="lastName" value="Last Name" styleClass="requiredLbl"/>                            
+                            <p:inputText id="lastName" value="#{UserView.lastName}" required="true"/> 
+                            <p:message for="lastName" display="text"/>
+
+                            <p:outputLabel for="date" value="Date of Birth" styleClass="requiredLbl"/>                            
+                            <p:inputMask id="date" value="#{UserView.dob}" mask="99/99/9999" required="true">
+                                <f:convertDateTime type="date" pattern="dd/MM/yyyy" timeZone="Europe/Berlin" />
+                            </p:inputMask>
+                            <p:message for="date" display="text"/>
+
+
+                            <p:outputLabel for="userName" value="Username" styleClass="requiredLbl"/>
+                            <p:inputText id="userName" value="#{UserView.userName}" required="true"/>
+                            <p:message for="userName" display="text"/>
+
+                            <p:outputLabel for="password" value="Password" styleClass="requiredLbl"/>
+                            <p:password id="password" value="#{UserView.password}" required ="true" />
+                            <p:message for="password" display="text"/>
+
+                            <p:outputLabel for="email" value="Email" styleClass="requiredLbl"/>
+                            <p:inputText id="email" value="#{UserView.email}" required="true">                                
+                                <f:validateRegex pattern="^[_A-Za-z0-9-\+]+(\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\.[A-Za-z0-9]+)*(\.[A-Za-z]{2,})$" />
+                            </p:inputText>
+                            <p:message for="email" display="text"/>
+
+                            <p:outputLabel for="address" value="Address" styleClass="requiredLbl"/>
+                            <p:inputText id="address" value="#{UserView.address}" required="true"/>
+                            <p:message for="address" display="text"/>
+
+
+                            <p:commandButton value="Update" action="#{UserView.UpdateUser}" ajax="false"/>
+
+
+
+                        </h:panelGrid>
+
+
+
+
+                    </p:panel>  
+                </h:form>
+            </h:body>
+
+        </ui:define>
+    </ui:composition>
+</html>
+
