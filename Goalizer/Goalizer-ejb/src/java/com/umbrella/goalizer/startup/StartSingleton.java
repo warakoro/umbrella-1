@@ -62,7 +62,7 @@ public class StartSingleton {
         user.setGender("M");
         user.setUsername("mamadou");
         user.setPassword(encodePassword("admin"));
-        user.setEmail("lsfernandez@mum.edu");
+        user.setEmail("lfernandez@mum.edu");
         user.setDob(new Date());
         user.setUrole("USER_ROLE");
         
