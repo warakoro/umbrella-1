@@ -37,7 +37,7 @@ public class GoalController {
     @Resource
     SessionContext sessionContext;
     private User user;
-    
+
     public void create(Goal goal, Deadline deadLine) {
         goal.setGoalStatus(GoalStatus.TODO);
         //user.addGoal(goal);
@@ -137,10 +137,12 @@ public class GoalController {
     public void checkExpiredGoals() {
         List<Goal> goals = getAllByUser();
         for (Goal goal : goals) {
-            if (goal.getCurrentDeadline().getDate().before(new Date())) {
+            
+            if (goal.getCurrentDeadline().getDate().before(new Date()) && goal.getGoalStatus()!=GoalStatus.EXPIRED) {
                 goal.setGoalStatus(GoalStatus.EXPIRED);
                 addScore(goal, -10);
             }
+           // goalFacade.edit(goal);
         }
     }
 
@@ -150,7 +152,7 @@ public class GoalController {
             addScore(goal, 20);
         }
     }
-    
+
     public void init() {
         user = userFacade.findByUsername(sessionContext.getCallerPrincipal().getName());
         checkExpiredGoals();
