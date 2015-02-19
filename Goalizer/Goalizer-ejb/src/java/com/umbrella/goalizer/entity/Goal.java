@@ -61,7 +61,7 @@ public class Goal implements Serializable, Comparable<Goal> {
     private String priority;
     @Enumerated(EnumType.STRING)
     private GoalStatus goalStatus;
-    @OneToOne(mappedBy = "goal",cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @OneToOne(mappedBy = "goal",cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
     private Score score;
     @JoinColumn(name = "categoryid", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
