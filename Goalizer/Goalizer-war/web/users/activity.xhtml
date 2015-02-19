@@ -12,18 +12,18 @@
                 <div class="row centered-form">
                     <div class="col-xs-12 col-sm-8 col-md-4 col-sm-offset-2 col-md-offset-4">
                         <div class="panel panel-default">
-                            <div class="panel-heading"><h3 class="panel-title text-center">Add Activity for activityMB.task.title</h3></div>
+                            <div class="panel-heading"><h3 class="panel-title text-center">Add Activity for ${activityMB.task.title}</h3></div>
                             <div class="panel-body" align="center">
-                                <h:panelGrid id="singleTaskActivity" rendered="#{activityMB.single}" columns="3"> 
+                                <h:panelGrid id="singleTaskActivity" rendered="${(activityMB.single) and (not activityMB.done)}" columns="3"> 
                                     ${activityMB.task.title} is done?&nbsp;&nbsp;
                                     <h:commandButton value="Done!" action="#{activityMB.add()}" class="btn btn-success">
                                             <f:ajax execute="form" render="@all" />
                                     </h:commandButton>
                                     <h:button value="Back" outcome="task.html?id=#{activityMB.task.goalid.id}" class="btn btn-info"/>
                                 </h:panelGrid>
-                                <h:panelGrid id="recurringTaskActivity" rendered="#{not activityMB.single}" columns="3"> 
+                                <h:panelGrid id="recurringTaskActivity" rendered="${(not activityMB.single) and (not activityMB.done)}" columns="3"> 
                                     Did ${activityMB.task.title}?&nbsp;&nbsp;  
-                                    <h:commandButton value="1 out of ${activityMB.task.recurrence} times" action="#{activityMB.add()}" class="btn btn-primary">
+                                    <h:commandButton value="${activityMB.currentRecurrence} out of ${activityMB.task.recurrence} times" action="#{activityMB.add()}" class="btn btn-primary">
                                             <f:ajax execute="form" render="@all" />
                                     </h:commandButton>
                                     <h:button value="Back" outcome="task.html?id=#{activityMB.task.goalid.id}" class="btn btn-info"/>

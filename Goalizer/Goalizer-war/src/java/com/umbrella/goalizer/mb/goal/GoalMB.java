@@ -106,7 +106,6 @@ public class GoalMB {
     }
 
     public void update(Goal goalToUpdate) {
-       
         goalController.update(goalToUpdate);
         RequestContext.getCurrentInstance().execute("PF('goalEditDialog').hide();");
     }
