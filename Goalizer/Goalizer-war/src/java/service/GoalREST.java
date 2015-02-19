@@ -11,6 +11,7 @@ import com.umbrella.goalizer.entity.Goal;
 import com.umbrella.goalizer.entity.Task;
 import java.util.List;
 import javax.inject.Inject;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -59,6 +60,22 @@ public class GoalREST {
         return taskFacase.getTasksByGoalId(id);
     }
  
+    @DELETE
+    @Path("DeleteTask/{id}")
+    @Produces({"application/json"})
+    public void deleteTask(@PathParam("id") Integer id) {
+        System.out.println("Deleteing Task via RESTFUL webService**********");
+        taskFacase.remove(taskFacase.find(id));
+    }
+ 
+   @DELETE
+    @Path("DeleteGoal/{id}")
+    @Produces({"application/json"})
+    public void deleteGoal(@PathParam("id") Integer id) {
+        System.out.println("Deleteing Goal via RESTFUL webService**********");
+        goalFacade.remove(goalFacade.find(id));
+    }
+     
     @POST
     public void test(@FormParam("name") String name) {
         System.out.println("************Mou is calling me");
