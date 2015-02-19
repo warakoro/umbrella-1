@@ -33,6 +33,7 @@ public class GoalsDailyEmailer {
     @EJB
     private MailSender mailSender;
 
+    @Schedule(dayOfWeek = "*", hour = "10", minute = "0", second = "0")
     public void myTimer() {
         System.out.println("Timer event: " + new Date());
         sendWarningGoalDate();
