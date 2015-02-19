@@ -8,8 +8,8 @@
     <ui:composition template="../default/main.xhtml" >
         <ui:define name="content">
             <h:body>
-                <h:graphicImage library="image" name="#{request.userPrincipal}.png" width="200" height="171"/><br/>
-                <p:commandButton value="Change Image" type="button" onclick="PF('addImage').show();" />
+                <h:graphicImage library="image" name="#{request.userPrincipal}.png" width="200" height="171" class="img-circle"/>
+                <p:commandButton value="Change Image" type="button" onclick="PF('addImage').show();" styleClass="btn btn-info"/>
 
                 <p:dialog id="goalDialog" header="Upload Image" widgetVar="addImage" minHeight="40">
                     <h:form id="formImage" enctype="multipart/form-data">
@@ -59,7 +59,7 @@
                             <p:message for="address" display="text"/>
 
 
-                            <p:commandButton value="Update" action="#{UserView.UpdateUser}" ajax="false"/>
+                            <p:commandButton value="Update" class="btn btn-info" action="#{UserView.UpdateUser}" ajax="false"/>
 
 
 

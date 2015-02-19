@@ -73,7 +73,7 @@
                         </h:column>
           
                         <h:column>
-                            <h:commandLink action="#{tskMB.edit(task)}" rendered="#{not task.editable}" class="btn btn-link" style="color:rgb(0, 153, 0);"  >
+                            <h:commandLink action="#{tskMB.edit(task)}" rendered="#{not task.editable}" class="btn btn-link" style="color:rgb(0, 153, 0);">
                                 <span class="glyphicon glyphicon-pencil">Edit</span>
                                 <f:ajax render="form:tTable" />
                             </h:commandLink>
