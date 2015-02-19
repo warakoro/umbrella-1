@@ -1,0 +1,96 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+    <ui:composition template="default/main.xhtml">
+        <ui:define name="content">
+            <h:body>
+                <h:form id="form">  
+                    <p:growl id="msgs" showDetail="true" />
+                    <p:tabView>
+                        <p:tab title="Tasks">
+                            <h:panelGrid columns="1" cellpadding="10">
+                                <h:outputText value="This page will show all tasks of a certain goal (active and done) in a grid view (with all the information)" />
+                                <br></br>
+                                <br></br>
+                                <p:dataTable var="taskRes" value="#{taskMB.showAllTasks()}">
+                                <p:column headerText="Id">
+                                    <h:outputText value="#{taskRes.id}" />
+                                </p:column>
+
+                                <p:column headerText="Title">
+                                    <h:outputText value="#{taskRes.title}" />
+                                </p:column>
+
+                                <p:column headerText="Description">
+                                    <h:outputText value="#{taskRes.description}" />
+                                </p:column>
+
+                            </p:dataTable>
+
+                                
+                            </h:panelGrid>
+                        </p:tab>
+                        <p:tab title="Activites" >
+                            <h:panelGrid columns="2" cellpadding="10">
+                                <h:outputText value="This page will show all ACTIVE tasks in a grid view (with all the information)" />
+                            </h:panelGrid>
+                        </p:tab>
+                        <p:tab title="Postpone deadline" >
+                            <h:panelGrid columns="2" cellpadding="10">
+                                <h:outputText value="User can change the deadline of the goal or related tasks)" />
+                            </h:panelGrid>
+                        </p:tab>
+                            
+                        <p:tab title="Add task">
+                            <div class="row centered-form">
+                                <div class="col-xs-12 col-sm-8 col-md-4 col-sm-offset-2 col-md-offset-4">
+                                    <div class="panel panel-default">
+                                        <div class="panel-heading"><h3 class="panel-title text-center">New Task</h3></div>
+                                        <div class="panel-body">
+                                            <h:form role="form">
+                                                 <p:panel id="createTask">
+                                                <p:messages/>
+
+                                                <div class="form-group"><h:inputText value="#{taskMB.task.title}" class="form-control input-sm" a:placeholder="Task Name" required="true"/></div>
+                                                <div class="form-group"><h:inputText value="#{taskMB.task.description}" class="form-control input-sm" a:placeholder="Task Description"/></div>
+                                                <div class="form-group"><p:calendar a:placeholder="DeadLine" value="#{taskMB.deadline.date}"/></div>
+                                                <h:selectOneRadio value="#{taskMB.taskType}">
+                                                    <div class="btn-group btn-group-justified" role="group" aria-label="...">
+                                                    <div class="btn-group" role="group">
+                                                        <f:selectItem itemValue="SingleTask" class="btn btn-default" itemLabel="Single Task" />
+                                                    </div>
+                                                    <div class="btn-group" role="group">
+                                                        <f:selectItem itemValue="RecurringTask" class="btn btn-default" itemLabel="Recurring Task" />
+                                                    </div>
+                                                    </div>
+                                                    <f:ajax render="results" />
+                                                </h:selectOneRadio>
+                                                <br></br>
+                                                <h:panelGroup id="results">   
+                                                    <h:panelGroup rendered="#{taskMB.taskType == 'RecurringTask'}">
+                                                        <div class="form-group"><h:inputText value="#{taskMB.recurringTask.recurrence}" class="form-control input-sm" a:placeholder="Recurrence"/></div>
+                                                            <div class="form-group">
+                                                                <h:selectOneMenu value="#{taskMB.recurringTask.period}" class="form-control"><f:selectItems value="#{periodMB.periods}" /></h:selectOneMenu>
+                                                            </div>
+                                                        </h:panelGroup> 
+                                                    </h:panelGroup>
+                                                    <h:commandButton class="btn btn-info btn-block" action="#{taskMB.addNewTask()}" value="Add"/>
+                                                 </p:panel>
+                                            </h:form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </p:tab>
+                    </p:tabView>
+                </h:form>
+            </h:body>
+
+        </ui:define>
+    </ui:composition>
+</html>

@@ -44,9 +44,4 @@ public class UserFacade extends AbstractFacade<User> {
             return null;
         }
     }
-//       public User findUserByName(String name){       
-//        
-//    }
-
-
 }

@@ -11,6 +11,8 @@ import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -20,12 +22,14 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  *
@@ -33,9 +37,14 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @Entity
 @NamedQueries({
-    @NamedQuery(name = Goal.GOALSBYUSER, query = "SELECT g FROM Goal g WHERE g.userid.id = :userId")})
+    @NamedQuery(name = Goal.GOALSBYUSER, query = "SELECT g FROM Goal g WHERE g.userid.id = :userId"),
+    @NamedQuery(name = Goal.GOALSBYCRITERIA, query = "SELECT DISTINCT g FROM Goal g WHERE g.name LIKE :criteria OR g.priority LIKE :criteria OR g.description LIKE :criteria OR g.name LIKE :criteria AND g.userid.id = :userId")
+})
+
 @XmlRootElement
 public class Goal implements Serializable, Comparable<Goal> {
+
+    public static final String GOALSBYCRITERIA = "Goal.getGoalsByNamePriorityOrPriority";
     public static final String GOALSBYUSER = "Goal.getGoalsByUser";
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "goalid", fetch = FetchType.LAZY)
     private List<Task> taskList = new ArrayList();
@@ -43,26 +52,29 @@ public class Goal implements Serializable, Comparable<Goal> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @NotNull
+    @NotNull(message = "this field doesn't accept nulls")
+    @NotEmpty(message = "this field doesn't accept empty")
     private String name;
-    @NotNull
     private String description;
     @NotNull
     private String priority;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "goalid", fetch = FetchType.LAZY)
-    private List<Score> scoreList;
+    @Enumerated(EnumType.STRING)
+    private GoalStatus goalStatus;
+    @OneToOne(mappedBy = "goal",cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private Score score;
     @JoinColumn(name = "categoryid", referencedColumnName = "id")
-    @ManyToOne( fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private Category categoryid;
     @JoinColumn(name = "userid", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     private User userid;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "goalid", fetch = FetchType.LAZY)
     private List<Deadline> deadlineList = new ArrayList();
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date creationDate;
     @Transient
     private Deadline currentDeadline;
+
     public Goal() {
         categoryid = new Category();
     }
@@ -71,6 +83,15 @@ public class Goal implements Serializable, Comparable<Goal> {
         return currentDeadline;
     }
 
+    public GoalStatus getGoalStatus() {
+        return goalStatus;
+    }
+
+    public void setGoalStatus(GoalStatus goalStatus) {
+        this.goalStatus = goalStatus;
+    }
+    
+    
     public void setCurrentDeadline(Deadline currentDeadline) {
         this.currentDeadline = currentDeadline;
     }
@@ -79,16 +100,15 @@ public class Goal implements Serializable, Comparable<Goal> {
         task.setGoalid(this);
         getTaskList().add(task);
     }
-    
+
     public void addDeadline(Deadline deadLine) {
         deadlineList.add(deadLine);
     }
 
-    public Goal(Integer id, String name, String description, String priority) {
+    public Goal(Integer id, String name, String description) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.priority = priority;
     }
 
     public Date getCreationDate() {
@@ -132,12 +152,12 @@ public class Goal implements Serializable, Comparable<Goal> {
     }
 
     @XmlTransient
-    public List<Score> getScoreList() {
-        return scoreList;
+    public Score getScore() {
+        return score;
     }
 
-    public void setScoreList(List<Score> scoreList) {
-        this.scoreList = scoreList;
+    public void setScore(Score score) {
+        this.score = score;
     }
 
     public Category getCategoryid() {
@@ -201,7 +221,7 @@ public class Goal implements Serializable, Comparable<Goal> {
 
     @Override
     public int compareTo(Goal o) {
-        return this.getCreationDate().compareTo(o.getCreationDate());
+        return o.getCreationDate().compareTo(this.getCreationDate());
     }
 
 }

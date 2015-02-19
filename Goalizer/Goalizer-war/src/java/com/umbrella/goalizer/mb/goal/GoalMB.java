@@ -7,20 +7,26 @@ package com.umbrella.goalizer.mb.goal;
 
 import com.umbrella.goalizer.boundry.GoalFacade;
 import com.umbrella.goalizer.boundry.UserFacade;
+import com.umbrella.goalizer.controller.GoalController;
 import com.umbrella.goalizer.entity.Deadline;
 import com.umbrella.goalizer.entity.Goal;
-import com.umbrella.goalizer.entity.User;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
+import org.primefaces.context.RequestContext;
 
 /**
  * @author Luis
  */
 @ManagedBean(name = "goalMB")
-@RequestScoped
+@ViewScoped
 public class GoalMB {
 
     /**
@@ -33,6 +39,17 @@ public class GoalMB {
     private UserFacade userFacade;
     private Deadline deadLine;
     private Goal selectedGoal;
+    @EJB
+    GoalController goalController;
+    private String criteria;
+
+    public String getCriteria() {
+        return criteria;
+    }
+
+    public void setCriteria(String criteria) {
+        this.criteria = criteria;
+    }
 
     public Goal getSelectedGoal() {
         return selectedGoal;
@@ -59,39 +76,48 @@ public class GoalMB {
     }
 
     public GoalMB() {
-        goal = new Goal();
-        deadLine = new Deadline();
+
     }
 
-    public String createGoal() {
-        User user = new User();
-        user.setId(1);
-        user = userFacade.find(user.getId());
-        goal.addDeadline(deadLine);
-        goal.setCreationDate(new Date());
-        goal.setUserid(user);
-        goalFacade.create(goal);
-//        RequestContext.getCurrentInstance().closeDialog("goalDialog");
-        return "index";
+    @PostConstruct
+    public void init() {
+        goal = new Goal();
+        deadLine = new Deadline();
+        criteria = "";
+    }
+    
+    public int getScore(){
+        return goalController.computeScore();
+    }
+
+    public void createGoal() {
+        goalController.create(goal, deadLine);
+        RequestContext.getCurrentInstance().execute("PF('addNewGoal').hide();");
     }
 
     public List<Goal> showAll() {
-        User user = new User();
-        user.setId(1);
-        List<Goal> goals = goalFacade.getGoalsByUser(user);
-        for (Goal goal1 : goals) {
-            goalFacade.getLastDeadLine(goal1);
+        List<Goal> goals;
+        if (criteria.isEmpty()) {
+            goals = goalController.getAllByUser();
+        } else {
+            goals = goalController.getAllByCriteria(criteria);
         }
         return goals;
     }
 
-    public String update() {
-        goalFacade.edit(selectedGoal);
-        return "index";
+    public void update(Goal goalToUpdate) {
+       
+        goalController.update(goalToUpdate);
+        RequestContext.getCurrentInstance().execute("PF('goalEditDialog').hide();");
     }
 
-    public String delete(){
-        goalFacade.remove(selectedGoal);
-        return "index";
+    public void delete(Goal goalToDelete) {
+        System.out.println("GOAL TO DELETE " + goalToDelete != null);
+        goalController.delete(goalToDelete);
+    }
+
+    public void addMessage(String summary, String detail) {
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
+        FacesContext.getCurrentInstance().addMessage(null, message);
     }
 }
