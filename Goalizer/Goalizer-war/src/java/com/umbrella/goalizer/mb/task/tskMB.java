@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.umbrella.goalizer.tsk;
+package com.umbrella.goalizer.mb.task;
 
 import com.umbrella.goalizer.boundry.GoalFacade;
 import com.umbrella.goalizer.boundry.RecurringTaskFacade;
@@ -12,6 +12,8 @@ import com.umbrella.goalizer.entity.Deadline;
 import com.umbrella.goalizer.entity.Goal;
 import com.umbrella.goalizer.entity.RecurringTask;
 import com.umbrella.goalizer.entity.Task;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -48,6 +50,8 @@ public class tskMB {
     private RecurringTask recurringTask;
     private Deadline deadline;
     private String taskType;
+    private String criteria;
+//    private Task selectedTask;
     
     public tskMB() {
         task = new Task();
@@ -93,6 +97,22 @@ public class tskMB {
         this.deadline = deadline;
     }
 
+    public String getCriteria() {
+        return criteria;
+    }
+
+    public void setCriteria(String criteria) {
+        this.criteria = criteria;
+    }
+
+//    public Task getSelectedTask() {
+//        return selectedTask;
+//    }
+//
+//    public void setSelectedTask(Task selectedTask) {
+//        this.selectedTask = selectedTask;
+//    }
+
     public List<Task> getTasks() {
         return tasks;
     }
@@ -110,12 +130,12 @@ public class tskMB {
         for(Task t:tasks){
             t.setTaskType(getTaskType(t));
             if (t.getTaskType().equals("RECURRING TASK")) {
-                System.out.println("Recurrence: " + ((RecurringTask)t).getRecurrence());
+//                System.out.println("Recurrence: " + ((RecurringTask)t).getRecurrence());
             }
         }
         return tasks;
     }
-    public String getTaskType(Task t) {
+    public static String getTaskType(Task t) {
         String tType="";
         if (t.getClass() == Task.class) {
             tType = "SINGLE TASK";
@@ -151,7 +171,52 @@ public class tskMB {
         taskType = "";
         setTasks(tasks);
     }
+   public String sortByDeadline(String order) {
+        if(order.equals("ASC")){
+            //ascending order
+            Collections.sort(tasks, new Comparator<Task>() {
+                @Override
+		public int compare(Task t1, Task t2) {
+                    return t1.getCurrentDeadline().getDate().compareTo(t2.getCurrentDeadline().getDate());
+                }
+        });
+        }else if (order.equals("DESC")) {
+            //descending order
+            Collections.sort(tasks, new Comparator<Task>() {
+                @Override
+                public int compare(Task t1, Task t2) {
+                    return t2.getCurrentDeadline().getDate().compareTo(t1.getCurrentDeadline().getDate());
+                }
+        });
+        }
+        return null;
+    }    
     
+    public String sortByTitle(String order) {
+        if(order.equals("ASC")){
+            //ascending order
+            Collections.sort(tasks, new Comparator<Task>() {
+                @Override
+		public int compare(Task t1, Task t2) {
+                    return t1.getTitle().compareTo(t2.getTitle());
+                }
+        });
+        }else if (order.equals("DESC")) {
+            //descending order
+            Collections.sort(tasks, new Comparator<Task>() {
+                @Override
+                public int compare(Task t1, Task t2) {
+                    return t2.getTitle().compareTo(t1.getTitle());
+                }
+        });
+        }
+        return null;
+    }
+    
+//    public void search(){
+//        tasks = taskFacade.getTasksByCriteria(criteria, goalId);
+//     }
+//    
     public void saveChanges(Task t){
         taskFacade.edit(t);
         cancelEdit(t);

@@ -5,102 +5,142 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
-      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
     <ui:composition template="../default/main.xhtml">
         <ui:define name="content">
             <h:body>
-                <!--<h:form id="form">-->  
-                    <p:growl id="msgs" showDetail="true" />
-                    <p:tabView id="tabview">
-                        <p:tab id="tasks" title="Tasks">
+                <h:form id="form">
+                <div class="container">
+                    <table id="example" class="table table-striped table-bordered" cellspacing="0" width="100%">
+<!--                        <p:inputText value="#{taskOrder.criteria}" class="input-medium search-query" placeholder="search...">
+                            <p:ajax event="keyup" update="form:tTable" listener=""/>
+                        </p:inputText>-->
+                        
+                        <h:dataTable id="tTable" value="#{tskMB.tasks}" var="task" class="table table-striped">  
+                        <h:inputText value="#{tskMB.goalId}"/>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="TaskType"/>
+                            </f:facet>
+                            <h:outputText value="#{task.taskType}"/>
+                        </h:column>                          
+                        <h:column>
+                            <f:facet name="header">
+                                <h:commandLink id="sortDeadlineAsc" action="#{tskMB.sortByDeadline('ASC')}"><span class="glyphicon glyphicon-chevron-down"></span>
+                                    <f:ajax render="form:tTable"/>
+                                </h:commandLink>
+                                Deadline
+                                <h:commandLink id="sortDeadlineDesc" action="#{tskMB.sortByDeadline('DESC')}"><span class="glyphicon glyphicon-chevron-up"></span>
+                                    <f:ajax render="form:tTable"/>
+                                </h:commandLink>
+                            </f:facet>
+                            <!--<p:calendar value="#{task.currentDeadline.date}" pattern="MM/dd/yyyy" rendered="#{task.editable}"/>-->
+                            <h:outputText value="#{task.currentDeadline.date}"/>
+                        </h:column>  
+                        <h:column>
+                            <f:facet name="header">
+                                <h:commandLink id="sortTitleAsc" action="#{tskMB.sortByTitle('ASC')}"><span class="glyphicon glyphicon-chevron-down"></span>
+                                    <f:ajax render="form:tTable"/>
+                                </h:commandLink>
+                                Title
+                                <h:commandLink id="sortTitleDesc" action="#{tskMB.sortByTitle('DESC')}"><span class="glyphicon glyphicon-chevron-up"></span>
+                                    <f:ajax render="form:tTable"/>
+                                </h:commandLink>
+                            </f:facet>
+                            <h:inputText value="#{task.title}" rendered="#{task.editable}" />
+                            <h:outputText value="#{task.title}" rendered="#{not task.editable}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="Description"/>
+                            </f:facet>
+                            <h:inputTextarea value="#{task.description}" rendered="#{task.editable}"/>
+                            <h:outputText value="#{task.description}" rendered="#{not task.editable}" />
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="Recurrence"/>
+                            </f:facet>
+                            <h:inputText class="small" value="#{task.recurrence}" rendered="${(task.taskType == 'RECURRING TASK' ? 'true' : 'false') and (task.editable)}"/>
+                            <h:outputText value="#{task.recurrence}" rendered="${(task.taskType == 'RECURRING TASK' ? 'true' : 'false') and (not task.editable)}"/>
+                        </h:column>
+                        <h:column>
+                            <f:facet name="header">
+                                <h:outputText value="Period"/>
+                            </f:facet>
+                            <h:selectOneMenu value="#{task.period}" rendered="${(task.taskType == 'RECURRING TASK' ? 'true' : 'false') and (task.editable)}"><f:selectItems value="#{periodMB.periods}" /></h:selectOneMenu>
+                            <h:outputText value="#{task.period}" rendered="${(task.taskType == 'RECURRING TASK' ? 'true' : 'false') and (not task.editable)}"/>
+                        </h:column>
+          
+                        <h:column>
+                            <h:commandLink action="#{tskMB.edit(task)}" rendered="#{not task.editable}" class="btn btn-link" style="color:rgb(0, 153, 0);"  >
+                                <span class="glyphicon glyphicon-pencil">Edit</span>
+                                <f:ajax render="form:tTable" />
+                            </h:commandLink>
                             
-
-                            <div class="container">
-                                <div class="panel-body" >
-                                    <ul class="list-group" id="ul">
-                                    <form id="showAll">
-                                        <ui:repeat value="#{taskMB.showAllTasks()}" var="t" varStatus="loopStatus" id="ui">
-                                        <li class="list-group-item" style="background-color: ${loopStatus.index % 2 == 0 ? '#ffffff' : '#c7ddef'}">
-                                        <h:outputText value="#{t.title} due to #{t.currentDeadline.date}"/>
-
-                                        <div class="pull-right action-buttons" id="right">
-                                            
-                                            <h:form id="btns">
-                                                <h:commandLink style="color:rgb(209, 91, 71);"><span class="glyphicon glyphicon-trash" id="s1"></span>
-                                                    <f:ajax listener="#{taskMB.delete(t)}" render="tabview:showAll" />
-                                                </h:commandLink>
-                                                <h:commandLink style="color:rgb(128, 144, 160);" onclick="PF('dlg1').show();"><span class="glyphicon glyphicon-pencil" id="s2"></span>
-                                                    
-                                                </h:commandLink>
-                                                <h:commandLink style="color:rgb(0, 153, 0);"><span class="glyphicon glyphicon-eye-open" id="s3"></span>
-                                                    <f:ajax listener="#{taskMB.addactivity(t)}" />
-                                                </h:commandLink>
-                                            </h:form>
-
-                                                         <p:dialog header="Basic Dialog" widgetVar="dlg1" minHeight="40">
-                                                             <h:outputText value="#{t.title}" />
-                                                         </p:dialog>
-                                            
-                                        </div>
-                                    </li>
-                                    </ui:repeat>
-                                    </form>
-                                </ul>
-                            </div>
-                        </div>
-
-
-                        </p:tab>
-                        <p:tab title="Activites" >
-                            <h:panelGrid columns="2" cellpadding="10">
-                                <h:outputText value="This page will show all ACTIVE tasks in a grid view (with all the information)" />
-                            </h:panelGrid>
-                        </p:tab>
-                        <p:tab title="Postpone deadline" >
-                            <h:panelGrid columns="2" cellpadding="10">
-                                <h:outputText value="User can change the deadline of the goal or related tasks)" />
-                            </h:panelGrid>
-                        </p:tab>
-                            
-                        <p:tab title="Add task">
-                            <div class="panel-body">
-                                <h:form>
-                                     <p:panel id="createTask">
-                                        <p:messages/>
-                                        <h:inputHidden value="#{taskMB.goalId}"/>
-                                        <div class="form-group"><h:inputText id="title" value="#{taskMB.task.title}" class="form-control input-sm" a:placeholder="Task Name" required="true"/><h:message for="title" style="color:red" /></div>
-                                        <div class="form-group"><h:inputTextarea cols="20" rows="10" value="#{taskMB.task.description}" class="form-control input-sm" a:placeholder="Task Description"/></div>
-                                        <div class="form-group"><p:calendar id="cal" a:placeholder="DeadLine" value="#{taskMB.deadline.date}" required="true"/><h:message for="cal" style="color:red" /></div>
-                                        <h:selectOneRadio value="#{taskMB.taskType}">
-                                            <div class="btn-group btn-group-justified" role="group" aria-label="...">
-                                                <div class="btn-group" role="group">
-                                                    <f:selectItem itemValue="SingleTask" itemLabel="Single Task" />
-                                                </div>
-                                                <div class="btn-group" role="group">
-                                                    <f:selectItem itemValue="RecurringTask" itemLabel="Recurring Task" />
-                                                </div>
-                                            </div>
-                                            <f:ajax render="results" />
-                                        </h:selectOneRadio>
-                                        <br></br>
-                                        <h:panelGroup id="results">   
-                                            <h:panelGroup rendered="#{taskMB.taskType == 'RecurringTask'}">
-                                                <div class="form-group"><h:inputText value="#{taskMB.recurringTask.recurrence}" class="form-control input-sm" a:placeholder="Recurrence"/></div>
-                                                <div class="form-group">
-                                                    <h:selectOneMenu value="#{taskMB.recurringTask.period}" class="form-control"><f:selectItems value="#{periodMB.periods}" /></h:selectOneMenu>
-                                                </div>
+                            <h:commandLink value="Save" action="#{tskMB.saveChanges(task)}" rendered="#{task.editable}" class="btn btn-link">
+                                <f:ajax execute="form:tTable" render="form:tTable" />
+                            </h:commandLink>
+                        </h:column>
+                        <h:column>
+                            <h:commandLink value="Cancel" action="#{tskMB.cancelEdit(task)}"  rendered="#{task.editable}" class="btn btn-link">
+                                <f:ajax render="form:tTable" />
+                            </h:commandLink>
+                        </h:column>
+                        <h:column>
+                            <h:commandLink id="remove" action="#{tskMB.remove(task)}" style="color:rgb(209, 91, 71);"
+                                           onclick="return confirm('Are you sure?')" class="btn btn-link"><span class="glyphicon glyphicon-trash">Delete</span>
+                                <f:ajax render="form:tTable" />
+                            </h:commandLink>
+                        </h:column>
+                        <h:column>
+                            <h:link class="btn btn-link" outcome="activity.xhtml?id=#{task.id}">
+                                <span class="glyphicon glyphicon-eye-open">Activity</span>
+                            </h:link>
+                        </h:column>
+                    </h:dataTable>
+                    </table>
+                    </div>   
+            
+                    <br></br><br></br>
+                    <div class="row centered-form">
+                        <div class="col-xs-12 col-sm-8 col-md-4 col-sm-offset-2 col-md-offset-4">
+                            <div class="panel panel-default">
+                                <div class="panel-heading"><h3 class="panel-title text-center">Add New Task</h3></div>
+                                <div class="panel-body" align="center">
+                                        <p:growl id="msgs" showDetail="true" />
+                                            <h:inputText id="title" value="#{tskMB.task.title}" a:placeholder="Title" class="form-control input-sm" required="true" requiredMessage="Task title can not be empty."/>
+                                        <h:message id="titlem" for="title" style="color:red; font-weight: bold"/>
+                                        <br/>
+                                            <h:inputTextarea id="description" cols="25" rows="10" value="#{tskMB.task.description}" a:placeholder="Description" class="form-control input-sm"/>
+                                        <br/>
+                                            <p:calendar id="deadline" value="#{tskMB.deadline.date}" pattern="dd-MM-yyyy" a:placeholder="Deadline" required="true" requiredMessage="Task deadLine can not be empty."/>
+                                            <br/><h:message id="deadlinem" for="deadline" style="color:red"/>
+                                        <br/>
+                                            <h:selectOneRadio value="#{tskMB.taskType}" a:placeholder="Task Type">
+                                                <f:selectItem itemValue="SingleTask" itemLabel="Single Task" />
+                                                <f:selectItem itemValue="RecurringTask" itemLabel="Recurring Task" />
+                                                <f:ajax render="result" />
+                                            </h:selectOneRadio>
+                                        <br/>
+                                        <h:panelGroup id="result">   
+                                            <h:panelGroup rendered="#{tskMB.taskType == 'RecurringTask'}">
+                                                <h:inputText id="recurrence" value="#{tskMB.recurringTask.recurrence}" a:placeholder="Recurrence"  class="form-control input-sm"/>
+                                                <br/><h:message id="recurrencem" for="recurrence" style="color:red; font-weight: bold"/>
+                                                <br/>
+                                                <h:selectOneMenu value="#{tskMB.recurringTask.period}" a:placeholder="Period" class="form-control"><f:selectItems value="#{periodMB.periods}" /></h:selectOneMenu>
                                             </h:panelGroup> 
                                         </h:panelGroup>
-                                        <p:commandButton styleClass="btn btn-info btn-block" value="Add" actionListener="#{taskMB.addNewTask()}" update="createTask" oncomplete="if(!args.validationFailed){window.location.replace(window.location.href);}"/>
-                                     </p:panel>
-                                </h:form>
+                                        <br/>
+                                        <h:commandButton value="Add Task" action="#{tskMB.add()}" styleClass="btn btn-info">
+                                            <f:ajax execute="form" render="@all" />
+                                        </h:commandButton>
+                                    </div>
+                                </div>
                             </div>
-                        </p:tab>
-                    </p:tabView>
-                <!--</h:form>-->
+                        </div>
+                </h:form>
             </h:body>
-
         </ui:define>
     </ui:composition>
 </html>

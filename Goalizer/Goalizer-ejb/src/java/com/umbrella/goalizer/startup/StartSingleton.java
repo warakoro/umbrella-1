@@ -7,6 +7,7 @@ package com.umbrella.goalizer.startup;
 
 import com.umbrella.goalizer.boundry.TaskFacade;
 import com.umbrella.goalizer.boundry.UserFacade;
+import com.umbrella.goalizer.entity.Activity;
 import com.umbrella.goalizer.entity.Category;
 import com.umbrella.goalizer.entity.Deadline;
 import com.umbrella.goalizer.entity.Goal;
@@ -53,10 +54,6 @@ public class StartSingleton {
         System.out.println("Starting Singleton...");
 
         /******** User ********/
-        Calendar c = Calendar.getInstance();
-        c.setTime(new Date()); // Now use today date.
-        c.add(Calendar.DATE, 1);
-        
         User user = new User();
         user.setFirstname("Mamadou");
         user.setLastname("Diarra");
@@ -65,75 +62,111 @@ public class StartSingleton {
         user.setUsername("mamadou");
         user.setPassword(encodePassword("admin"));
         user.setEmail("lsfernandez@mum.edu");
-//        user.setDob(new Date());
-        user.setDob(c.getTime());
+        user.setDob(new Date());
         user.setUrole("USER_ROLE");
         
         Goal goal = new Goal();
-//        goal.setCreationDate(new Date());
-        goal.setCreationDate(c.getTime());
+        goal.setCreationDate(new Date());
         Deadline deadLine = new Deadline();
-//        deadLine.setDate(new Date());
-        deadLine.setDate(c.getTime());
-        goal.addDeadline(deadLine);
-        goal.setDescription("Find a good job in California");
+        deadLine.setDate(new Date());
+        Calendar goalDeadlineCal = Calendar.getInstance();
+        goalDeadlineCal.setTime(goal.getCreationDate());
+        goalDeadlineCal.add(Calendar.DATE, 14);
+        Deadline goalDeadline = new Deadline(goalDeadlineCal.getTime());
+        goalDeadline.setGoalid(goal);
+        goal.addDeadline(goalDeadline);
+        goal.setDescription("Workout and Get Fit");
         goal.setPriority("high");
-        goal.setName("Find a good job in California");
-
-        Goal goal2 = new Goal();
-//        goal2.setCreationDate(new Date());
-        goal2.setCreationDate(c.getTime());
-//        deadLine.setDate(new Date());
-        deadLine.setDate(c.getTime());
-        goal2.addDeadline(deadLine);
-        goal2.setDescription("Lose weight");
-        goal2.setPriority("high");
-        goal2.setName("Lose weight...");
+        goal.setName("Workout");
         
-        Task t = new Task();
-        t.addDeadline(deadLine);
-        t.setTitle("Practice EJB");
-        t.setDescription("Task 1 Description");
-        goal.addTask(t);
+        RecurringTask runTask = new RecurringTask();
+        runTask.setTitle("Run");
+        runTask.setDescription("Run for 10 Minutes 3 Times a Week");
+        runTask.setPeriod(Period.WEEK);
+        runTask.setRecurrence(3);
+        Calendar runDeadlineCal = Calendar.getInstance();
+        runDeadlineCal.setTime(runTask.getCreationDate());
+        runDeadlineCal.add(Calendar.DATE, 14);
+        Deadline runDeadline = new Deadline(runDeadlineCal.getTime());
+        runDeadline.setTask(runTask);
+        runTask.addDeadline(runDeadline);
+        Activity runActivity = new Activity(runTask);
+        Calendar runActivityCreation = Calendar.getInstance();
+        runActivityCreation.setTime(runTask.getCreationDate());
+        runActivityCreation.add(Calendar.DATE, 1);
+        runActivity.setCreationDate(runActivityCreation.getTime());
+        runTask.addActivity(runActivity);
+        goal.addTask(runTask);
+        runTask.setGoalid(goal);
         
-        Task t1 = new Task();
-        t1.addDeadline(deadLine);
-        t1.setTitle("Practice Spring");
-        t1.setDescription("Task 2 Description");
-        goal.addTask(t1);
         
-        RecurringTask t2 = new RecurringTask();
-        t2.addDeadline(deadLine);
-        t2.setTitle("Update your linkedln");
-        t2.setDescription("Task 3 Description");
-        t2.setRecurrence(3);
-        t2.setPeriod(Period.MONTH);
-        goal.addTask(t2);
+        RecurringTask tunaTask = new RecurringTask();
+        tunaTask.setTitle("Eat Tuna");
+        tunaTask.setDescription("Eat 25g Protein Tuna 6 Times a Day");
+        tunaTask.setPeriod(Period.DAY);
+        tunaTask.setRecurrence(6);
+        Calendar tunaDeadlineCal = Calendar.getInstance();
+        tunaDeadlineCal.setTime(tunaTask.getCreationDate());
+        tunaDeadlineCal.add(Calendar.DATE, 7);
+        Deadline tunaDeadline = new Deadline(tunaDeadlineCal.getTime());
+        tunaDeadline.setTask(tunaTask);
+        tunaTask.addDeadline(tunaDeadline);
+        for (int i = 0; i < 7; i++) {
+            for (int j = 0; j < 4; j++) {
+                System.out.println("Loop: " + j);
+                Activity tunaActivity = new Activity(tunaTask);
+                Calendar tunaActivityCreation = Calendar.getInstance();
+                tunaActivityCreation.setTime(tunaTask.getCreationDate());
+                tunaActivityCreation.add(Calendar.DATE, i);
+                tunaActivity.setCreationDate(tunaActivityCreation.getTime());
+                tunaTask.addActivity(tunaActivity);
+            }
+        }
+        goal.addTask(tunaTask);
+        tunaTask.setGoalid(goal);
         
-        Task t3 = new Task();
-        t3.addDeadline(deadLine);
-        t3.setTitle("Go to the gym reqularly");
-        t3.setDescription("Task Description");
-        goal2.addTask(t3);
         
+        RecurringTask waterTask = new RecurringTask();
+        waterTask.setTitle("Drink Water");
+        waterTask.setDescription("Drink 2L of Water a Day");
+        waterTask.setPeriod(Period.DAY);
+        waterTask.setRecurrence(1);
+        Calendar waterDeadlineCal = Calendar.getInstance();
+        waterDeadlineCal.setTime(waterTask.getCreationDate());
+        waterDeadlineCal.add(Calendar.DATE, 14);
+        Deadline waterDeadline = new Deadline(waterDeadlineCal.getTime());
+        waterDeadline.setTask(waterTask);
+        waterTask.addDeadline(waterDeadline);
+        int[] times = {1, 2, 3, 6, 7, 9, 11, 13};
+        for (int i = 0; i < times.length; i++) {
+            Activity waterActivity = new Activity(waterTask);
+            Calendar waterActivityCreation = Calendar.getInstance();
+            waterActivityCreation.setTime(waterTask.getCreationDate());
+            waterActivityCreation.add(Calendar.DATE, times[i]);
+            waterActivity.setCreationDate(waterActivityCreation.getTime());
+            waterTask.addActivity(waterActivity);
+        }
+        goal.addTask(waterTask);
+        waterTask.setGoalid(goal);
+        
+        Task readBookTask = new Task();
+        readBookTask.setTitle("Read Workout Book");
+        readBookTask.setDescription("Read a Book About Working Out");
+        Calendar readBookDeadlineCal = Calendar.getInstance();
+        readBookDeadlineCal.setTime(readBookTask.getCreationDate());
+        readBookDeadlineCal.add(Calendar.DATE, 14);
+        Deadline readBookDeadline = new Deadline(readBookDeadlineCal.getTime());
+        readBookDeadline.setTask(readBookTask);
+        readBookTask.addDeadline(readBookDeadline);
+        goal.addTask(readBookTask);
+        readBookTask.setGoalid(goal);
+              
         Category cat = new Category();
-        cat.setName("hola");
+        cat.setName("Physical");
         
         goal.setCategoryid(cat);
-        goal2.setCategoryid(cat);
-        user.addGoal(goal2);
         user.addGoal(goal);
         userFacade.create(user);
-        
-        
-        
-
-        /******** Goal ********/
-//        Goal goal2 = new Goal();
-//        goal2.setName("Test Goal");
-//        goal2.setDescription("Test Goal .... jshdjshd");
-//        goal2.setPriority("High");
-//        goalFacade.create(goal2);
     }
 
       public String encodePassword(String pw) {
@@ -148,7 +181,7 @@ public class StartSingleton {
                     Logger.getLogger(StartSingleton.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 byte[] passwordDigest = md.digest();
-               encodedPasswordHash = new sun.misc.BASE64Encoder().encode(passwordDigest);
+                encodedPasswordHash = new sun.misc.BASE64Encoder().encode(passwordDigest);
             } catch (NoSuchAlgorithmException ex) {
                 Logger.getLogger(StartSingleton.class.getName()).log(Level.SEVERE, null, ex);
             }

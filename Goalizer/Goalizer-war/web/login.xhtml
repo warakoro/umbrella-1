@@ -8,7 +8,33 @@
     <ui:composition template="default/main.xhtml">
         <ui:define name="content">
             <h:body>
-                
+                <form method="POST" action="j_security_check" class="form-horizontal">
+                    <p:messages/>
+                    <div class="control-group">
+                        <label class="control-label" for="username">Username</label>
+                        <div class="controls">
+                            <input type="text" name="j_username" id="username" placeholder="Username"/>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="password">Password</label>
+                        <div class="controls">
+                            <input type="password" name="j_password" id="password" placeholder="Password"/>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <div class="controls">
+                            <label class="checkbox">
+                                <input type="checkbox" /> Remember me
+                            </label>
+                            <input type="submit" value="Login" styleClass="btn btn-info"/>
+                            <input type="reset" value="Reset" styleClass="btn btn-info" />
+                        </div>
+                    </div>
+                    <br/>
+                    <strong><p>Don't have an account create one <a href="#{facesContext.externalContext.requestContextPath}/addUser.jsf"> here!</a></p></strong> 
+                </form>
+<!--                
                 <form method="POST" action="j_security_check">
                     <p:panel header="Login">
                         <p:messages/>
@@ -22,7 +48,7 @@
                         <p>Don't have an account create one <a href="#{facesContext.externalContext.requestContextPath}/addUser.jsf"> here!</a></p> 
 
                     </p:panel>
-                </form>    
+                </form>    -->
             </h:body>
         </ui:define>
     </ui:composition>

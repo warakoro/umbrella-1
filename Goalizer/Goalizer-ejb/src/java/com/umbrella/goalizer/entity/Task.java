@@ -8,6 +8,7 @@ package com.umbrella.goalizer.entity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -27,6 +28,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -38,7 +41,10 @@ import javax.xml.bind.annotation.XmlTransient;
  * @author Mamadou
  */
 @Entity
-@NamedQueries({@NamedQuery(name = Task.TASKBYGOALID, query = "SELECT t FROM Task t WHERE t.goalid.id = :goalId")})
+@NamedQueries({@NamedQuery(name = Task.TASKBYGOALID, query = "SELECT DISTINCT t FROM Task t WHERE t.goalid.id = :goalId"),
+@NamedQuery(name = Task.TASKSBYCRITERIA, query = "SELECT DISTINCT t FROM Task t WHERE t.title LIKE :criteria OR t.description LIKE :criteria AND t.goalid.id = :goalId")
+})
+
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "disc", discriminatorType =  DiscriminatorType.STRING)
 @DiscriminatorValue("SINGLE_TASK")
@@ -46,6 +52,7 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 public class Task implements Serializable {
     public static final String TASKBYGOALID = "Task.getTasksByGoalId";
+    public static final String TASKSBYCRITERIA = "Task.getTasksByCriteria";
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -72,10 +79,29 @@ public class Task implements Serializable {
     @JoinColumn(name = "goalid", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Goal goalid;
+    
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date creationDate;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "task", fetch = FetchType.LAZY)
+    private List<Activity> activityList = new ArrayList<>();
 
     public Task() {
        this.deadlines = new ArrayList<>();
        this.editable = false;
+       this.creationDate = new Date();
+    }
+
+    public Date getCreationDate() {
+        return creationDate;
+    }
+    
+    public void addActivity(Activity activity) {
+        activityList.add(activity);
+    }
+
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
     }
 
     public void addDeadline(Deadline deadline){
@@ -144,7 +170,13 @@ public class Task implements Serializable {
 
     @XmlTransient
     public String getTaskType() {
-        return taskType;
+        String tType="";
+        if (this.getClass() == Task.class) {
+            tType = "SINGLE_TASK";
+        } else if (this.getClass() == RecurringTask.class) {
+            tType = "RECURRING_TASK";
+        }
+        return tType;
     }
 
     public void setTaskType(String taskType) {

@@ -61,6 +61,10 @@ public class Deadline implements Serializable {
 
     public Deadline() {
     }
+    
+    public Deadline(Date date) {
+        this.date = date;
+    }
 
     public Deadline(Integer id) {
         this.id = id;
