@@ -75,7 +75,7 @@
                         <h:column>
                             <h:commandLink id="remove" action="#{activityMB.remove(activity)}" style="color:rgb(209, 91, 71);"
                                            onclick="return confirm('Are you sure?')" class="btn btn-link"><span class="glyphicon glyphicon-trash">Delete</span>
-                                <f:ajax render="form:aTable" />
+                                <f:ajax render="@form" />
                             </h:commandLink>
                         </h:column>
                     </h:dataTable>
